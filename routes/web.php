@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['namespace' => 'Site'], function(){
+	Route::get('/login', 'UserController@login');
+	Route::post('/login', 'UserController@postLogin');
+});
+
