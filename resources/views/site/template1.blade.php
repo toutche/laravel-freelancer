@@ -11,10 +11,12 @@
 		 
 		<link rel="stylesheet" href="{{url('css/bootstrap.min.css')}}" type="text/css">
 		<link rel="stylesheet" href="{{url('css/font-awesome.min.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{url('css/themify-icons.css')}}" type="text/css">
 		<link rel="stylesheet" href="{{url('assets/site/css/main.css')}}" type="text/css">
 		<!-- Responsive Menu -->
 		<link rel="stylesheet" href="{{url('assets/site/css/slicknav.css')}}" type="text/css">
 		<link rel="stylesheet" href="{{url('assets/site/css/style.css')}}" type="text/css">
+		@stack('scripts_css')
 		
 	</head>
 	<body>
@@ -109,9 +111,11 @@
 			</div>
 		</div>
 		
+		@yield('content')
 
 		<script type="text/javascript" src="{{url('js/jquery.js')}}"></script>
 		<script type="text/javascript" src="{{url('assets/site/js/slicknav.js')}}"></script>
 		<script type="text/javascript" src="{{url('assets/site/js/main.js')}}"></script>
+		@stack('scripts_js')
 	</body>
 </html>

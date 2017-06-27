@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Route::group(['namespace' => 'Site'], function(){
 	Route::get('/login', 'UserController@login');
-	Route::post('/login', 'UserController@postLogin');
+	//Route::post('/login', 'UserController@postLogin');
+	Route::post('/perfil/registrar', 'UserController@postRegister');
+	Route::get('/perfil/complemento-perfil', 'UserController@postRegisterPerfil');
 });
 

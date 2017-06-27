@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name','user_name', 'email', 'password',
     ];
 
     /**
@@ -25,5 +25,23 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+    public $rules = [
+        'name' => 'required|min:3|max:100',
+        'user_name' => 'required|min:3|max:100',
+        'email' => 'required|email|max:100',
+    ];
+
+    public $messages = [
+        'name.required'          => 'O campo nome é obrigatório',
+        'name.min'               => 'Mínimo de caracteres para o nome é 3',
+        'name.max'               => 'Máximo de caracteres para o nome é 100',
+        'user_name.required'     => 'O campo username é obrigatório',
+        'user_name.min'          => 'Mínimo de caracteres para o username é 3',
+        'user_name.max'          => 'Máximo de caracteres para o username é 100',
+        'email.required'         => 'O campo email é obrigatório',
+        'email.min'              => 'Mínimo de caracteres para o email é 3',
+        'email.max'              => 'Máximo de caracteres para o email é 100',
     ];
 }
