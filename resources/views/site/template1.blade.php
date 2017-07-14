@@ -15,7 +15,6 @@
 		<link rel="stylesheet" href="{{url('assets/site/css/main.css')}}" type="text/css">
 		<!-- Responsive Menu -->
 		<link rel="stylesheet" href="{{url('assets/site/css/slicknav.css')}}" type="text/css">
-		<link rel="stylesheet" href="{{url('assets/site/css/style.css')}}" type="text/css">
 		@stack('scripts_css')
 		
 	</head>
@@ -113,7 +112,7 @@
 		
 		@yield('content')
 
-		<script type="text/javascript" src="{{url('js/jquery.js')}}"></script>
+		<script type="text/javascript" src="{{url('js/jquery-3.2.1.min.js')}}"></script>
 		<script type="text/javascript" src="{{url('assets/site/js/slicknav.js')}}"></script>
 		<script type="text/javascript" src="{{url('assets/site/js/main.js')}}"></script>
 		@stack('scripts_js')

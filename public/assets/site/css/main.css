@@ -70,6 +70,9 @@ label {
     background: #ff4f57;
     color: #fff;
 }
+/**
+ * Reset Bootstrap
+ */
 
 /* Main Menu*/
 .navbar-default.affix {
@@ -102,11 +105,11 @@ label {
     margin-top: 0;
 }
 .navbar-default.affix .float-right li a {
-    color: #ff4f57!important;
-    border: 1px solid #ff4f57;
+    color: #4682b4!important;
+    border: 1px solid #4682b4;
 }
 .navbar-default.affix .float-right li a:hover {
-    background: #ff4f57;
+    background: #4682b4;
     color: #fff!important;
 }
 .navbar {
@@ -159,7 +162,7 @@ label {
 }
 .navbar-default .navbar-nav>li:hover>a, .navbar-default .navbar-nav>li>a.active {
     color: #fff;
-    background-color: #ff4f57;
+    background-color: #4682B4;
 }
 .navbar-default .navbar-nav .dropdown {
     background: #ffffff;
@@ -201,7 +204,7 @@ label {
 }
 .dropdown>li:hover>a, .sup-dropdown li:hover>a {
     color: #ff4f57;
-    background: #ff4f57;
+    background: #4682B4;
 }
 .dropdown li, .sup-dropdown li {
     position: relative;
@@ -278,8 +281,8 @@ label {
     color: #444;
 }
 .main-navigation .float-right li a {
-    color: #ff4f57!important;
-    border: 1px solid #ff4f57;
+    color: #4682B4!important;
+    border: 1px solid #4682B4;
     border-radius: 4px;
 }
 .main-navigation .float-right li a:hover {
@@ -418,7 +421,7 @@ nav#menu span.fa.fa-bars:hover {
 }
 .breadcrumb {
     font-size: 14px;
-    color: #ff4f57;
+    color: #9ac6ea;
     border-radius: 0px;
     background: transparent;
     padding: 5px 0px;
@@ -635,7 +638,7 @@ nav#menu span.fa.fa-bars:hover {
     font-size: 16px;
     height: 50px;
     line-height: 50px;
-    background: #ff4f57;
+    background: #4682B4;
     color: #fff;
 }
 .my-account-form .cd-switcher a.selected {
@@ -853,7 +856,7 @@ nav#menu span.fa.fa-bars:hover {
 .form-control:focus {
     box-shadow: none;
 }
-.button-login-register {
+.button-align-center {
     text-align: center;
 }
 /**
@@ -863,6 +866,7 @@ nav#menu span.fa.fa-bars:hover {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+    color: #fff;
     position: relative;
     display: inline-block;
     overflow: hidden;
@@ -900,23 +904,24 @@ nav#menu span.fa.fa-bars:hover {
     -webkit-border-radius: 0 6px 6px 0;
 }
 .my-btn i.icon {
+    color: #333;
     font-size: 23px;
-    background-color: #00967f;
-    -webkit-box-shadow: 0 3px 0 0 #007261;
-    box-shadow: 0 3px 0 0 #007261;
+    background-color: #4ba3ec;
+    -webkit-box-shadow: 0 3px 0 0 #305a7d;
+    box-shadow: 0 3px 0 0 #305a7d;
     text-shadow: 0px 1px 1px #888;
 }
 .my-btn span.title {
-    -webkit-box-shadow: 0 3px 0 0 #00ae94;
-    box-shadow: 0 3px 0 0 #00ae94;
-    background-color: #00cdae;
+    -webkit-box-shadow: 0 3px 0 0 #305a7d;
+    box-shadow: 0 3px 0 0 #305a7d;
+    background-color: #4682B4;
 }
 .my-btn:active>span.left, .btn:active>i {
     -webkit-box-shadow: 0 2px 0 0 #00ae94;
-    box-shadow: 0 2px 0 0 #00ae94;
+    box-shadow: 0 2px 0 0 #4682B4;
 }
 .my-btn i.ti {
-    padding: 14px;
+    padding: 13.4px;
 }
 .inputfile {
     width: 0.1px;
@@ -930,7 +935,7 @@ nav#menu span.fa.fa-bars:hover {
     font-size: 1.25em;
     font-weight: 700;
     color: white;
-    background-color: #ff4f57;
+    background-color: #4682b4;
     display: inline-block;
     padding: 10px;
     border-radius: 3px;
@@ -951,7 +956,7 @@ nav#menu span.fa.fa-bars:hover {
     font-weight: 700;
 }
 .add-post-btn .btn-delete {
-    color: red;
+    color: #4682b4;
     font-size: 12px;
     font-weight: 700;
 }
@@ -964,7 +969,12 @@ nav#menu span.fa.fa-bars:hover {
 #semestre, #crea {
     display: none;
 }
-
+.has-error .note-editor {
+    border-color: #a94442!important;
+    border: 2px; 
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
 /**
  * Geral
  */

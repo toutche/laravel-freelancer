@@ -5,10 +5,10 @@ jQuery(document).ready(function($) {
         time: 800
     });*/
 });
-$(window).load(function() {
+/*$(window).load(function() {
     "use strict";
     $('#loading').fadeOut();
-});
+});*/
 $(document).ready(function() {
     $('.wpb-mobile-menu').slicknav({
         prependTo: '.navbar-header',
