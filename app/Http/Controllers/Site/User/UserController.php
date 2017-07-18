@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Site;
+namespace App\Http\Controllers\Site\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
-use App\Http\Requests\Site\RegisterFormRequest;
+use App\Models\Site\User\User;
+use App\Http\Requests\Site\User\RegisterFormRequest;
+use App\Http\Requests\Site\User\LoginFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Site\User\PasswordReset;
 
@@ -16,45 +17,46 @@ class UserController extends Controller
 	public function __construct(User $user) 
 	{
 		$this->user = $user;
-
 	}
     
     public function login()
     {
-    	//dd(session('users'));
     	if(Auth::viaRemember() || Auth::check()) {
     		//Vai para o Dashboard
     		return "Já logado";
     	}
     	else {
     		$title = "Login Freelas";
-    		return view('site.pageloginorregister', compact('title'));
+    		return view('site.login_or_register', compact('title'));
     	}
     }
 
-    public function postLogin(Request $request)
+    public function postLogin(LoginFormRequest $request)
     {
     	$dataForm = $request->except(['_token']);
     	$remember = false;
     	$column = "";
 
+        //User tagged remind
     	if(isset($dataForm['remember'])) {
     		$remember = true;
     	}
 
+        //User fills in email or username
     	if(filter_var($dataForm['email_username'], FILTER_VALIDATE_EMAIL)) {
     		$column = "email";
     	}else {
     		$column = "user_name";
     	}
 
-    	if(Auth::attempt([$column => $dataForm['email_username'], 'password' => $dataForm['password']], $remember)) {
+        //login and set session with user object
+    	if(Auth::attempt([$column => $dataForm['email_username'], 'password' => $dataForm['password_login']], $remember)) {
     		//Envia para o Dashboard 
     		return "ok";
     	}
     	else{
-    		return redirect('/login')
-    						->with('error', 'Usuário/E-mail ou senha incorretos');
+            $request->session()->flash('error', 'E-mail/Usuário ou senha incorretos');
+    		return back();
     	}
     }
 
@@ -63,25 +65,24 @@ class UserController extends Controller
     	return "deslogou";
     }
 
+    //Insert on table user
     public function postRegister(RegisterFormRequest $request)
     {
     	$dataForm = $request->except(['_token']);
     	$dataForm['password'] = bcrypt($dataForm['password']);
-    	$dataForm['confirm-password'] = bcrypt($dataForm['confirm-password']);
 
-    	
     	if($this->user->create($dataForm)) {
-    		return redirect('/login');
+    		return redirect('perfil/complemento-perfil');
     	} else {
-    		return redirect('/login');
+            $request->session()->flash('error-register','Erro ao registrar,tente novamente!');
+    		return back();
     	}
     }
 
-    public function complementRegisterPerfil(Request $request)
+    public function complementRegisterPerfil()
     {
     	$title = "Completar Perfil";
-    	return view("site.complementregisterperfil")
-    				->with(compact('title'));
+    	return view("site.complement_register_perfil", compact('title'));
     }
 
     public function postComplementRegisterPerfil(Request $request)
@@ -115,10 +116,10 @@ class UserController extends Controller
     	$validate = validator($dataForm, $fields_experiences_validate, $messages_experiences_validate);
 
     	if($validate->fails()) {
-    		return redirect('/perfil/complemento-perfil')
+            $request->session()->flash('number_of_experiences', $number_of_experiences);
+    		return back()
     						->withErrors($validate)
-    						->withInput()
-    						->with('number_of_experiences', $number_of_experiences);
+    						->withInput();
     	}
     	return 'Enviando formulário...';
     }

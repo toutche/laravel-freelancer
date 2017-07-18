@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'contato@toutche.com.br'),
-        'name' => env('MAIL_FROM_NAME', 'toutche'),
+        'name' => env('MAIL_FROM_NAME', 'Toutchê - Produtora Digital'),
     ],
 
     /*

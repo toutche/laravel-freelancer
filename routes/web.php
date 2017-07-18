@@ -11,20 +11,20 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', 'Site\User\UserController@login');
+
 
 Route::group(['namespace' => 'Site'], function(){
-	Route::get('/login', 'UserController@login');
-	Route::post('/login', 'UserController@postLogin');
-	Route::get('/perfil/logout', 'UserController@logout');
+	Route::get('/login', 'User\UserController@login');
+	Route::post('/login', 'User\UserController@postLogin');
+	Route::get('/perfil/logout', 'User\UserController@logout');
 
 	Route::post('/perfil/resetar/senha', 'User\PasswordResetController@resetPassword');
 	Route::get('/perfil/resetar/senha/{token}', 'User\PasswordResetController@getResetPassword');
 	Route::post('/perfil/resetar/senha/{token}', 'User\PasswordResetController@postResetPassword');
 
-	Route::post('/perfil/registrar', 'UserController@postRegister');
-	Route::get('/perfil/complemento-perfil', 'UserController@complementRegisterPerfil');
-	Route::post('/perfil/complemento-perfil/envio', 'UserController@postComplementRegisterPerfil');
+	Route::post('/perfil/registrar', 'User\UserController@postRegister');
+	Route::get('/perfil/complemento-perfil', 'User\UserController@complementRegisterPerfil');
+	Route::post('/perfil/complemento-perfil/envio', 'User\UserController@postComplementRegisterPerfil');
 });

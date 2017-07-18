@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Input;
 
 class PasswordResetFormRequest extends FormRequest
 {
+    private $form_request;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -27,13 +29,17 @@ class PasswordResetFormRequest extends FormRequest
         $rules = array();
 
         foreach (Input::except('_token') as $key => $value) {
-            if ($key == 'email-reset') {
-                $rules = ['email-reset' => 'required|email'];       
-            } elseif ($key == 'password-reset') {
+            if ($key == 'email_reset') {
+                $rules = ['email_reset' => 'required|email'];
+                $this->form_request = "form_password_reset_request";
+                break;       
+            } elseif ($key == 'password_reset') {
                 $rules = [ 
-                    'password-reset'         => 'same:password-reset-confirm|required|between:6,16',
-                    'password-reset-confirm' => 'same:password-reset|required|between:6,16'
+                    'password_reset'         => 'required|between:6,16',
+                    'password_reset_confirm' => 'same:password_reset'
                 ];
+                $this->form_request = "form_password_reset";
+                break;
             }
         }
         return $rules;
@@ -42,22 +48,18 @@ class PasswordResetFormRequest extends FormRequest
     public function messages()
     {
         $messages = array();
-        foreach (Input::except('_token') as $key => $value) {
-            if ($key == 'email-reset') {
-                $messages = [
-                                'email-reset.required'  => 'O campo e-mail é obrigatório',
-                                'email-reset.email'     => 'Digite um e-mail válido'
-                            ];       
-            } elseif ($key == 'password-reset') {
-                $messages = [ 
-                    'password-reset.same'               => 'As senhas não conferem',
-                    'password-reset.required'           => 'O campo senha é obrigatório',
-                    'password-reset.between'            => 'O campo senha deve possuir entre 6 e 16 caracteres',
-                    'password-reset-confirm.same'       => 'As senhas não conferem',
-                    'password-reset-confirm.required'   => 'O campo confirmar senha é obrigatório',
-                    'password-reset-confirm.between'    => 'O campo confirmar senha deve possuir entre 6 e 16 caracteres'
+        if($this->form_request == "form_password_reset_request") {
+            $messages = [
+                    'email_reset.required'  => 'O campo e-mail é obrigatório',
+                    'email_reset.email'     => 'Digite um e-mail válido'
+                ]; 
+        }
+        elseif($this->form_request == "form_password_reset") {
+            $messages = [ 
+                    'password_reset.required'           => 'O campo senha é obrigatório',
+                    'password_reset.between'            => 'O campo senha deve possuir entre 6 e 16 caracteres',
+                    'password_reset_confirm.same'       => 'Senhas devem ser iguais'
                 ];
-            }
         }
         return $messages;
     }

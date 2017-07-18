@@ -29,23 +29,23 @@
 									<p class="alert alert-success">{{ session('success') }}</p>
 								@endif
 								<p class="cd-form-message">Digite sua nova senha.</p>
-								<form class="cd-form" id="form-reset-password" action="{{url('/perfil/resetar/senha/'.$token)}}" method="POST">
+								<form class="cd-form" id="form_password_reset" action="{{url('/perfil/resetar/senha/'.$token)}}" method="POST">
 									{!!csrf_field()!!}
-									<div class="form-group">
+									<div class="form-group @if ($errors->has('password_reset')) has-error @endif">
 										<div class="input-icon">
 											<i class="fa fa-lock"></i>
-											<input type="password" class="form-control" id="password-reset" name="password-reset" placeholder="Nova senha">
-											@if ($errors->has('password-reset')) 
-												<p class="alert-danger">{{ $errors->first('password-reset') }}</p> 
+											<input type="password" class="form-control" id="password_reset" name="password_reset" placeholder="Nova senha">
+											@if ($errors->has('password_reset')) 
+												<p class="alert-danger">{{ $errors->first('password_reset') }}</p> 
 											@endif
 										</div>
 									</div>
-									<div class="form-group">
+									<div class="form-group @if ($errors->has('password_reset_confirm')) has-error @endif">
 										<div class="input-icon">
 											<i class="fa fa-lock"></i>
-											<input type="password"  class="form-control" id="password-reset-confirm" name="password-reset-confirm" placeholder="Repetir nova senha">
-											@if ($errors->has('password-reset-confirm')) 
-												<p class="alert-danger">{{ $errors->first('password-reset-confirm') }}</p> 
+											<input type="password"  class="form-control" id="password_reset_confirm" name="password_reset_confirm" placeholder="Repetir nova senha">
+											@if ($errors->has('password_reset_confirm')) 
+												<p class="alert-danger">{{ $errors->first('password_reset_confirm') }}</p> 
 											@endif
 										</div>
 									</div>
@@ -63,6 +63,7 @@
 			</div>
 		</section><!-- #content -->
 		<script type="text/javascript" src="{{url('js/jquery-3.2.1.min.js')}}"></script>
+		<script type="text/javascript" src="{{url('js/jquery.validate.min.js')}}"></script>
 		<script type="text/javascript" src="{{url('assets/site/js/login-register.js')}}"></script>
 	</body>
 </html>
