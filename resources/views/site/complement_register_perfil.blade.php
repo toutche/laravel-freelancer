@@ -26,7 +26,7 @@
 
 						@include('site.user.education.education')
 
-						@include('site.user.user_experiences.user_experiences')
+						@include('site.user.professionals_experiences.professional_experiences')
 
 						<div class="button-save-form">
 							<div class="pull-right">
