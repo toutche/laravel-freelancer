@@ -25,6 +25,6 @@ Route::group(['namespace' => 'Site'], function(){
 	Route::post('/perfil/resetar/senha/{token}', 'User\PasswordResetController@postResetPassword');
 
 	Route::post('/perfil/registrar', 'User\UserController@postRegister');
-	Route::get('/perfil/complemento-perfil', 'User\UserController@complementRegisterPerfil');
-	Route::post('/perfil/complemento-perfil/envio', 'User\UserController@postComplementRegisterPerfil');
+	Route::get('/perfil/complemento-perfil', 'User\ComplementInformations\ComplementInformationsController@complementRegisterPerfil');
+	Route::post('/perfil/complemento-perfil/envio', 'User\ComplementInformations\ComplementInformationsController@postComplementRegisterPerfil');
 });
