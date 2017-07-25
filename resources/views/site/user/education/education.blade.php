@@ -83,11 +83,3 @@
 		</div>
 	</div>
 </div>
-<div class="add-post-btn">
-	<div class="pull-left">
-		<a href="#" class="btn-added"><i class="ti-plus"></i> Adicionar</a>
-	</div>
-	<div class="pull-right">
-		<a href="#" class="btn-delete"><i class="ti-trash"></i> Deletar este</a>
-	</div>
-</div>
