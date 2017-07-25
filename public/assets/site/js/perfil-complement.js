@@ -1,11 +1,10 @@
 $(document).ready(function() {
 
-	
 	$('#options-degree').change(function(){
 		var option_selected = $(this).val();
 		var semestre = $('#semestre');
 		var crea = $('#crea');
-		console.log(option_selected);
+
 		if(option_selected == 'graduating') {
 			crea.hide();
 			semestre.show();
@@ -46,8 +45,6 @@ $(document).ready(function() {
 
 	$('#save').click(function(){
 		event.preventDefault(); //Prevent default from click
-		//console.log($("textarea[name='ex_description_1'").summernote("code"));
-		//alert("Salvou");
 	});
 
 	//Function update inputs and textarea attributes name
@@ -96,4 +93,18 @@ $(document).ready(function() {
 								  ]
 					    	});
 	}
+
+	$('input[name="cpf"]').mask('000.000.000-00');
+	$('input[name="phone"]').mask('(00) 0000-0000');
+
+	var options = {
+		onKeyPress: function(cell_phone, ev, el, op) {
+			var masks = ['(00) 0000-00000', '(00) 00000-0000'];
+			mask = (cell_phone.length > 14) ? masks[1] : masks[0];
+			el.mask(mask,op);
+		}
+	}
+	$('input[name="cell_phone"]').mask('(00) 0000-00000',options);
+	$('input[name="date_birth"]').mask('00/00/0000');
+
 });
