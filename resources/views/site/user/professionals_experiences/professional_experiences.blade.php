@@ -45,10 +45,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group has-error">
+			<div class="form-group">
 				<label class="control-label" for="textarea">Descrição</label>
 			</div>
-			<section class="editor has-error">
+			<section class="editor">
 				<textarea class="edit" name="ex_description_{{$i}}">
 					@php 
 						echo htmlspecialchars(old('ex_description_'.$i));
