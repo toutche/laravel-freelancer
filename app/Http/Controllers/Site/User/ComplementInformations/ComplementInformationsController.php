@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site\User\ComplementInformations;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Site\User\ComplementInformationsRequest;
 
 class ComplementInformationsController extends Controller
 {
@@ -13,7 +14,7 @@ class ComplementInformationsController extends Controller
     	return view("site.complement_register_perfil", compact('title'));
     }
 
-    public function postComplementRegisterPerfil(Request $request)
+    public function postComplementRegisterPerfil(ComplementInformationsRequest $request)
     {
     	$dataForm = $request->except(['_token']);
     	$number_of_experiences = $request['number_of_experiences'];

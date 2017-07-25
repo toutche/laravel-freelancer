@@ -19,7 +19,7 @@
 					</div>
 				@endif
 				<div class="page-ads box">
-					<form class="form-ad" method="POST" action="{{url('/perfil/complemento-perfil/envio')}}">
+					<form class="form-ad" method="POST" action="{{url('/perfil/complemento-perfil/envio')}}" enctype="multipart/form-data">
 						{!!csrf_field()!!}
 						
 						@include('site.user.basic_informations.basic_informations')
@@ -43,6 +43,7 @@
 
 @push('scripts_js')
 	<script type="text/javascript" src="{{url('js/bootstrap.min.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/jquery.mask.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote-pt-BR.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/bootstrap-select.min.js')}}"></script>
