@@ -94,6 +94,79 @@ $(document).ready(function() {
 					    	});
 	}
 
+	var v = $("#complement_register").validate({
+		focusInvalid: false,
+		focusCleanup: true,
+		rules: {
+			name: {
+				required: true,
+				minlength: 3,
+				maxlength:100
+			},
+			cpf: {
+				required: true,
+				cpfVerify: true
+			},
+			email: {
+				required: true,
+				email: true
+			},
+			professional_title: {
+				minlength: 3,
+				maxlength: 100
+			},
+			phone: {
+				required: false,
+				phoneVerify: true
+			},
+			cell_phone: {
+				required: false,
+				cellPhoneVerify: true
+			},
+			site: {
+				url: true
+			},
+			date_birth: {
+				brazilianDate: true
+			},
+			image_perfil: {
+				extension: "jpg|jpeg|png",
+				filesize: 2097152
+			}
+		},
+		messages: {
+			name: {
+				required: "O campo nome é obrigatório",
+				minlength: "Mínimo de caracteres para o nome é 3",
+				maxlength: "Máximo de caracteres para o nome é 100"
+			},
+			cpf: {
+				required: "O campo CPF é obrigatório"
+			},
+			email: {
+				required: "O campo e-mail é obrigatório",
+				email: "Digite um e-mail válido"
+			},
+			professional_title: {
+				minlength: "Mínimo de caracteres para o título profissional é 3",
+				maxlength: "Máximo de caracteres para o título profissional é 100"
+			},
+			site: {
+				url: "Digite uma url no formato http://www ou https://www"
+			},
+			image_perfil: {
+				extension: "Insira uma imagem no formato jpeg, png ou jpg"
+			}
+		},
+    	errorPlacement: function(error, element) {
+			showErrorMessage(element,error);
+    	},
+    	success: function(label, element) {
+    		removeErrorMessage(element);
+    	}
+	});
+
+	//Masks
 	$('input[name="cpf"]').mask('000.000.000-00');
 	$('input[name="phone"]').mask('(00) 0000-0000');
 
@@ -107,4 +180,21 @@ $(document).ready(function() {
 	$('input[name="cell_phone"]').mask('(00) 0000-00000',options);
 	$('input[name="date_birth"]').mask('00/00/0000');
 
+	function showErrorMessage(element, error) {
+		$(element).parent().find('p').remove();
+		if($(element).attr('id') == 'image_perfil') {
+			$('<p class="alert-danger">'+ error[0].innerHTML +'</p>').insertAfter($(element).next());
+		} else {
+			//Paints the border of the field signaling required field
+			$(element).parent().addClass('has-error');
+			//Show 'p' whith error message
+			$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
+		}
+	}
+
+	function removeErrorMessage(element) {
+		$(element).parent().removeClass('has-error');
+		console.log($(element).parent());
+		$(element).parent().find('p').remove();
+	}
 });

@@ -42,6 +42,6 @@
 	</section><!-- #content -->
 @endsection
 @push('scripts_js')
-	<script type="text/javascript" src="{{url('js/jquery.validate.min.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/validation/jquery.validate.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/login-register.js')}}"></script>
 @endpush
