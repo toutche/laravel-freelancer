@@ -83,7 +83,7 @@ class ComplementInformationsRequest extends FormRequest
             'phone'                    => 'phone|nullable',
             'cell_phone'               => 'cell_phone|nullable',
             'site'                     => 'url|nullable',
-            'date_birth'               => 'date_format:d/m/Y',
+            'date_birth'               => 'required|date_format:d/m/Y',
             'about_me'                 => 'string|max:1500|nullable',
             'image_perfil'             => 'image|mimes:jpeg,png,jpg|max:2000|nullable'
         ];
@@ -103,6 +103,7 @@ class ComplementInformationsRequest extends FormRequest
             'professional_title.min'        => 'Mínimo de caracteres para o título profissional é 3',
             'professional_title.max'        => 'Máximo de caracteres para o título profissional é 100',
             'site.url'                      => 'Digite uma url no formato http://www ou https://www',
+            'date_birth.required'           => 'O campo data de nascimento é obrigatório',
             'date_birth.date_format'        => 'Digite uma data válida no formato DD/MM/AAAA',
             'about_me.max'                  => 'Máximo de caracteres para o sobre mim é 1500',
             'image_perfil.mimes'            => 'Insira uma imagem no formato jpeg, png ou jpg',
