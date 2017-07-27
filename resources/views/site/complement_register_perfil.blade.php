@@ -48,9 +48,9 @@
 	<script type="text/javascript" src="{{url('js/validation/aditional/cpfVerify.js')}}"></script>
 	<script type="text/javascript" src="{{url('js/validation/aditional/phoneVerify.js')}}"></script>
 	<script type="text/javascript" src="{{url('js/validation/aditional/cellPhoneVerify.js')}}"></script>
-	<script type="text/javascript" src="{{url('js/validation/aditional/bazilianDate.js')}}"></script>
-	<script type="text/javascript" src="{{url('js/validation/aditional/filesize.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/validation/aditional/brazilianDate.js')}}"></script>
 	<script type="text/javascript" src="{{url('js/validation/aditional/extension.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/validation/aditional/filesize.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote-pt-BR.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/bootstrap-select.min.js')}}"></script>
