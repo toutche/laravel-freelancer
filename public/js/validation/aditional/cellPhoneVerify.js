@@ -4,7 +4,9 @@
 		value = value.replace(' ','');
 		cell_phone = value.replace('-','');
 
-		if( cell_phone.length != 10 && cell_phone.length != 11){
+		if (cell_phone.length == 0) {
+			return true;
+		} else if( cell_phone.length != 10 && cell_phone.length != 11){
 			return false;
 		}
 		return true;

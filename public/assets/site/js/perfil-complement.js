@@ -43,10 +43,6 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#save').click(function(){
-		event.preventDefault(); //Prevent default from click
-	});
-
 	//Function update inputs and textarea attributes name
 	function update_fields(number_of_experiences) {
 
@@ -94,10 +90,11 @@ $(document).ready(function() {
 					    	});
 	}
 
-	var v = $("#complement_register").validate({
+	$("#complement_register").validate({
 		focusInvalid: false,
 		focusCleanup: true,
 		rules: {
+			//basic informations
 			name: {
 				required: true,
 				minlength: 3,
@@ -127,6 +124,7 @@ $(document).ready(function() {
 				url: true
 			},
 			date_birth: {
+				required: true,
 				brazilianDate: true
 			},
 			image_perfil: {
@@ -154,6 +152,9 @@ $(document).ready(function() {
 			site: {
 				url: "Digite uma url no formato http://www ou https://www"
 			},
+			date_birth: {
+				required: "O campo data de nascimento é obrigatório"
+			},
 			image_perfil: {
 				extension: "Insira uma imagem no formato jpeg, png ou jpg"
 			}
@@ -163,7 +164,10 @@ $(document).ready(function() {
     	},
     	success: function(label, element) {
     		removeErrorMessage(element);
-    	}
+    	},
+    	// The div has the following class `.note-editable .panel-body` that we can use to
+  		// exclude it from validation
+    	ignore: ":hidden:not(#summernote),.note-editable.panel-body"
 	});
 
 	//Masks
@@ -194,7 +198,6 @@ $(document).ready(function() {
 
 	function removeErrorMessage(element) {
 		$(element).parent().removeClass('has-error');
-		console.log($(element).parent());
 		$(element).parent().find('p').remove();
 	}
 });

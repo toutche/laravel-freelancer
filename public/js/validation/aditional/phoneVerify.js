@@ -4,7 +4,9 @@
 		value = value.replace(' ','');
 		phone = value.replace('-','');
 		
-		if(phone.length!=10){
+		if (phone.length == 0) {
+			return true;
+		} else if(phone.length!=10){
 			return false;
 		}
 		return true;
