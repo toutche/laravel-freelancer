@@ -434,6 +434,7 @@ nav#menu span.fa.fa-bars:hover {
     color: #ff4f57;
 }
 #loading_experiences {
+    background-image: url(../images/loading.gif);
     background-repeat: no-repeat;
     background-position: top center;
     height: 60px;
