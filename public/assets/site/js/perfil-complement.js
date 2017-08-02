@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+	//Set token for ajax request
+	$.ajaxSetup({
+	  headers: {
+	    'X-CSRF-TOKEN': $('input[name="_token"]').val()
+	  }
+	});
+
 	$('#options-degree').change(function(){
 		var option_selected = $(this).val();
 		var semestre = $('#semestre');
@@ -20,27 +27,41 @@ $(document).ready(function() {
 	//Action click from button add new experience
 	$(document).on('click','#add-experience',function(event){
 		event.preventDefault(); //Prevent default from click
-		
-		//Get amount number of experiences
-		var number_of_experiences = new Number($('input[name="number_of_experiences"]').attr('value')) + 1;
+ 		
+ 		//identifies the current button clicked
+		var current = $(this);
 
-		if (number_of_experiences <= 5) {
-			//Set new amount of experiences
-			$('input[name="number_of_experiences"]').attr('value', number_of_experiences);
+		//mobile url = /laravel/public
+		//Get current session value of number_of_experiences with ajax request
+		$.post({                    
+		  url: '/session/get',
+		  data: { key: 'number_of_experiences'},
+		  dataType: 'json',
+		  success: function (response) {
+		  	var number_of_experiences = new Number(response.number_of_experiences) + 1;
+		  			  	
+		  	if (number_of_experiences <= 5) {
+		  		//set new current session value of number_of_experiences with ajax request
+				$.post({
+					url: '/session/set',
+					data: { key: 'number_of_experiences', value: number_of_experiences},
+					dataType: 'json'
+				});
 
-			//Get 'last' experience by 'number_of_experiences'
-			var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
-			last_experience
-					.clone()	
-					.attr('data-experience', number_of_experiences)
-					.appendTo($('#experiences'));
+				//Get 'last' experience by 'number_of_experiences'
+				var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
+				last_experience
+						.clone()	
+						.attr('data-experience', number_of_experiences)
+						.appendTo($('#experiences'));
 
-			update_fields(number_of_experiences);
-
-			$(this).remove(); //Remove link from previous experience
-		} else {
-			alert("Máximo de experiências é 5");
-		}
+				update_fields(number_of_experiences);
+				current.remove(); //Remove link from previous experience
+			} else {
+				alert("Máximo de experiências é 5");
+			}
+		  }   
+		});
 	});
 
 	//Function update inputs and textarea attributes name
@@ -130,7 +151,12 @@ $(document).ready(function() {
 			image_perfil: {
 				extension: "jpg|jpeg|png",
 				filesize: 2097152
-			}
+			},
+			//education
+			select_degree: {
+				selectVerify: true
+			},
+
 		},
 		messages: {
 			name: {
@@ -157,7 +183,7 @@ $(document).ready(function() {
 			},
 			image_perfil: {
 				extension: "Insira uma imagem no formato jpeg, png ou jpg"
-			}
+			},
 		},
     	errorPlacement: function(error, element) {
 			showErrorMessage(element,error);
@@ -185,19 +211,48 @@ $(document).ready(function() {
 	$('input[name="date_birth"]').mask('00/00/0000');
 
 	function showErrorMessage(element, error) {
-		$(element).parent().find('p').remove();
-		if($(element).attr('id') == 'image_perfil') {
-			$('<p class="alert-danger">'+ error[0].innerHTML +'</p>').insertAfter($(element).next());
-		} else {
-			//Paints the border of the field signaling required field
-			$(element).parent().addClass('has-error');
-			//Show 'p' whith error message
-			$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
+		$(element).getParent(1).find('p.alert-danger').remove();
+
+		var levelParent;
+		switch($(element).attr('id')) {
+			case "image_perfil":
+				$('<p class="alert-danger">'+ error[0].innerHTML +'</p>').insertAfter($(element).next());
+				break;
+			case "select_degree":
+				levelParent = 4;
+				//Show 'p' whith error message
+				$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
+				break;
+			default:
+				levelParent = 1;
+				//Show 'p' whith error message
+				$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
+				break;
 		}
+		//Paints the border of the field signaling required field
+		$(element).getParent(levelParent).addClass('has-error');
 	}
 
 	function removeErrorMessage(element) {
-		$(element).parent().removeClass('has-error');
-		$(element).parent().find('p').remove();
+		var levelParent;
+		switch($(element).attr('id')) {
+			case "select_degree":
+				levelParent = 4;
+				break;
+			default:
+				levelParent = 1;
+				break;
+		}
+		$(element).parent().find('p.alert-danger').remove();
+		$(element).getParent(levelParent).removeClass('has-error');
 	}
+
+	//Plugin getParent by levels
+	jQuery.fn.getParent = function(num) {
+	    var last = this[0];
+	    for (var i = 0; i < num; i++) {
+	        last = last.parentNode;
+	    }
+	    return jQuery(last);
+	};
 });

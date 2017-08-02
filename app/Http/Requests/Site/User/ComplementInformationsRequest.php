@@ -109,5 +109,5 @@ class ComplementInformationsRequest extends FormRequest
             'image_perfil.mimes'            => 'Insira uma imagem no formato jpeg, png ou jpg',
             'image_perfil.max'              => 'Tamanho máximo para imagem de perfil é 2MB',
         ];
-    }
+    } 
 }

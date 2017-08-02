@@ -1,15 +1,27 @@
 <div class="divider"><h3>Experiências profissionais</h3></div>
 <div id="experiences">
-	@if(session('number_of_experiences'))
+	
+	@php
+		$number_of_experiences = 0;
+	@endphp
+	
+	@if(!session()->has('errors_experiences'))
 		@php
-			$number_of_experiences = session('number_of_experiences');
+			session()->forget('number_of_experiences');
+		@endphp
+	@endif
+	
+	@if(!session()->has('number_of_experiences'))
+		@php
+			$number_of_experiences = 1;
+			session()->put('number_of_experiences', $number_of_experiences);
 		@endphp
 	@else
 		@php
-		    $number_of_experiences = 1;
+			$number_of_experiences = session()->get('number_of_experiences');
 		@endphp
 	@endif
-	<input type="hidden" name="number_of_experiences" value="{{$number_of_experiences}}">
+
 	@for($i = 1; $i <= $number_of_experiences; $i++)
 
 		<div class="experience" data-experience="{{$i}}">
@@ -67,4 +79,5 @@
 			</div>
 		</div>
 	@endfor
+	<div id="loading_experiences"></div>
 </div>

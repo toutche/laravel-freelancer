@@ -28,3 +28,8 @@ Route::group(['namespace' => 'Site'], function(){
 	Route::get('/perfil/complemento-perfil', 'User\ComplementInformations\ComplementInformationsController@complementRegisterPerfil');
 	Route::post('/perfil/complemento-perfil/envio', 'User\ComplementInformations\ComplementInformationsController@postComplementRegisterPerfil');
 });
+
+Route::group(['namespace' => 'Ajax'], function(){
+	Route::post('/session/get', 'SessionController@getSessionValueByName');
+	Route::post('/session/set', 'SessionController@setSessionValueByName');
+});

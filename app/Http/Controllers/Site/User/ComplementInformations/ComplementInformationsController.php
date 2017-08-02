@@ -17,7 +17,7 @@ class ComplementInformationsController extends Controller
     public function postComplementRegisterPerfil(ComplementInformationsRequest $request)
     {
     	$dataForm = $request->except(['_token']);
-    	$number_of_experiences = $request['number_of_experiences'];
+    	$number_of_experiences = $request->session()->get('number_of_experiences');
 
     	$fields_experiences_validate = array();
     	$messages_experiences_validate = array();
@@ -46,6 +46,7 @@ class ComplementInformationsController extends Controller
 
     	if($validate->fails()) {
             $request->session()->flash('number_of_experiences', $number_of_experiences);
+            $request->session()->flash('errors_experiences','yes');
     		return back()
     						->withErrors($validate)
     						->withInput();
