@@ -94,17 +94,17 @@ $(document).ready(function() {
 			
 			//Set news attributes name
 			switch($(this).attr("name")) {
-				case 'ex_company_name_' + (number_of_experiences - 1):
-					$(this).attr("name", "ex_company_name_" + number_of_experiences);
+				case 'ex_company_name_[' + (number_of_experiences - 1) + ']':
+					$(this).attr("name", "ex_company_name_[" + number_of_experiences + "]");
 					break;
-				case 'ex_responsibility_name_' + (number_of_experiences - 1):
-					$(this).attr("name", "ex_responsibility_name_" + number_of_experiences);
+				case 'ex_responsibility_name_[' + (number_of_experiences - 1) + ']':
+					$(this).attr("name", "ex_responsibility_name_[" + number_of_experiences + "]");
 					break;
-				case 'ex_start_date_' + (number_of_experiences - 1):
-					$(this).attr("name", "ex_start_date_" + number_of_experiences);
+				case 'ex_start_date_[' + (number_of_experiences - 1) + ']':
+					$(this).attr("name", "ex_start_date_[" + number_of_experiences + "]");
 					break;
-				case 'ex_end_date_' + (number_of_experiences - 1):
-					$(this).attr("name", "ex_end_date_" + number_of_experiences);
+				case 'ex_end_date_[' + (number_of_experiences - 1) + ']':
+					$(this).attr("name", "ex_end_date_[" + number_of_experiences + "]");
 					break;
 			}
 			$(this).val("");
