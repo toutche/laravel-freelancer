@@ -79,5 +79,4 @@
 			</div>
 		</div>
 	@endfor
-	<div id="loading_experiences"></div>
 </div>

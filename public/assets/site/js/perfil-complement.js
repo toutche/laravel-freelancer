@@ -7,7 +7,7 @@ $(document).ready(function() {
 	  }
 	});
 
-	$('#options-degree').change(function(){
+	$('#select_degree').change(function(){
 		var option_selected = $(this).val();
 		var semestre = $('#semestre');
 		var crea = $('#crea');
@@ -18,18 +18,22 @@ $(document).ready(function() {
 		} else if(option_selected == 'graduate'){
 			semestre.hide();
 			crea.show();
-		} else if(option_selected == 'select-degree') {
+		} else if(option_selected == '') {
 			semestre.hide();
 			crea.hide();
 		}
+		$(this).valid();
 	});
 
 	//Action click from button add new experience
 	$(document).on('click','#add-experience',function(event){
 		event.preventDefault(); //Prevent default from click
- 		
+ 	
  		//identifies the current button clicked
 		var current = $(this);
+
+		//add loading image
+		current.getParent(3).append('<div id="loading_experiences"></div>');
 
 		//mobile url = /laravel/public
 		//Get current session value of number_of_experiences with ajax request
@@ -37,32 +41,50 @@ $(document).ready(function() {
 		  url: '/session/get',
 		  data: { key: 'number_of_experiences'},
 		  dataType: 'json',
+		  timeout: 50000,
 		  success: function (response) {
 		  	var number_of_experiences = new Number(response.number_of_experiences) + 1;
-		  			  	
+		  	var jqxhr;
 		  	if (number_of_experiences <= 5) {
 		  		//set new current session value of number_of_experiences with ajax request
-				$.post({
+				jqxhr = $.post({
 					url: '/session/set',
 					data: { key: 'number_of_experiences', value: number_of_experiences},
 					dataType: 'json'
 				});
 
-				//Get 'last' experience by 'number_of_experiences'
-				var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
-				last_experience
-						.clone()	
-						.attr('data-experience', number_of_experiences)
-						.appendTo($('#experiences'));
+				jqxhr.always(function() {
+					//Get 'last' experience by 'number_of_experiences'
+					var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
+					last_experience
+							.clone()	
+							.attr('data-experience', number_of_experiences)
+							.appendTo($('#experiences'));
 
-				update_fields(number_of_experiences);
-				current.remove(); //Remove link from previous experience
+					update_fields(number_of_experiences);
+					current.remove(); //Remove link from previous experience
+					
+					removeLoading('div#loading_experiences');
+				});
+				
 			} else {
+				removeLoading('div#loading_experiences');
 				alert("Máximo de experiências é 5");
 			}
-		  }   
+		  },
+		  error: function(xmlhttprequest, textstatus, message) {
+		    if(textstatus==="timeout") {
+		    	removeLoading('div#loading_experiences');
+		        alert("Erro: Tente novamente");
+		    }
+		  }
 		});
 	});
+
+	function removeLoading(identifier) {
+		//remove loading image
+		$(identifier).remove();
+	}
 
 	//Function update inputs and textarea attributes name
 	function update_fields(number_of_experiences) {
