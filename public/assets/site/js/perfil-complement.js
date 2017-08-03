@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 					update_fields(number_of_experiences);
 					current.remove(); //Remove link from previous experience
-					
+					validateExperiences();
 					removeLoading('div#loading_experiences');
 				});
 				
@@ -178,7 +178,6 @@ $(document).ready(function() {
 			select_degree: {
 				selectVerify: true
 			},
-
 		},
 		messages: {
 			name: {
@@ -217,6 +216,59 @@ $(document).ready(function() {
   		// exclude it from validation
     	ignore: ":hidden:not(#summernote),.note-editable.panel-body"
 	});
+
+	//Used in the validation of experiences by Array
+	// must be called after validate()
+	var validateExperiences = function() {
+		$('input.ex_company_name').each(function () {
+	        $(this).rules('add', {
+	            required: true,
+	            minlength: 3,
+	            maxlength: 100,
+	            messages: {
+				    required: "O campo nome da empresa é obrigatório",
+				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo nome da empresa é {0}"),
+				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo nome da empresa é {0}")
+				}
+	        });
+	    });
+
+	    $('input.ex_responsibility_name').each(function () {
+	        $(this).rules('add', {
+	            required: true,
+	            minlength: 3,
+	            maxlength: 100,
+	            messages: {
+				    required: "O campo cargo da empresa é obrigatório",
+				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo cargo da empresa é {0}"),
+				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo cargo da empresa é {0}")
+				}
+	        });
+	    });
+
+	    $('input.ex_start_date').each(function () {
+	        $(this).rules('add', {
+	            number: true,
+	            exactly: 4,
+	            messages: {
+				    number: "O campo data de início só aceita números",
+				    exactly: jQuery.validator.format("O campo data de início tem que possuir {0} números")
+				}
+	        });
+	    });
+
+	    $('input.ex_end_date').each(function () {
+	        $(this).rules('add', {
+	            number: true,
+	            exactly: 4,
+	            messages: {
+				    number: "O campo data de término só aceita números",
+				    exactly: jQuery.validator.format("O campo data de término tem que possuir {0} números")
+				}
+	        });
+	    });
+	}
+	validateExperiences();
 
 	//Masks
 	$('input[name="cpf"]').mask('000.000.000-00');
