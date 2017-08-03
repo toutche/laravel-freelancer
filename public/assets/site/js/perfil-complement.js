@@ -108,6 +108,7 @@ $(document).ready(function() {
 					break;
 			}
 			$(this).val("");
+			removeErrorMessage($(this));
 		});
 
 		$(".experience[data-experience='" + number_of_experiences + "']")
