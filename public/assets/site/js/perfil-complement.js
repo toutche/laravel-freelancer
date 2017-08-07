@@ -7,7 +7,7 @@ $(document).ready(function() {
 	  }
 	});
 
-	$('#select_degree').change(function(){
+	$('#ed_select_degree').change(function(){
 		var option_selected = $(this).val();
 		var semestre = $('#semestre');
 		var crea = $('#crea');
@@ -32,8 +32,8 @@ $(document).ready(function() {
  		//identifies the current button clicked
 		var current = $(this);
 
-		//add loading image
-		current.getParent(3).append('<div id="loading_experiences"></div>');
+		//disable buttom link
+		current.bind('click', false);
 
 		//mobile url = /laravel/public
 		//Get current session value of number_of_experiences with ajax request
@@ -42,6 +42,10 @@ $(document).ready(function() {
 		  data: { key: 'number_of_experiences'},
 		  dataType: 'json',
 		  timeout: 50000,
+		  beforeSend: function(){
+		    //add loading image
+			current.getParent(3).append('<div id="loading"></div>');
+		  },
 		  success: function (response) {
 		  	var number_of_experiences = new Number(response.number_of_experiences) + 1;
 		  	var jqxhr;
@@ -61,24 +65,88 @@ $(document).ready(function() {
 							.attr('data-experience', number_of_experiences)
 							.appendTo($('#experiences'));
 
-					update_fields(number_of_experiences);
+					update_fields_experiences(number_of_experiences);
 					current.remove(); //Remove link from previous experience
 					validateExperiences();
-					removeLoading('div#loading_experiences');
+					removeLoading('div#loading');
 				});
 				
 			} else {
-				removeLoading('div#loading_experiences');
+				removeLoading('div#loading');
 				alert("Máximo de experiências é 5");
 			}
 		  },
 		  error: function(xmlhttprequest, textstatus, message) {
 		    if(textstatus==="timeout") {
-		    	removeLoading('div#loading_experiences');
+		    	removeLoading('div#loading');
 		        alert("Erro: Tente novamente");
 		    }
 		  }
 		});
+		//enable buttom link
+		current.disable(false);
+	});
+
+	//Action click from button add new education
+	$(document).on('click','#add-education',function(event) {
+		event.preventDefault(); //Prevent default from click
+
+		//identifies the current button clicked
+		var current = $(this);
+
+		//disable buttom link
+		current.bind('click', false);
+
+		//mobile url = /laravel/public
+		//Get current session value of number_of_educations with ajax request
+		$.post({                    
+		  url: '/session/get',
+		  data: { key: 'number_of_educations'},
+		  dataType: 'json',
+		  timeout: 50000,
+		  beforeSend: function(){
+		    //add loading image
+			current.getParent(3).append('<div id="loading"></div>');
+		  },
+		  success: function (response) {
+		  	var number_of_educations = new Number(response.number_of_educations) + 1;
+		  	var jqxhr;
+		  	if (number_of_educations <= 5) {
+		  		//set new current session value of number_of_educations with ajax request
+				jqxhr = $.post({
+					url: '/session/set',
+					data: { key: 'number_of_educations', value: number_of_educations},
+					dataType: 'json'
+				});
+
+				jqxhr.always(function() {
+					//Get 'last' experience by 'number_of_educations'
+					var last_education = $(".education[data-education='" + (number_of_educations - 1) + "']")
+					last_education
+							.clone()	
+							.attr('data-education', number_of_educations)
+							.appendTo($('#educations'));
+
+					update_fields_educations(number_of_educations);
+					current.remove(); //Remove link from previous experience
+
+					removeLoading('div#loading');
+				});
+				
+			} else {
+				removeLoading('div#loading');
+				alert("Máximo de educações é 5");
+			}
+		  },
+		  error: function(xmlhttprequest, textstatus, message) {
+		    if(textstatus==="timeout") {
+		    	removeLoading('div#loading');
+		        alert("Erro: Tente novamente");
+		    }
+		  }
+		});
+		//enable buttom link
+		current.disable(false);
 	});
 
 	function removeLoading(identifier) {
@@ -86,8 +154,8 @@ $(document).ready(function() {
 		$(identifier).remove();
 	}
 
-	//Function update inputs and textarea attributes name
-	function update_fields(number_of_experiences) {
+	//Function update inputs and textarea attributes name of experiences
+	function update_fields_experiences(number_of_experiences) {
 
 		//Fetches all clone inputs
 		$(".experience[data-experience='" + number_of_experiences + "'] :input").each( function() {
@@ -132,6 +200,44 @@ $(document).ready(function() {
 								    ['height', ['height']]
 								  ]
 					    	});
+	}
+
+	//Function update inputs and textarea attributes name of educations
+	function update_fields_educations(number_of_educations) {
+
+		//Fetches all clone inputs
+		$(".education[data-education='" + number_of_educations + "'] :input").each( function() {
+			
+			//Set news attributes name
+			switch($(this).attr("name")) {
+				case 'ed_select_degree_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_select_degree_[" + number_of_educations + "]");
+					break;
+				case 'ed_course_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_course_[" + number_of_educations + "]");
+					break;
+				case 'ed_semester_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_semester_[" + number_of_educations + "]");
+					break;
+				case 'ed_crea_state_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_crea_state_[" + number_of_educations + "]");
+					break;
+				case 'ed_crea_number_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_crea_number_[" + number_of_educations + "]");
+					break;
+				case 'ed_college_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_college_[" + number_of_educations + "]");
+					break;
+				case 'ed_start_date_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_start_date_[" + number_of_educations + "]");
+					break;
+				case 'ed_end_date_[' + (number_of_educations - 1) + ']':
+					$(this).attr("name", "ed_end_date_[" + number_of_educations + "]");
+					break;
+			}
+			$(this).val("");
+			removeErrorMessage($(this));
+		});
 	}
 
 	$("#complement_register").validate({
@@ -330,4 +436,13 @@ $(document).ready(function() {
 	    }
 	    return jQuery(last);
 	};
+
+	// Disable function
+	jQuery.fn.extend({
+        disable: function(state) {
+            return this.each(function() {
+                this.disabled = state;
+            });
+        }
+    });
 });

@@ -433,7 +433,7 @@ nav#menu span.fa.fa-bars:hover {
 .breadcrumb a:hover {
     color: #ff4f57;
 }
-#loading_experiences {
+#loading {
     background-image: url(../images/loading.gif);
     background-repeat: no-repeat;
     background-position: top center;
