@@ -7,23 +7,8 @@ $(document).ready(function() {
 	  }
 	});
 
-	$('#ed_select_degree').change(function(){
-		var option_selected = $(this).val();
-		var semestre = $('#semestre');
-		var crea = $('#crea');
-
-		if(option_selected == 'graduating') {
-			crea.hide();
-			semestre.show();
-		} else if(option_selected == 'graduate'){
-			semestre.hide();
-			crea.show();
-		} else if(option_selected == '') {
-			semestre.hide();
-			crea.hide();
-		}
-		$(this).valid();
-	});
+	$('.semester').hide();
+	$('.crea').hide();
 
 	//Action click from button add new experience
 	$(document).on('click','#add-experience',function(event){
@@ -211,7 +196,19 @@ $(document).ready(function() {
 			//Set news attributes name
 			switch($(this).attr("name")) {
 				case 'ed_select_degree_[' + (number_of_educations - 1) + ']':
+					
 					$(this).attr("name", "ed_select_degree_[" + number_of_educations + "]");
+					$(this).attr("id", "ed_select_degree_[" + number_of_educations + "]");
+					$(this).attr("data-id", number_of_educations);
+					$(this).prev().prev().attr("data-id", "ed_select_degree_[" + number_of_educations + "]");
+
+					var clone = $(this).getParent(1).clone();
+					clone.find("button").remove();
+					clone.find('select').selectpicker();
+					clone.appendTo($(this).getParent(2));
+
+					$(this).getParent(1).remove();
+					
 					break;
 				case 'ed_course_[' + (number_of_educations - 1) + ']':
 					$(this).attr("name", "ed_course_[" + number_of_educations + "]");
@@ -235,10 +232,33 @@ $(document).ready(function() {
 					$(this).attr("name", "ed_end_date_[" + number_of_educations + "]");
 					break;
 			}
+
+			$(".education[data-education='" + number_of_educations + "']").find("div.semester").attr("id", "semester_" + number_of_educations);
+			$(".education[data-education='" + number_of_educations + "']").find("div.crea").attr("id", "crea_" + number_of_educations);
+
 			$(this).val("");
 			removeErrorMessage($(this));
 		});
 	}
+
+	$(document).on('change', 'select.selectpicker', function() {
+		var option_selected = $(this).val();
+		var education_number = $(this).attr('data-id');
+		var semester = $("div#semester_" + education_number);
+		var crea = $("div#crea_" + education_number);
+		
+		if(option_selected == 'graduating') {
+			crea.hide();
+			semester.show();
+		} else if(option_selected == 'graduate'){
+			semester.hide();
+			crea.show();
+		} else if(option_selected == '') {
+			semester.hide();
+			crea.hide();
+		}
+		$(this).valid();
+	});
 
 	$("#complement_register").validate({
 		focusInvalid: false,
@@ -280,10 +300,6 @@ $(document).ready(function() {
 			image_perfil: {
 				extension: "jpg|jpeg|png",
 				filesize: 2097152
-			},
-			//education
-			select_degree: {
-				selectVerify: true
 			},
 		},
 		messages: {
@@ -399,7 +415,7 @@ $(document).ready(function() {
 			case "image_perfil":
 				$('<p class="alert-danger">'+ error[0].innerHTML +'</p>').insertAfter($(element).next());
 				break;
-			case "select_degree":
+			case "ed_select_degree":
 				levelParent = 4;
 				//Show 'p' whith error message
 				$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
@@ -417,7 +433,7 @@ $(document).ready(function() {
 	function removeErrorMessage(element) {
 		var levelParent;
 		switch($(element).attr('id')) {
-			case "select_degree":
+			case "ed_select_degree":
 				levelParent = 4;
 				break;
 			default:

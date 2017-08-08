@@ -798,9 +798,6 @@ nav#menu span.fa.fa-bars:hover {
 #crea-estado > .form-group {
     margin-left: 20px;
 }
-#semestre, #crea {
-    display: none;
-}
 .has-error .note-editor {
     border-color: #a94442!important;
     border: 2px; 
