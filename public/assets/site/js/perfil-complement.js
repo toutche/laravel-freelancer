@@ -240,13 +240,26 @@ $(document).ready(function() {
 			removeErrorMessage($(this));
 		});
 	}
+	
+	//Identifies whether the degree is selected and shows the specific div according to the degree.
+	//When it returns with error in the educations already appears, the clones with the 
+	//div semester or crea open.
 
+	//Ready the document
+	$('select.selectpicker').each(function(){
+		open_crea_or_semester($(this));
+	});
+	//When there is change
 	$(document).on('change', 'select.selectpicker', function() {
-		var option_selected = $(this).val();
-		var education_number = $(this).attr('data-id');
+		open_crea_or_semester($(this));
+	});
+
+	function open_crea_or_semester(element) {
+		var option_selected = element.val();
+		var education_number = element.attr('data-id');
 		var semester = $("div#semester_" + education_number);
 		var crea = $("div#crea_" + education_number);
-		
+
 		if(option_selected == 'graduating') {
 			crea.hide();
 			semester.show();
@@ -257,8 +270,8 @@ $(document).ready(function() {
 			semester.hide();
 			crea.hide();
 		}
-		$(this).valid();
-	});
+		element.valid();
+	}
 
 	$("#complement_register").validate({
 		focusInvalid: false,
