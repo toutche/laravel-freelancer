@@ -246,15 +246,15 @@ $(document).ready(function() {
 	//div semester or crea open.
 
 	//Ready the document
-	$('select.selectpicker').each(function(){
-		open_crea_or_semester($(this));
+	$('.degree select.selectpicker').each(function(){
+		open_crea_or_semester($(this), false);
 	});
 	//When there is change
 	$(document).on('change', 'select.selectpicker', function() {
-		open_crea_or_semester($(this));
+		open_crea_or_semester($(this), true);
 	});
 
-	function open_crea_or_semester(element) {
+	function open_crea_or_semester(element, validate) {
 		var option_selected = element.val();
 		var education_number = element.attr('data-id');
 		var semester = $("div#semester_" + education_number);
@@ -270,7 +270,7 @@ $(document).ready(function() {
 			semester.hide();
 			crea.hide();
 		}
-		element.valid();
+		if(validate) element.valid();
 	}
 
 	$("#complement_register").validate({
