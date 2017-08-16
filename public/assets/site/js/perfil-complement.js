@@ -189,26 +189,30 @@ $(document).ready(function() {
 
 	//Function update inputs and textarea attributes name of educations
 	function update_fields_educations(number_of_educations) {
-
+		
 		//Fetches all clone inputs
 		$(".education[data-education='" + number_of_educations + "'] :input").each( function() {
+			var element = $(this);
 			
 			//Set news attributes name
 			switch($(this).attr("name")) {
 				case 'ed_select_degree_[' + (number_of_educations - 1) + ']':
-					
+					//$(this) == select
+					$(this).getParent(3).prev().attr("for", "ed_select_degree_[" + number_of_educations + "]"); //external label
+					$(this).getParent(3).attr("id", "ed_select_degree_[" + number_of_educations + "]"); //div#ed_select_degree_[i]
+					$(this).prev().prev().attr("data-id", "ed_select_degree_[" + number_of_educations + "]"); // button
 					$(this).attr("name", "ed_select_degree_[" + number_of_educations + "]");
 					$(this).attr("id", "ed_select_degree_[" + number_of_educations + "]");
 					$(this).attr("data-id", number_of_educations);
-					$(this).prev().prev().attr("data-id", "ed_select_degree_[" + number_of_educations + "]");
 
-					var clone = $(this).getParent(1).clone();
-					clone.find("button").remove();
-					clone.find('select').selectpicker();
-					clone.appendTo($(this).getParent(2));
-
-					$(this).getParent(1).remove();
+					var label = $(this).getParent(2); //#label
+					var select = label.find("select").clone(); //clone select
+					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
+					select.appendTo(label).selectpicker("render"); //add new select
+					select.change();
 					
+					element = select;
+
 					break;
 				case 'ed_course_[' + (number_of_educations - 1) + ']':
 					$(this).attr("name", "ed_course_[" + number_of_educations + "]");
@@ -236,8 +240,11 @@ $(document).ready(function() {
 			$(".education[data-education='" + number_of_educations + "']").find("div.semester").attr("id", "semester_" + number_of_educations);
 			$(".education[data-education='" + number_of_educations + "']").find("div.crea").attr("id", "crea_" + number_of_educations);
 
-			$(this).val("");
-			removeErrorMessage($(this));
+			//if obj equal 'SELECT' don't clean value 
+			if(element[0].tagName != 'SELECT') {
+				$(this).val("");
+			}
+			removeErrorMessage(element);
 		});
 	}
 	
@@ -313,7 +320,7 @@ $(document).ready(function() {
 			image_perfil: {
 				extension: "jpg|jpeg|png",
 				filesize: 2097152
-			},
+			},		
 		},
 		messages: {
 			name: {
@@ -428,7 +435,7 @@ $(document).ready(function() {
 			case "image_perfil":
 				$('<p class="alert-danger">'+ error[0].innerHTML +'</p>').insertAfter($(element).next());
 				break;
-			case "ed_select_degree":
+			case "ed_select_degree_[" + $(element).attr('data-id') + "]":
 				levelParent = 4;
 				//Show 'p' whith error message
 				$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
@@ -446,15 +453,16 @@ $(document).ready(function() {
 	function removeErrorMessage(element) {
 		var levelParent;
 		switch($(element).attr('id')) {
-			case "ed_select_degree":
+			case "ed_select_degree_[" + $(element).attr('data-id') + "]":
 				levelParent = 4;
 				break;
 			default:
 				levelParent = 1;
 				break;
 		}
-		$(element).parent().find('p.alert-danger').remove();
+		
 		$(element).getParent(levelParent).removeClass('has-error');
+		$(element).getParent(levelParent).find('p.alert-danger').remove();
 	}
 
 	//Plugin getParent by levels

@@ -25,8 +25,8 @@
 
 		<div class="education" data-education="{{$i}}">
 			<div class="form-group @if ($errors->has('ed_select_degree_.'.$i)) has-error @endif">
-				<label class="control-label" for="select_degree">Grau</label>
-				<div>
+				<label class="control-label" for="ed_select_degree_[{{$i}}]">Grau</label>
+				<div id="ed_select_degree_[{{$i}}]">
 					<label class="styled-select degree">
 						<select id="ed_select_degree_[{{$i}}]" name="ed_select_degree_[{{$i}}]" data-id="{{$i}}" class="dropdown-product selectpicker">
 							<option value="">Selecione uma opção</option>
@@ -119,7 +119,7 @@
 				<div class="row">
 					<div class="col-md-6 @if ($errors->has('ed_start_date_.'.$i)) has-error @endif">
 						<label class="control-label" for="textarea">Ano de Início</label>
-						<input type="number" class="form-control" name="ed_start_date_[{{$i}}]" placeholder="Ex: 2014" value="{{old('ed_start_date_.'.$i)}}">
+						<input type="text" class="form-control" name="ed_start_date_[{{$i}}]" placeholder="Ex: 2014" value="{{old('ed_start_date_.'.$i)}}">
 						@if ($errors->has('ed_start_date_.'.$i)) 
 							<p class="alert-danger">{{ $errors->first('ed_start_date_.'.$i) }}</p> 
 						@endif
