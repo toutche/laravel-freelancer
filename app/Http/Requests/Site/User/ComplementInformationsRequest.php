@@ -107,7 +107,7 @@ class ComplementInformationsRequest extends FormRequest
             //Experiences
             'ex_company_name_.*'            => 'required|min:3|max:100',
             'ex_responsibility_name_.*'     => 'required|min:3|max:100',
-            'ex_start_date_.*'              => 'numeric|exactly:4',
+            'ex_start_date_.*'              => 'required|numeric|exactly:4',
             'ex_end_date_.*'                => 'numeric|exactly:4'
         ];
         //As graduation selection applies the respective rules
@@ -164,6 +164,7 @@ class ComplementInformationsRequest extends FormRequest
             'ex_responsibility_name_.*.required'    => 'O campo cargo da empresa é obrigatório',
             'ex_responsibility_name_.*.min'         => 'Mínimo de caracteres para o campo cargo da empresa é 3',
             'ex_responsibility_name_.*.max'         => 'Máximo de caracteres para o campo cargo da empresa é 100',
+            'ex_start_date_.*.required'             => 'O campo data de início é obrigatório',
             'ex_start_date_.*.numeric'              => 'O campo data de início só aceita números',
             'ex_start_date_.*.exactly'              => 'O campo data de início tem que possuir 4 números',
             'ex_end_date_.*.numeric'                => 'O campo data de término só aceita números',

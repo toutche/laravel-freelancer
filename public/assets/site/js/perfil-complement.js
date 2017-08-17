@@ -418,9 +418,11 @@ $(document).ready(function() {
 
 	    $('input.ex_start_date').each(function () {
 	        $(this).rules('add', {
+	            required:true,
 	            number: true,
 	            exactly: 4,
 	            messages: {
+	            	required: "O campo data de início é obrigatório"
 				    number: "O campo data de início só aceita números",
 				    exactly: jQuery.validator.format("O campo data de início tem que possuir {0} números")
 				}
