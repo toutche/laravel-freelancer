@@ -116,7 +116,7 @@ class ComplementInformationsRequest extends FormRequest
                 if(Input::get('ed_select_degree_.' . $i) == "graduating") {
                     $rules['ed_semester_.' . $i] = 'required|numeric';
                 } else if(Input::get('ed_select_degree_.' . $i) == "graduate") {
-                    $rules['ed_crea_state_.' . $i] = 'required|in:ac,al'; 
+                    $rules['ed_crea_state_.' . $i] = 'required|in:ac,al,am,ap,ba,ce,df,es,go,ma,mt,ms,mg,pa,pb,pr, pe,pi,rj,rn,ro,rs,rr,sc,se,sp,to'; 
                     $rules['ed_crea_number_.' . $i] = 'required|number';
                 }
             }
@@ -151,7 +151,7 @@ class ComplementInformationsRequest extends FormRequest
             'ed_course_.*.max'                      => 'Máximo de caracteres para o campo curso é 100',
             'ed_college_.*.required'                => 'O campo instituição de ensino é obrigatório',
             'ed_college_.*.min'                     => 'Mínimo de caracteres para o campo instituição de ensino é 3',
-            'ed_college_.*.max'                     => 'Máximo de caracteres para o campo instituição de ensino é 3',
+            'ed_college_.*.max'                     => 'Máximo de caracteres para o campo instituição de ensino é 100',
             'ed_start_date_.*.required'             => 'O campo ano de início é obrigatório',
             'ed_start_date_.*.numeric'              => 'O campo ano de início só aceita números',
             'ed_start_date_.*.exactly'              => 'O campo ano de início tem que possuir 4 números',
