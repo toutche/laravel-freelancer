@@ -53,10 +53,13 @@
 	<script type="text/javascript" src="{{url('js/validation/aditional/filesize.js')}}"></script>
 	<script type="text/javascript" src="{{url('js/validation/aditional/selectVerify.js')}}"></script>
 	<script type="text/javascript" src="{{url('js/validation/aditional/exactly.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/validation/aditional/valueNotEquals.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/validation/aditional/inArray.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote-pt-BR.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/bootstrap-select.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/perfil-complement.js')}}"></script>
+
 	<script>
 		
     	$('.edit').summernote({

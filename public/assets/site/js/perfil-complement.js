@@ -270,9 +270,18 @@ $(document).ready(function() {
 		if(option_selected == 'graduating') {
 			crea.hide();
 			semester.show();
-		} else if(option_selected == 'graduate'){
+			removeErrorMessage(crea.find('select'));
+			removeErrorMessage(crea.find('input'));
+			removeRulesOfGraduate(crea.find('select'), crea.find('input'));
+			addRulesOfGraduating(semester.find('input'));
+
+		} else if(option_selected == 'graduate') {
 			semester.hide();
 			crea.show();
+			removeErrorMessage(semester.find('input'));
+			removeRulesOfGraduating(semester.find('input'));
+			addRulesOfGraduate(crea.find('select'), crea.find('input'));
+
 		} else if(option_selected == '') {
 			semester.hide();
 			crea.hide();
@@ -412,6 +421,107 @@ $(document).ready(function() {
 	    });
 	}
 	validateExperiences();
+
+	//Used in the validation of educations by Array
+	// must be called after validate()
+	var validateEducations = function() {
+		$('select.ed_select_degree').each(function () {
+	        $(this).rules('add', {
+	            valueNotEquals: "",
+	            inArray: ["graduating", "graduate"],
+	            messages: {
+				    valueNotEquals: "O campo grau é obrigatório",
+				    inArray: "Selecione uma opção"
+				}
+	        });
+	    });
+		$('input.ed_course').each(function () {
+	        $(this).rules('add', {
+	            required: true,
+	            minlength: 3,
+	            maxlength: 100,
+	            messages: {
+				    required: "O campo curso é obrigatório",
+				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo curso é {0}"),
+				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo curso é {0}")
+				}
+	        });
+	    });
+	    $('input.ed_college').each(function () {
+	        $(this).rules('add', {
+	            required: true,
+	            minlength: 3,
+	            maxlength: 100,
+	            messages: {
+				    required: "O campo instituição de ensino é obrigatório",
+				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo instituição de ensino é {0}"),
+				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo instituição de ensino é {0}")
+				}
+	        });
+	    });
+	    $('input.ed_start_date').each(function () {
+	        $(this).rules('add', {
+	            required: true,
+	            number:true,
+	            exactly:4,
+	            messages: {
+				    required: "O campo ano de início é obrigatório",
+				    number: "O campo ano de início só aceita números",
+				    exactly: jQuery.validator.format("O campo ano de início tem que possuir {0} números")
+				}
+	        });
+	    });
+	    $('input.ed_end_date').each(function () {
+	        $(this).rules('add', {
+	            number:true,
+	            exactly:4,
+	            messages: {
+				    number: "O campo ano de término só aceita números",
+				    exactly: jQuery.validator.format("O campo ano de término tem que possuir {0} números")
+				}
+	        });
+	    });
+	}
+	validateEducations();
+
+	function addRulesOfGraduate(state, number) {
+	        state.rules('add', {
+	            valueNotEquals: "",
+	            inArray: ["ac", "al", "am", "ap", "ba", "ce", "df", "es", "go", "ma", "mt", "ms", "mg", "pa", "pb",
+	            "pr", "pe", "pi", "rj", "rn", "ro", "rs", "rr", "sc", "se", "sp", "to"],
+	            messages: {
+				    valueNotEquals: "O campo estado é obrigatório",
+				    inArray: "Escolha um estado"
+				}
+	        });
+	        number.rules('add', {
+	            required: true,
+	            number:true,
+	            messages: {
+				    required: "O campo CREA é obrigatório",
+				    number: "O campo CREA só aceita números"
+				}
+	        });
+	}
+	function removeRulesOfGraduate(state, number) {
+		state.rules('remove');
+		number.rules('remove');
+	}
+
+	function addRulesOfGraduating(semester) {
+	        semester.rules('add', {
+	            required: true,
+	            number:true,
+	            messages: {
+				    required: "O campo semestre é obrigatório",
+				    number: "O campo semestre só aceita números"
+				}
+	        });
+	}
+
+	function removeRulesOfGraduating(semester) {
+		$(semester).rules('remove');
+	}
 
 	//Masks
 	$('input[name="cpf"]').mask('000.000.000-00');
