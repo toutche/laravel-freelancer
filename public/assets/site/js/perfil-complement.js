@@ -409,9 +409,9 @@ $(document).ready(function() {
 	            minlength: 3,
 	            maxlength: 100,
 	            messages: {
-				    required: "O campo cargo da empresa é obrigatório",
-				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo cargo da empresa é {0}"),
-				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo cargo da empresa é {0}")
+				    required: "O campo cargo é obrigatório",
+				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo cargo é {0}"),
+				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo cargo é {0}")
 				}
 	        });
 	    });
