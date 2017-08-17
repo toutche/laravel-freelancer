@@ -57,10 +57,10 @@
 			<div class="add-post-btn crea" id="crea_{{$i}}">
 				<div class="pull-left">
 					<div class="form-group @if ($errors->has('ed_crea_state_.'.$i)) has-error @endif">
-						<label class="control-label" for="textarea">Estado</label>
-						<div class="search-category-container">
+						<label class="control-label">Estado</label>
+						<div class="search-category-container" id="ed_crea_state_[{{$i}}]">
 							<label class="styled-select state">
-								<select class="dropdown-product selectpicker ed_crea_state" name="ed_crea_state_[{{$i}}]">
+								<select class="dropdown-product selectpicker ed_crea_state" data-id="{{$i}}" name="ed_crea_state_[{{$i}}]">
 									<option value="">Selecione o Estado</option> 
 									<option value="ac">Acre</option> 
 									<option value="al">Alagoas</option> 

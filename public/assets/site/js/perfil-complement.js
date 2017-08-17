@@ -114,7 +114,7 @@ $(document).ready(function() {
 
 					update_fields_educations(number_of_educations);
 					current.remove(); //Remove link from previous experience
-
+					validateEducations();
 					removeLoading('div#loading');
 				});
 				
@@ -221,7 +221,20 @@ $(document).ready(function() {
 					$(this).attr("name", "ed_semester_[" + number_of_educations + "]");
 					break;
 				case 'ed_crea_state_[' + (number_of_educations - 1) + ']':
+					$(this).getParent(3).attr("id", "ed_crea_state_[" + number_of_educations + "]"); //div#ed_crea_state_[i]
+					$(this).prev().prev().attr("data-id", "ed_crea_state_[" + number_of_educations + "]"); // button
 					$(this).attr("name", "ed_crea_state_[" + number_of_educations + "]");
+					$(this).attr("id", "ed_crea_state_[" + number_of_educations + "]");
+					$(this).attr("data-id", number_of_educations);
+
+					var label = $(this).getParent(2); //#label
+					var select = label.find("select").clone(); //clone select
+					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
+					select.appendTo(label).selectpicker("render"); //add new select
+					select.change();
+					
+					element = select;
+
 					break;
 				case 'ed_crea_number_[' + (number_of_educations - 1) + ']':
 					$(this).attr("name", "ed_crea_number_[" + number_of_educations + "]");
@@ -257,7 +270,7 @@ $(document).ready(function() {
 		open_crea_or_semester($(this), false);
 	});
 	//When there is change
-	$(document).on('change', 'select.selectpicker', function() {
+	$(document).on('change', '.degree select.selectpicker', function() {
 		open_crea_or_semester($(this), true);
 	});
 
@@ -288,6 +301,11 @@ $(document).ready(function() {
 		}
 		if(validate) element.valid();
 	}
+
+	//When there is change select state crea
+	$(document).on('change', '.crea select.selectpicker', function() {
+		$(this).valid();
+	});
 
 	$("#complement_register").validate({
 		focusInvalid: false,
@@ -485,23 +503,23 @@ $(document).ready(function() {
 	validateEducations();
 
 	function addRulesOfGraduate(state, number) {
-	        state.rules('add', {
-	            valueNotEquals: "",
-	            inArray: ["ac", "al", "am", "ap", "ba", "ce", "df", "es", "go", "ma", "mt", "ms", "mg", "pa", "pb",
-	            "pr", "pe", "pi", "rj", "rn", "ro", "rs", "rr", "sc", "se", "sp", "to"],
-	            messages: {
-				    valueNotEquals: "O campo estado é obrigatório",
-				    inArray: "Escolha um estado"
-				}
-	        });
-	        number.rules('add', {
-	            required: true,
-	            number:true,
-	            messages: {
-				    required: "O campo CREA é obrigatório",
-				    number: "O campo CREA só aceita números"
-				}
-	        });
+        state.rules('add', {
+            valueNotEquals: "",
+            inArray: ["ac", "am", "ap", "ba", "ce", "df", "es", "go", "ma", "mt", "ms", "mg", "pa", "pb",
+            "pr", "pe", "pi", "rj", "rn", "ro", "rs", "rr", "sc", "se", "sp", "to"],
+            messages: {
+			    valueNotEquals: "O campo estado é obrigatório",
+			    inArray: "Escolha um estado"
+			}
+        });
+        number.rules('add', {
+            required: true,
+            number:true,
+            messages: {
+			    required: "O campo CREA é obrigatório",
+			    number: "O campo CREA só aceita números"
+			}
+        });
 	}
 	function removeRulesOfGraduate(state, number) {
 		state.rules('remove');
@@ -509,14 +527,14 @@ $(document).ready(function() {
 	}
 
 	function addRulesOfGraduating(semester) {
-	        semester.rules('add', {
-	            required: true,
-	            number:true,
-	            messages: {
-				    required: "O campo semestre é obrigatório",
-				    number: "O campo semestre só aceita números"
-				}
-	        });
+        semester.rules('add', {
+            required: true,
+            number:true,
+            messages: {
+			    required: "O campo semestre é obrigatório",
+			    number: "O campo semestre só aceita números"
+			}
+        });
 	}
 
 	function removeRulesOfGraduating(semester) {
