@@ -24,11 +24,14 @@ class ComplementInformationsRequest extends FormRequest
 
         $validationFactory->extend(
             'exactly',
-            function ($attribute, $value, $parameters) {
-                if(strlen($value) == $parameters[0]) 
+            function ($attribute, $value, $parameters){
+                if(strlen($value) == 0) {
                     return true;
-                else
+                }
+                if(strlen($value) != $parameters[0]) {
                     return false;
+                }
+                return true;
             },
             'O campo :attribute não possui o número de caracteres correspondentes'
         );
@@ -103,12 +106,12 @@ class ComplementInformationsRequest extends FormRequest
             'ed_course_.*'                  => 'required|min:3|max:100',
             'ed_college_.*'                 => 'required|min:3|max:100',
             'ed_start_date_.*'              => 'required|numeric|exactly:4',
-            'ed_end_date_.*'                => 'numeric|exactly:4', 
+            'ed_end_date_.*'                => 'nullable|numeric|exactly:4', 
             //Experiences
             'ex_company_name_.*'            => 'required|min:3|max:100',
             'ex_responsibility_name_.*'     => 'required|min:3|max:100',
             'ex_start_date_.*'              => 'required|numeric|exactly:4',
-            'ex_end_date_.*'                => 'numeric|exactly:4'
+            'ex_end_date_.*'                => 'nullable|numeric|exactly:4'
         ];
         //As graduation selection applies the respective rules
         for($i = 1; $i <= count(Input::get('ed_select_degree_.*')); $i++ ) {

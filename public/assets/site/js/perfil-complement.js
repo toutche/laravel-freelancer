@@ -472,8 +472,8 @@ $(document).ready(function() {
 	    });
 	    $('input.ed_end_date').each(function () {
 	        $(this).rules('add', {
-	            number:true,
-	            exactly:4,
+	            number: true,
+	            exactly: 4,
 	            messages: {
 				    number: "O campo ano de término só aceita números",
 				    exactly: jQuery.validator.format("O campo ano de término tem que possuir {0} números")
