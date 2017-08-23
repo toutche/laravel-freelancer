@@ -7,6 +7,24 @@ $(document).ready(function() {
 	  }
 	});
 
+	//Plugin getParent by levels
+	jQuery.fn.getParent = function(num) {
+	    var last = this[0];
+	    for (var i = 0; i < num; i++) {
+	        last = last.parentNode;
+	    }
+	    return jQuery(last);
+	};
+
+	// Disable function
+	jQuery.fn.extend({
+        disable: function(state) {
+            return this.each(function() {
+                this.disabled = state;
+            });
+        }
+    });
+
 	$('.semester').hide();
 	$('.crea').hide();
 
@@ -208,6 +226,7 @@ $(document).ready(function() {
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
+					select.find('option:selected').removeAttr("selected");//remove option selected
 					select.appendTo(label).selectpicker("render"); //add new select
 					select.change();
 					
@@ -230,6 +249,7 @@ $(document).ready(function() {
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
+					select.find('option:selected').removeAttr("selected");//remove option selected
 					select.appendTo(label).selectpicker("render"); //add new select
 					select.change();
 					
@@ -261,47 +281,6 @@ $(document).ready(function() {
 		});
 	}
 	
-	//Identifies whether the degree is selected and shows the specific div according to the degree.
-	//When it returns with error in the educations already appears, the clones with the 
-	//div semester or crea open.
-
-	//Ready the document
-	$('.degree select.selectpicker').each(function(){
-		open_crea_or_semester($(this), false);
-	});
-	//When there is change
-	$(document).on('change', '.degree select.selectpicker', function() {
-		open_crea_or_semester($(this), true);
-	});
-
-	function open_crea_or_semester(element, validate) {
-		var option_selected = element.val();
-		var education_number = element.attr('data-id');
-		var semester = $("div#semester_" + education_number);
-		var crea = $("div#crea_" + education_number);
-
-		if(option_selected == 'graduating') {
-			crea.hide();
-			semester.show();
-			removeErrorMessage(crea.find('select'));
-			removeErrorMessage(crea.find('input'));
-			removeRulesOfGraduate(crea.find('select'), crea.find('input'));
-			addRulesOfGraduating(semester.find('input'));
-
-		} else if(option_selected == 'graduate') {
-			semester.hide();
-			crea.show();
-			removeErrorMessage(semester.find('input'));
-			removeRulesOfGraduating(semester.find('input'));
-			addRulesOfGraduate(crea.find('select'), crea.find('input'));
-
-		} else if(option_selected == '') {
-			semester.hide();
-			crea.hide();
-		}
-		if(validate) element.valid();
-	}
-
 	//When there is change select state crea
 	$(document).on('change', '.crea select.selectpicker', function() {
 		$(this).valid();
@@ -507,8 +486,8 @@ $(document).ready(function() {
 	function addRulesOfGraduate(state, number) {
         state.rules('add', {
             valueNotEquals: "",
-            inArray: ["ac", "am", "ap", "ba", "ce", "df", "es", "go", "ma", "mt", "ms", "mg", "pa", "pb",
-            "pr", "pe", "pi", "rj", "rn", "ro", "rs", "rr", "sc", "se", "sp", "to"],
+            inArray: ["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
+            "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"],
             messages: {
 			    valueNotEquals: "O campo estado é obrigatório",
 			    inArray: "Escolha um estado"
@@ -541,6 +520,45 @@ $(document).ready(function() {
 
 	function removeRulesOfGraduating(semester) {
 		$(semester).rules('remove');
+	}
+
+	//Identifies whether the degree is selected and shows the specific div according to the degree.
+	//When it returns with error in the educations already appears, the clones with the 
+	//div semester or crea open.
+
+	//Ready the document
+	$('.degree select.selectpicker').each(function(){
+		open_crea_or_semester($(this), false);
+	});
+	//When there is change
+	$(document).on('change', '.degree select.selectpicker', function() {
+		open_crea_or_semester($(this), true);
+	});
+
+	function open_crea_or_semester(element, validate) {
+		var option_selected = element.val();
+		var education_number = element.attr('data-id');
+		var semester = $("div#semester_" + education_number);
+		var crea = $("div#crea_" + education_number);
+
+		if(option_selected == 'graduating') {
+			crea.hide();
+			semester.show();
+			removeErrorMessage(crea.find('select'));
+			removeErrorMessage(crea.find('input'));
+			removeRulesOfGraduate(crea.find('select'), crea.find('input'));
+			addRulesOfGraduating(semester.find('input'));
+		} else if(option_selected == 'graduate') {
+			semester.hide();
+			crea.show();
+			removeErrorMessage(semester.find('input'));
+			removeRulesOfGraduating(semester.find('input'));
+			addRulesOfGraduate(crea.find('select'), crea.find('input'));
+		} else if(option_selected == '') {
+			semester.hide();
+			crea.hide();
+		}
+		if(validate) element.valid();
 	}
 
 	//Masks
@@ -594,22 +612,4 @@ $(document).ready(function() {
 		$(element).getParent(levelParent).removeClass('has-error');
 		$(element).getParent(levelParent).find('p.alert-danger').remove();
 	}
-
-	//Plugin getParent by levels
-	jQuery.fn.getParent = function(num) {
-	    var last = this[0];
-	    for (var i = 0; i < num; i++) {
-	        last = last.parentNode;
-	    }
-	    return jQuery(last);
-	};
-
-	// Disable function
-	jQuery.fn.extend({
-        disable: function(state) {
-            return this.each(function() {
-                this.disabled = state;
-            });
-        }
-    });
 });

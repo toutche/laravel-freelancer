@@ -116,8 +116,8 @@ class ComplementInformationsRequest extends FormRequest
                 if(Input::get('ed_select_degree_.' . $i) == "graduating") {
                     $rules['ed_semester_.' . $i] = 'required|numeric';
                 } else if(Input::get('ed_select_degree_.' . $i) == "graduate") {
-                    $rules['ed_crea_state_.' . $i] = 'required|in:ac,al,am,ap,ba,ce,df,es,go,ma,mt,ms,mg,pa,pb,pr, pe,pi,rj,rn,ro,rs,rr,sc,se,sp,to'; 
-                    $rules['ed_crea_number_.' . $i] = 'required|number';
+                    $rules['ed_crea_state_.' . $i] = 'required|in:AC,AL,AM,AP,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR, PE,PI,RJ,RN,RO,RS,RR,SC,SE,SP,TO'; 
+                    $rules['ed_crea_number_.' . $i] = 'required|numeric';
                 }
             }
         }
