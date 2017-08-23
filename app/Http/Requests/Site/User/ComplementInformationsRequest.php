@@ -114,7 +114,7 @@ class ComplementInformationsRequest extends FormRequest
         for($i = 1; $i <= count(Input::get('ed_select_degree_.*')); $i++ ) {
             if(!empty(Input::get('ed_select_degree_.' . $i ))) {
                 if(Input::get('ed_select_degree_.' . $i) == "graduating") {
-                    $rules['ed_semester_.' . $i] = 'required|numeric';
+                    $rules['ed_semester_.' . $i] = 'required|numeric|between:1,10';
                 } else if(Input::get('ed_select_degree_.' . $i) == "graduate") {
                     $rules['ed_crea_state_.' . $i] = 'required|in:AC,AL,AM,AP,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR, PE,PI,RJ,RN,RO,RS,RR,SC,SE,SP,TO'; 
                     $rules['ed_crea_number_.' . $i] = 'required|numeric';
@@ -178,6 +178,7 @@ class ComplementInformationsRequest extends FormRequest
                 if($ed_select_degree == "graduating") {
                     $messages['ed_semester_.' . $i . '.required'] = "O campo semestre é obrigatório";
                     $messages['ed_semester_.' . $i . '.numeric'] = "O campo semestre só aceita números";
+                    $messages['ed_semester_.' . $i . '.between'] = "O campo semestre precisa estar entre 1 e 10";
                 } else if($ed_select_degree == "graduate") {
                     $messages['ed_crea_state_.' . $i. '.required'] = "O campo estado é obrigatório"; 
                     $messages['ed_crea_state_.' . $i. '.in'] = "Escolha um estado";

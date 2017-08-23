@@ -510,10 +510,12 @@ $(document).ready(function() {
 	function addRulesOfGraduating(semester) {
         semester.rules('add', {
             required: true,
-            number:true,
+            number: true,
+            range: [1,10],
             messages: {
 			    required: "O campo semestre é obrigatório",
-			    number: "O campo semestre só aceita números"
+			    number: "O campo semestre só aceita números",
+			    range: "O campo semestre precisa estar entre 1 e 10"
 			}
         });
 	}
