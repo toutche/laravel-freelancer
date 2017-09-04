@@ -90,6 +90,45 @@ $(document).ready(function() {
 		current.disable(false);
 	});
 
+	//Action click from button delete education
+	$(document).on('click','#delete-education',function(event) {
+		event.preventDefault();
+		var div_education = $(this).getParent(3);
+		var id = div_education.attr("data-education");
+		
+
+		$("#educations > div.education").each( function(index) {
+			index++;
+			if(index > id) {
+				update_fields_educations(index,true);
+			}
+		});
+		div_education.remove();
+
+		$.post({                    
+		  url: '/session/get',
+		  data: { key: 'number_of_educations'},
+		  dataType: 'json',
+		  timeout: 50000,
+		  success: function (response) {
+		  	var number_of_educations = new Number(response.number_of_educations) - 1;
+
+		  	var jqxhr;
+	  		//set new current session value of number_of_educations with ajax request
+			jqxhr = $.post({
+				url: '/session/set',
+				data: { key: 'number_of_educations', value: number_of_educations},
+				dataType: 'json'
+			});
+
+			jqxhr.always(function() {
+				if(number_of_educations == 1) {
+				}
+			});
+		  }
+		});
+	});
+
 	//Action click from button add new education
 	$(document).on('click','#add-education',function(event) {
 		event.preventDefault(); //Prevent default from click
@@ -206,22 +245,35 @@ $(document).ready(function() {
 	}
 
 	//Function update inputs and textarea attributes name of educations
-	function update_fields_educations(number_of_educations) {
+	function update_fields_educations(number_of_education, remove = false) {
+		var new_number_of_education;
+		if (remove == false) {
+			new_number_of_education = number_of_education;
+			number_of_education = number_of_education - 1;
+			//if exists button, remove this
+			$(".education[data-education='" + new_number_of_education + "'] div.add-post-btn > div:last > a").remove();
+			//add button remove education
+			$(".education[data-education='" + new_number_of_education + "'] div.add-post-btn > div:last").append('<a href="#" id="delete-education" class="btn-delete"><i class="ti-trash"></i> Remover este</a>');
+		} else {
+			new_number_of_education = number_of_education - 1;
+			//update new attibute data-education for 'div.education' 
+			$(".education[data-education='" + number_of_education + "']").attr("data-education", new_number_of_education);
+		}
 		
 		//Fetches all clone inputs
-		$(".education[data-education='" + number_of_educations + "'] :input").each( function() {
+		$(".education[data-education='" + new_number_of_education + "'] :input").each( function() {
 			var element = $(this);
 			
 			//Set news attributes name
 			switch($(this).attr("name")) {
-				case 'ed_select_degree_[' + (number_of_educations - 1) + ']':
+				case 'ed_select_degree_[' + number_of_education + ']':
 					//$(this) == select
-					$(this).getParent(3).prev().attr("for", "ed_select_degree_[" + number_of_educations + "]"); //external label
-					$(this).getParent(3).attr("id", "ed_select_degree_[" + number_of_educations + "]"); //div#ed_select_degree_[i]
-					$(this).prev().prev().attr("data-id", "ed_select_degree_[" + number_of_educations + "]"); // button
-					$(this).attr("name", "ed_select_degree_[" + number_of_educations + "]");
-					$(this).attr("id", "ed_select_degree_[" + number_of_educations + "]");
-					$(this).attr("data-id", number_of_educations);
+					$(this).getParent(3).prev().attr("for", "ed_select_degree_[" + new_number_of_education + "]"); //external label
+					$(this).getParent(3).attr("id", "ed_select_degree_[" + new_number_of_education + "]"); //div#ed_select_degree_[i]
+					$(this).prev().prev().attr("data-id", "ed_select_degree_[" + new_number_of_education + "]"); // button
+					$(this).attr("name", "ed_select_degree_[" + new_number_of_education + "]");
+					$(this).attr("id", "ed_select_degree_[" + new_number_of_education + "]");
+					$(this).attr("data-id", new_number_of_education);
 
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
@@ -233,18 +285,18 @@ $(document).ready(function() {
 					element = select;
 
 					break;
-				case 'ed_course_[' + (number_of_educations - 1) + ']':
-					$(this).attr("name", "ed_course_[" + number_of_educations + "]");
+				case 'ed_course_[' + number_of_education + ']':
+					$(this).attr("name", "ed_course_[" + new_number_of_education + "]");
 					break;
-				case 'ed_semester_[' + (number_of_educations - 1) + ']':
-					$(this).attr("name", "ed_semester_[" + number_of_educations + "]");
+				case 'ed_semester_[' + number_of_education + ']':
+					$(this).attr("name", "ed_semester_[" + new_number_of_education + "]");
 					break;
-				case 'ed_crea_state_[' + (number_of_educations - 1) + ']':
-					$(this).getParent(3).attr("id", "ed_crea_state_[" + number_of_educations + "]"); //div#ed_crea_state_[i]
-					$(this).prev().prev().attr("data-id", "ed_crea_state_[" + number_of_educations + "]"); // button
-					$(this).attr("name", "ed_crea_state_[" + number_of_educations + "]");
-					$(this).attr("id", "ed_crea_state_[" + number_of_educations + "]");
-					$(this).attr("data-id", number_of_educations);
+				case 'ed_crea_state_[' + number_of_education + ']':
+					$(this).getParent(3).attr("id", "ed_crea_state_[" + new_number_of_education + "]"); //div#ed_crea_state_[i]
+					$(this).prev().prev().attr("data-id", "ed_crea_state_[" + new_number_of_education + "]"); // button
+					$(this).attr("name", "ed_crea_state_[" + new_number_of_education + "]");
+					$(this).attr("id", "ed_crea_state_[" + new_number_of_education + "]");
+					$(this).attr("data-id", new_number_of_education);
 
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
@@ -256,22 +308,22 @@ $(document).ready(function() {
 					element = select;
 
 					break;
-				case 'ed_crea_number_[' + (number_of_educations - 1) + ']':
-					$(this).attr("name", "ed_crea_number_[" + number_of_educations + "]");
+				case 'ed_crea_number_[' + number_of_education + ']':
+					$(this).attr("name", "ed_crea_number_[" + new_number_of_education + "]");
 					break;
-				case 'ed_college_[' + (number_of_educations - 1) + ']':
-					$(this).attr("name", "ed_college_[" + number_of_educations + "]");
+				case 'ed_college_[' + number_of_education + ']':
+					$(this).attr("name", "ed_college_[" + new_number_of_education + "]");
 					break;
-				case 'ed_start_date_[' + (number_of_educations - 1) + ']':
-					$(this).attr("name", "ed_start_date_[" + number_of_educations + "]");
+				case 'ed_start_date_[' + number_of_education + ']':
+					$(this).attr("name", "ed_start_date_[" + new_number_of_education + "]");
 					break;
-				case 'ed_end_date_[' + (number_of_educations - 1) + ']':
-					$(this).attr("name", "ed_end_date_[" + number_of_educations + "]");
+				case 'ed_end_date_[' + number_of_education + ']':
+					$(this).attr("name", "ed_end_date_[" + new_number_of_education + "]");
 					break;
 			}
 
-			$(".education[data-education='" + number_of_educations + "']").find("div.semester").attr("id", "semester_" + number_of_educations);
-			$(".education[data-education='" + number_of_educations + "']").find("div.crea").attr("id", "crea_" + number_of_educations);
+			$(".education[data-education='" + new_number_of_education + "']").find("div.semester").attr("id", "semester_" + new_number_of_education);
+			$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
 
 			//if obj equal 'SELECT' don't clean value 
 			if(element[0].tagName != 'SELECT') {
