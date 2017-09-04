@@ -123,6 +123,7 @@ $(document).ready(function() {
 
 			jqxhr.always(function() {
 				if(number_of_educations == 1) {
+					$(".education[data-education='" + number_of_educations + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-education" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
 				}
 			});
 		  }
