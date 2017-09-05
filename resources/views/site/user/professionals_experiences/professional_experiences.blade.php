@@ -74,7 +74,9 @@
 					@endif
 				</div>
 				<div class="pull-right">
-					<a href="#" id="delete-experience" class="btn-delete"><i class="ti-trash"></i> Deletar este</a>
+					@if($i != 1)
+						<a href="#" id="delete-experience" class="btn-delete"><i class="ti-trash"></i> Deletar este</a>
+					@endif
 				</div>
 			</div>
 		</div>

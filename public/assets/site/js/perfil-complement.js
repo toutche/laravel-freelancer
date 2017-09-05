@@ -28,6 +28,45 @@ $(document).ready(function() {
 	$('.semester').hide();
 	$('.crea').hide();
 
+	//Action click from button delete experience
+	$(document).on('click','#delete-experience',function(event) {
+		event.preventDefault();
+		//(div_experience = .experience) div of button clicked
+		var div_experience = $(this).getParent(3);
+		//Data-attribute of the div_experience
+		var id = new Number(div_experience.attr("data-experience"));
+		//Remove div -> .experience, div of button clicked
+		div_experience.remove();
+
+		$.post({                    
+		  url: '/session/get',
+		  data: { key: 'number_of_experiences'},
+		  dataType: 'json',
+		  timeout: 50000,
+		  success: function (response) {
+		  	var number_of_experiences = new Number(response.number_of_experiences) - 1;
+		  	//Updates the experiences after the div removed
+		  	for(i = (id+1); i <= new Number(response.number_of_experiences); i++) {
+		  		update_fields_experiences(i,true);
+		  	}
+		  	var jqxhr;
+	  		//set new current session value of number_of_experiences with ajax request
+			jqxhr = $.post({
+				url: '/session/set',
+				data: { key: 'number_of_experiences', value: number_of_experiences},
+				dataType: 'json'
+			});
+
+			jqxhr.always(function() {
+				//puts the button when there is only one experiment, or when the one to be deleted is the last one placed in the previous one
+				if(number_of_experiences == 1 || id == response.number_of_experiences) {
+					$(".experience[data-experience='" + number_of_experiences + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
+				}
+			});
+		  }
+		});
+	});
+
 	//Action click from button add new experience
 	$(document).on('click','#add-experience',function(event){
 		event.preventDefault(); //Prevent default from click
@@ -96,7 +135,6 @@ $(document).ready(function() {
 		var div_education = $(this).getParent(3);
 		var id = div_education.attr("data-education");
 		
-
 		$("#educations > div.education").each( function(index) {
 			index++;
 			if(index > id) {
@@ -198,39 +236,51 @@ $(document).ready(function() {
 	}
 
 	//Function update inputs and textarea attributes name of experiences
-	function update_fields_experiences(number_of_experiences) {
+	function update_fields_experiences(number_of_experience, remove = false) {
+		var new_number_of_experience
+		if (remove == false) {
+			new_number_of_experience = number_of_experience;
+			number_of_experience = number_of_experience - 1;
+			//if exists button, remove this
+			$(".experience[data-experience='" + new_number_of_experience + "'] div.add-post-btn > div:last > a").remove();
+			//add button remove experience
+			$(".experience[data-experience='" + new_number_of_experience + "'] div.add-post-btn > div:last").append('<a href="#" id="delete-experience" class="btn-delete"><i class="ti-trash"></i> Remover este</a>');
+		} else {
+			new_number_of_experience = number_of_experience - 1;
+			//update new attibute data-experience for 'div.experience' 
+			$(".experience[data-experience='" + number_of_experience + "']").attr("data-experience", new_number_of_experience);
 
+		}
+		
 		//Fetches all clone inputs
-		$(".experience[data-experience='" + number_of_experiences + "'] :input").each( function() {
+		$(".experience[data-experience='" + new_number_of_experience + "'] :input").each( function() {
 			
 			//Set news attributes name
 			switch($(this).attr("name")) {
-				case 'ex_company_name_[' + (number_of_experiences - 1) + ']':
-					$(this).attr("name", "ex_company_name_[" + number_of_experiences + "]");
+				case 'ex_company_name_[' + number_of_experience + ']':
+					$(this).attr("name", "ex_company_name_[" + new_number_of_experience + "]");
 					break;
-				case 'ex_responsibility_name_[' + (number_of_experiences - 1) + ']':
-					$(this).attr("name", "ex_responsibility_name_[" + number_of_experiences + "]");
+				case 'ex_responsibility_name_[' + number_of_experience + ']':
+					$(this).attr("name", "ex_responsibility_name_[" + new_number_of_experience + "]");
 					break;
-				case 'ex_start_date_[' + (number_of_experiences - 1) + ']':
-					$(this).attr("name", "ex_start_date_[" + number_of_experiences + "]");
+				case 'ex_start_date_[' + number_of_experience + ']':
+					$(this).attr("name", "ex_start_date_[" + new_number_of_experience + "]");
 					break;
-				case 'ex_end_date_[' + (number_of_experiences - 1) + ']':
-					$(this).attr("name", "ex_end_date_[" + number_of_experiences + "]");
+				case 'ex_end_date_[' + number_of_experience + ']':
+					$(this).attr("name", "ex_end_date_[" + new_number_of_experience + "]");
 					break;
 			}
-			$(this).val("");
+			//If action remove not clean values
+			if(remove == false) $(this).val("");
 			removeErrorMessage($(this));
 		});
 
-		$(".experience[data-experience='" + number_of_experiences + "']")
-							.find('div.note-editor')
-							.remove();
-
-		//Find clone textearea and set new attribute name 
-		$(".experience[data-experience='" + number_of_experiences + "']")
-							.find('textarea')
-							.attr("name", "ex_description_" + number_of_experiences)
-							.summernote({
+		//Update references of the Summernote (recreate)
+		var current_editor = $(".experience[data-experience='" + new_number_of_experience + "']:last section.editor");
+		current_editor.find('div.note-editor').remove();
+		current_editor.find("textarea").remove();					
+		current_editor.append("<textarea name='ex_description_["+ new_number_of_experience +"]'></textarea>");
+		current_editor.find("textarea").summernote({
 					    		height: 150,	
 					    		lang: 'pt-BR',
 					    		toolbar: [
