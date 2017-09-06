@@ -1,6 +1,5 @@
 $(document).ready(function() {
-	var teste = 1;
-	console.log(teste);
+
 	//Set token for ajax request
 	$.ajaxSetup({
 	  headers: {
@@ -143,7 +142,10 @@ $(document).ready(function() {
 
 	//Action click from button delete education
 	$(document).on('click','#delete-education',function(event) {
+		
 		event.preventDefault();
+
+		var current = $(this);
 		var div_education = $(this).getParent(3);
 		var id = div_education.attr("data-education");
 		
@@ -153,30 +155,37 @@ $(document).ready(function() {
 				update_fields_educations(index,true);
 			}
 		});
-		div_education.remove();
 
 		$.post({                    
-		  url: '/session/get',
-		  data: { key: 'number_of_educations'},
-		  dataType: 'json',
-		  timeout: 50000,
-		  success: function (response) {
-		  	var number_of_educations = new Number(response.number_of_educations) - 1;
+		 	url: '/session/get',
+		 	data: { key: 'number_of_educations'},
+			dataType: 'json',
+			timeout: 50000,
+			beforeSend: function(){
+		    	//add loading image
+		    	current.getParent(3).next().prepend('<div id="loading"></div>');
+		    	//Remove div -> .experience, div of button clicked
+				div_education.remove();
+			},
+			success: function (response) {
+		  	
+		  		var number_of_educations = new Number(response.number_of_educations) - 1;
+				var jqxhr;
+	  		
+	  			//set new current session value of number_of_educations with ajax request
+				jqxhr = $.post({
+					url: '/session/set',
+					data: { key: 'number_of_educations', value: number_of_educations},
+					dataType: 'json'
+				});
 
-		  	var jqxhr;
-	  		//set new current session value of number_of_educations with ajax request
-			jqxhr = $.post({
-				url: '/session/set',
-				data: { key: 'number_of_educations', value: number_of_educations},
-				dataType: 'json'
-			});
-
-			jqxhr.always(function() {
-				if(number_of_educations == 1) {
-					$(".education[data-education='" + number_of_educations + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-education" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
-				}
-			});
-		  }
+				jqxhr.always(function() {
+					if(number_of_educations == 1) {
+						$(".education[data-education='" + number_of_educations + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-education" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
+					}
+					removeLoading('div#loading');
+				});
+		  	}
 		});
 	});
 
@@ -193,50 +202,53 @@ $(document).ready(function() {
 		//mobile url = /laravel/public
 		//Get current session value of number_of_educations with ajax request
 		$.post({                    
-		  url: '/session/get',
-		  data: { key: 'number_of_educations'},
-		  dataType: 'json',
-		  timeout: 50000,
-		  beforeSend: function(){
-		    //add loading image
-			current.getParent(3).append('<div id="loading"></div>');
-		  },
-		  success: function (response) {
-		  	var number_of_educations = new Number(response.number_of_educations) + 1;
-		  	var jqxhr;
-		  	if (number_of_educations <= 5) {
-		  		//set new current session value of number_of_educations with ajax request
-				jqxhr = $.post({
-					url: '/session/set',
-					data: { key: 'number_of_educations', value: number_of_educations},
-					dataType: 'json'
-				});
+			url: '/session/get',
+		  	data: { key: 'number_of_educations'},
+		  	dataType: 'json',
+		  	timeout: 50000,
+		  	beforeSend: function(){
+		    	//add loading image
+				current.getParent(3).append('<div id="loading"></div>');
+		  	},
+		  	success: function (response) {
+		  	
+		  		var number_of_educations = new Number(response.number_of_educations) + 1;
+		  		var jqxhr;
 
-				jqxhr.always(function() {
-					//Get 'last' experience by 'number_of_educations'
-					var last_education = $(".education[data-education='" + (number_of_educations - 1) + "']")
-					last_education
+		  		if (number_of_educations <= 5) {
+		  			//set new current session value of number_of_educations with ajax request
+					jqxhr = $.post({
+						url: '/session/set',
+						data: { key: 'number_of_educations', value: number_of_educations},
+						dataType: 'json'
+					});
+
+					jqxhr.always(function() {
+					
+						//Get 'last' experience by 'number_of_educations'
+						var last_education = $(".education[data-education='" + (number_of_educations - 1) + "']")
+					
+						last_education
 							.clone()	
 							.attr('data-education', number_of_educations)
 							.appendTo($('#educations'));
 
-					update_fields_educations(number_of_educations);
-					current.remove(); //Remove link from previous experience
-					validateEducations();
+						update_fields_educations(number_of_educations);
+						current.remove(); //Remove link from previous experience
+						validateEducations();
+						removeLoading('div#loading');
+					});	
+				} else {
 					removeLoading('div#loading');
-				});
-				
-			} else {
-				removeLoading('div#loading');
-				alert("Máximo de educações é 5");
-			}
-		  },
-		  error: function(xmlhttprequest, textstatus, message) {
-		    if(textstatus==="timeout") {
-		    	removeLoading('div#loading');
-		        alert("Erro: Tente novamente");
-		    }
-		  }
+					alert("Máximo de educações é 5");
+				}
+		  	},
+		  	error: function(xmlhttprequest, textstatus, message) {
+		    	if(textstatus==="timeout") {
+		    		removeLoading('div#loading');
+		        	alert("Erro: Tente novamente");
+		    	}
+		  	}
 		});
 		//enable buttom link
 		current.disable(false);
@@ -249,7 +261,9 @@ $(document).ready(function() {
 
 	//Function update inputs and textarea attributes name of experiences
 	function update_fields_experiences(number_of_experience, remove = false) {
+		
 		var new_number_of_experience
+		
 		if (remove == false) {
 			new_number_of_experience = number_of_experience;
 			number_of_experience = number_of_experience - 1;
@@ -289,6 +303,7 @@ $(document).ready(function() {
 
 		//Update references of the Summernote (recreate)
 		var current_editor = $(".experience[data-experience='" + new_number_of_experience + "']:last section.editor");
+		
 		current_editor.find('div.note-editor').remove();
 		current_editor.find("textarea").remove();					
 		current_editor.append("<textarea name='ex_description_["+ new_number_of_experience +"]'></textarea>");
@@ -407,6 +422,7 @@ $(document).ready(function() {
 
 			$(".education[data-education='" + new_number_of_education + "']").find("div.semester").attr("id", "semester_" + new_number_of_education);
 			$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
+			
 			//If action remove not clean values
 			if(remove == false) {
 				//if obj equal 'SELECT' don't clean value 
