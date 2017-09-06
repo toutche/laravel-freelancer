@@ -1,5 +1,6 @@
 $(document).ready(function() {
-
+	var teste = 1;
+	console.log(teste);
 	//Set token for ajax request
 	$.ajaxSetup({
 	  headers: {
@@ -30,19 +31,27 @@ $(document).ready(function() {
 
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
+
 		event.preventDefault();
+
+		//identifies the current button clicked
+		var current = $(this);
 		//(div_experience = .experience) div of button clicked
 		var div_experience = $(this).getParent(3);
 		//Data-attribute of the div_experience
 		var id = new Number(div_experience.attr("data-experience"));
-		//Remove div -> .experience, div of button clicked
-		div_experience.remove();
-
+		
 		$.post({                    
 		  url: '/session/get',
 		  data: { key: 'number_of_experiences'},
 		  dataType: 'json',
 		  timeout: 50000,
+		  beforeSend: function(){
+		    //add loading image
+		    current.getParent(3).next().prepend('<div id="loading"></div>');
+		    //Remove div -> .experience, div of button clicked
+			div_experience.remove();
+		  },
 		  success: function (response) {
 		  	var number_of_experiences = new Number(response.number_of_experiences) - 1;
 		  	//Updates the experiences after the div removed
@@ -62,6 +71,7 @@ $(document).ready(function() {
 				if(number_of_experiences == 1 || id == response.number_of_experiences) {
 					$(".experience[data-experience='" + number_of_experiences + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
 				}
+				removeLoading('div#loading');
 			});
 		  }
 		});
@@ -80,50 +90,52 @@ $(document).ready(function() {
 		//mobile url = /laravel/public
 		//Get current session value of number_of_experiences with ajax request
 		$.post({                    
-		  url: '/session/get',
-		  data: { key: 'number_of_experiences'},
-		  dataType: 'json',
-		  timeout: 50000,
-		  beforeSend: function(){
-		    //add loading image
-			current.getParent(3).append('<div id="loading"></div>');
-		  },
-		  success: function (response) {
-		  	var number_of_experiences = new Number(response.number_of_experiences) + 1;
-		  	var jqxhr;
-		  	if (number_of_experiences <= 5) {
-		  		//set new current session value of number_of_experiences with ajax request
-				jqxhr = $.post({
-					url: '/session/set',
-					data: { key: 'number_of_experiences', value: number_of_experiences},
-					dataType: 'json'
-				});
+		 	url: '/session/get',
+		  	data: { key: 'number_of_experiences'},
+			dataType: 'json',
+			timeout: 50000,
+			beforeSend: function(){
+				//add loading image
+		    	current.getParent(3).append('<div id="loading"></div>');
+			},
+			success: function (response) {
+		  		var number_of_experiences = new Number(response.number_of_experiences) + 1;
+		  		var jqxhr;
+		  		if (number_of_experiences <= 5) {
+		  			//set new current session value of number_of_experiences with ajax request
+					jqxhr = $.post({
+						url: '/session/set',
+						data: { key: 'number_of_experiences', value: number_of_experiences},
+						dataType: 'json'
+					});
 
-				jqxhr.always(function() {
-					//Get 'last' experience by 'number_of_experiences'
-					var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
-					last_experience
+					jqxhr.always(function() {
+					
+						//Get 'last' experience by 'number_of_experiences'
+						var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
+					
+						last_experience
 							.clone()	
 							.attr('data-experience', number_of_experiences)
 							.appendTo($('#experiences'));
 
-					update_fields_experiences(number_of_experiences);
-					current.remove(); //Remove link from previous experience
-					validateExperiences();
-					removeLoading('div#loading');
-				});
+						update_fields_experiences(number_of_experiences);
+						current.remove(); //Remove link from previous experience
+						validateExperiences();
+						removeLoading('div#loading');
+					});
 				
-			} else {
-				removeLoading('div#loading');
-				alert("Máximo de experiências é 5");
-			}
-		  },
-		  error: function(xmlhttprequest, textstatus, message) {
-		    if(textstatus==="timeout") {
-		    	removeLoading('div#loading');
-		        alert("Erro: Tente novamente");
-		    }
-		  }
+				} else {
+					removeLoading('div#loading');
+					alert("Máximo de experiências é 5");
+				}
+			},
+			error: function(xmlhttprequest, textstatus, message) {
+			    if(textstatus==="timeout") {
+			    	removeLoading('div#loading');
+			        alert("Erro: Tente novamente");
+			    }
+		  	}
 		});
 		//enable buttom link
 		current.disable(false);
