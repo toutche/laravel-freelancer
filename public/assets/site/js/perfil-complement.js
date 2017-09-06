@@ -297,7 +297,9 @@ $(document).ready(function() {
 
 	//Function update inputs and textarea attributes name of educations
 	function update_fields_educations(number_of_education, remove = false) {
+		
 		var new_number_of_education;
+
 		if (remove == false) {
 			new_number_of_education = number_of_education;
 			number_of_education = number_of_education - 1;
@@ -313,6 +315,7 @@ $(document).ready(function() {
 		
 		//Fetches all clone inputs
 		$(".education[data-education='" + new_number_of_education + "'] :input").each( function() {
+			
 			var element = $(this);
 			
 			//Set news attributes name
@@ -328,13 +331,21 @@ $(document).ready(function() {
 
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
+					var index;
+					//If action remove not clean values
+					if(remove == true) {
+						//Get index of selected option
+						index = label.find("li.selected").attr("data-original-index");
+					}
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
-					select.find('option:selected').removeAttr("selected");//remove option selected
 					select.appendTo(label).selectpicker("render"); //add new select
+					//If action remove not clean values
+					if(remove == true) {
+						//Remarks option selected by index
+						select.children().eq(index).attr("selected", "selected");
+					}
 					select.change();
-					
 					element = select;
-
 					break;
 				case 'ed_course_[' + number_of_education + ']':
 					$(this).attr("name", "ed_course_[" + new_number_of_education + "]");
@@ -351,13 +362,22 @@ $(document).ready(function() {
 
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
+					var index;
+					//If action remove not clean values
+					if(remove == true) {
+						//Get index of selected option
+						index = label.find("li.selected").attr("data-original-index");
+					}
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
 					select.find('option:selected').removeAttr("selected");//remove option selected
 					select.appendTo(label).selectpicker("render"); //add new select
+					//If action remove not clean values
+					if(remove == true) {
+						//Remarks option selected by index
+						select.children().eq(index).attr("selected", "selected");
+					}
 					select.change();
-					
 					element = select;
-
 					break;
 				case 'ed_crea_number_[' + number_of_education + ']':
 					$(this).attr("name", "ed_crea_number_[" + new_number_of_education + "]");
@@ -375,10 +395,12 @@ $(document).ready(function() {
 
 			$(".education[data-education='" + new_number_of_education + "']").find("div.semester").attr("id", "semester_" + new_number_of_education);
 			$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
-
-			//if obj equal 'SELECT' don't clean value 
-			if(element[0].tagName != 'SELECT') {
-				$(this).val("");
+			//If action remove not clean values
+			if(remove == false) {
+				//if obj equal 'SELECT' don't clean value 
+				if(element[0].tagName != 'SELECT') {
+					$(this).val("");
+				}
 			}
 			removeErrorMessage(element);
 		});
