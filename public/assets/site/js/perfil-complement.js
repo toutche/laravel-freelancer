@@ -28,6 +28,29 @@ $(document).ready(function() {
 	$('.semester').hide();
 	$('.crea').hide();
 
+	//mobile url = /laravel/public
+	function getAJAX(url, key, before_send = (function(){})()) {
+		var response;
+		var jqxhr = $.post({                    
+		 	url: url,
+			data: { key: key},
+			dataType: 'json',
+			async: false,
+			timeout: 50000,
+			beforeSend: function(){
+		    	before_send;
+		  	}
+		});
+
+		jqxhr.done(function(responseRequest){
+			response = new Number(responseRequest[key]);
+		});
+		return response;
+	}
+
+	//variable to control total experiences
+	var number_of_experiences = new Number(getAJAX('/session/get', 'number_of_experiences'));
+
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
 
@@ -39,41 +62,42 @@ $(document).ready(function() {
 		var div_experience = $(this).getParent(3);
 		//Data-attribute of the div_experience
 		var id = new Number(div_experience.attr("data-experience"));
-		
-		$.post({                    
-		  url: '/session/get',
-		  data: { key: 'number_of_experiences'},
-		  dataType: 'json',
-		  timeout: 50000,
-		  beforeSend: function(){
-		    //add loading image
-		    current.getParent(3).next().prepend('<div id="loading"></div>');
-		    //Remove div -> .experience, div of button clicked
-			div_experience.remove();
-		  },
-		  success: function (response) {
-		  	var number_of_experiences = new Number(response.number_of_experiences) - 1;
-		  	//Updates the experiences after the div removed
-		  	for(i = (id+1); i <= new Number(response.number_of_experiences); i++) {
-		  		update_fields_experiences(i,true);
-		  	}
-		  	var jqxhr;
-	  		//set new current session value of number_of_experiences with ajax request
-			jqxhr = $.post({
-				url: '/session/set',
-				data: { key: 'number_of_experiences', value: number_of_experiences},
-				dataType: 'json'
-			});
+		var jqxhr;
+		//add loading image
+		var before_send = (function() {
+			//if it's the last div.experience, add loading in the previous div else in the next div  
+			if (number_of_experiences == id) {
+				current.getParent(3).prev().append('<div id="loading"></div>');
+			} else {
+				current.getParent(3).next().prepend('<div id="loading"></div>');
+			}
+		})();
+		//Get value number_of_experiences
+	  	var number_of_experiences_local = getAJAX('/session/get', 'number_of_experiences', before_send);
+	  	//update global variable number_of_experiences
+	  	number_of_experiences = number_of_experiences - 1;
+	  	//Updates the experiences after the div removed
+	  	for(i = (id+1); i <= number_of_experiences_local; i++) {
+	  		update_fields_experiences(i,true);
+	  	}
 
-			jqxhr.always(function() {
-				//puts the button when there is only one experiment, or when the one to be deleted is the last one placed in the previous one
-				if(number_of_experiences == 1 || id == response.number_of_experiences) {
-					$(".experience[data-experience='" + number_of_experiences + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
-				}
-				removeLoading('div#loading');
-			});
-		  }
+  		//set new current session value of number_of_experiences with ajax request
+		jqxhr = $.post({
+			url: '/session/set',
+			data: { key: 'number_of_experiences', value: (number_of_experiences_local-1)},
+			dataType: 'json'
 		});
+
+		jqxhr.always(function() {
+			//puts the button when there is only one experiment, or when the one to be deleted is the last one placed in the previous one
+			if((number_of_experiences_local-1) == 1 || id == number_of_experiences_local) {
+				$(".experience[data-experience='" + (number_of_experiences_local-1) + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
+			}
+			//Remove div -> .experience, div of button clicked
+			div_experience.remove();
+			removeLoading('div#loading');
+		});
+
 	});
 
 	//Action click from button add new experience
@@ -85,57 +109,45 @@ $(document).ready(function() {
 
 		//disable buttom link
 		current.bind('click', false);
+		//update global variable number_of_experiences 
+  		number_of_experiences = number_of_experiences + 1;
+  		
+  		//add loading image
+		var before_send = (function() {
+			current.getParent(3).append('<div id="loading"></div>');
+		})();
+		//Get value number_of_experiences
+	  	var number_of_experiences_local = (getAJAX('/session/get', 'number_of_experiences', before_send) + 1);
+		
+  		var jqxhr;
+  		if (number_of_experiences_local <= 5) {
+  			//set new current session value of number_of_experiences with ajax request
+			jqxhr = $.post({
+				url: '/session/set',
+				data: { key: 'number_of_experiences', value: number_of_experiences_local},
+				dataType: 'json'
+			});
 
-		//mobile url = /laravel/public
-		//Get current session value of number_of_experiences with ajax request
-		$.post({                    
-		 	url: '/session/get',
-		  	data: { key: 'number_of_experiences'},
-			dataType: 'json',
-			timeout: 50000,
-			beforeSend: function(){
-				//add loading image
-		    	current.getParent(3).append('<div id="loading"></div>');
-			},
-			success: function (response) {
-		  		var number_of_experiences = new Number(response.number_of_experiences) + 1;
-		  		var jqxhr;
-		  		if (number_of_experiences <= 5) {
-		  			//set new current session value of number_of_experiences with ajax request
-					jqxhr = $.post({
-						url: '/session/set',
-						data: { key: 'number_of_experiences', value: number_of_experiences},
-						dataType: 'json'
-					});
+			jqxhr.always(function() {
+			
+				//Get 'last' experience by 'number_of_experiences'
+				var last_experience = $(".experience[data-experience='" + (number_of_experiences_local - 1) + "']")
+			
+				last_experience
+					.clone()	
+					.attr('data-experience', number_of_experiences_local)
+					.appendTo($('#experiences'));
 
-					jqxhr.always(function() {
-					
-						//Get 'last' experience by 'number_of_experiences'
-						var last_experience = $(".experience[data-experience='" + (number_of_experiences - 1) + "']")
-					
-						last_experience
-							.clone()	
-							.attr('data-experience', number_of_experiences)
-							.appendTo($('#experiences'));
-
-						update_fields_experiences(number_of_experiences);
-						current.remove(); //Remove link from previous experience
-						validateExperiences();
-						removeLoading('div#loading');
-					});
-				
-				} else {
-					removeLoading('div#loading');
-					alert("Máximo de experiências é 5");
-				}
-			},
-			error: function(xmlhttprequest, textstatus, message) {
-			    if(textstatus==="timeout") {
-			    	removeLoading('div#loading');
-			        alert("Erro: Tente novamente");
-			    }
-		  	}
-		});
+				update_fields_experiences(number_of_experiences_local);
+				current.remove(); //Remove link from previous experience
+				validateExperiences();
+				removeLoading('div#loading');
+			});
+		
+		} else {
+			removeLoading('div#loading');
+			alert("Máximo de experiências é 5");
+		}
 		//enable buttom link
 		current.disable(false);
 	});
