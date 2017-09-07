@@ -2,28 +2,28 @@ $(document).ready(function() {
 
 	//Set token for ajax request
 	$.ajaxSetup({
-	  headers: {
-	    'X-CSRF-TOKEN': $('input[name="_token"]').val()
-	  }
+		headers: {
+			'X-CSRF-TOKEN': $('input[name="_token"]').val()
+		}
 	});
 
 	//Plugin getParent by levels
 	jQuery.fn.getParent = function(num) {
-	    var last = this[0];
-	    for (var i = 0; i < num; i++) {
-	        last = last.parentNode;
-	    }
-	    return jQuery(last);
+		var last = this[0];
+		for (var i = 0; i < num; i++) {
+			last = last.parentNode;
+		}
+		return jQuery(last);
 	};
 
 	// Disable function
 	jQuery.fn.extend({
-        disable: function(state) {
-            return this.each(function() {
-                this.disabled = state;
-            });
-        }
-    });
+		disable: function(state) {
+			return this.each(function() {
+				this.disabled = state;
+			});
+		}
+	});
 
 	$('.semester').hide();
 	$('.crea').hide();
@@ -32,14 +32,14 @@ $(document).ready(function() {
 	function getAJAX(url, key, before_send = function(){}) {
 		var response;
 		var jqxhr = $.post({                    
-		 	url: url,
+			url: url,
 			data: { key: key},
 			dataType: 'json',
 			async: false,
 			timeout: 50000,
 			beforeSend: function(){
-		    	(before_send)();
-		  	}
+				(before_send)();
+			}
 		});
 
 		jqxhr.done(function(responseRequest){
@@ -50,6 +50,8 @@ $(document).ready(function() {
 
 	//variable to control total experiences
 	var number_of_experiences = getAJAX('/session/get', 'number_of_experiences');
+	//variable to control total educations
+	var number_of_educations = getAJAX('/session/get', 'number_of_educations');
 
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
@@ -73,21 +75,21 @@ $(document).ready(function() {
 			}
 		};
 		//Get value number_of_experiences
-	  	var number_of_experiences_local = getAJAX('/session/get', 'number_of_experiences', before_send);
-	  	
-	  	//Updates the experiences after the div removed
+		var number_of_experiences_local = getAJAX('/session/get', 'number_of_experiences', before_send);
+
+	  	//Updates indexes the experiences after the removed div
 	  	for(i = (id+1); i <= number_of_experiences_local; i++) {
 	  		update_fields_experiences(i,true);
 	  	}
 
   		//set new current session value of number_of_experiences with ajax request
-		jqxhr = $.post({
-			url: '/session/set',
-			data: { key: 'number_of_experiences', value: (number_of_experiences_local-1)},
-			dataType: 'json'
-		});
+  		jqxhr = $.post({
+  			url: '/session/set',
+  			data: { key: 'number_of_experiences', value: (number_of_experiences_local-1)},
+  			dataType: 'json'
+  		});
 
-		jqxhr.always(function() {
+  		jqxhr.always(function() {
 			//puts the button when there is only one experiment, or when the one to be deleted is the last one placed in the previous one
 			if((number_of_experiences_local-1) == 1 || id == number_of_experiences) {
 				$(".experience[data-experience='" + (number_of_experiences_local-1) + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
@@ -95,73 +97,86 @@ $(document).ready(function() {
 			//Remove div -> .experience, div of button clicked
 			div_experience.remove();
 			//update global variable number_of_experiences
-	  		number_of_experiences = number_of_experiences - 1;
+			number_of_experiences = number_of_experiences - 1;
 			removeLoading('div#loading');
 		});
 
-	});
+  	});
 
 	//Action click from button add new experience
 	$(document).on('click','#add-experience',function(event){
 		event.preventDefault(); //Prevent default from click
- 	
+
  		//identifies the current button clicked
-		var current = $(this);
+ 		var current = $(this);
 
 		//disable buttom link
 		current.bind('click', false);
 		//update global variable number_of_experiences 
-  		number_of_experiences = number_of_experiences + 1;
-  		
-  		//add loading image
-		var before_send = function() {
-			current.getParent(3).append('<div id="loading"></div>');
-		};
-		//Get value number_of_experiences
-	  	var number_of_experiences_local = (getAJAX('/session/get', 'number_of_experiences', before_send) + 1);
-		
-  		var jqxhr;
-  		if (number_of_experiences_local <= 5) {
-  			//set new current session value of number_of_experiences with ajax request
-			jqxhr = $.post({
-				url: '/session/set',
-				data: { key: 'number_of_experiences', value: number_of_experiences_local},
-				dataType: 'json'
-			});
+		number_of_experiences = number_of_experiences + 1;
 
-			jqxhr.always(function() {
-			
+  		//add loading image
+  		var before_send = function() {
+  			current.getParent(3).append('<div id="loading"></div>');
+  		};
+		//Get value number_of_experiences
+		var number_of_experiences_local = (getAJAX('/session/get', 'number_of_experiences', before_send) + 1);
+		
+		var jqxhr;
+		if (number_of_experiences_local <= 5) {
+  			//set new current session value of number_of_experiences with ajax request
+  			jqxhr = $.post({
+  				url: '/session/set',
+  				data: { key: 'number_of_experiences', value: number_of_experiences_local},
+  				dataType: 'json'
+  			});
+
+  			jqxhr.always(function() {
+
 				//Get 'last' experience by 'number_of_experiences'
 				var last_experience = $(".experience[data-experience='" + (number_of_experiences_local - 1) + "']")
-			
+
 				last_experience
-					.clone()	
-					.attr('data-experience', number_of_experiences_local)
-					.appendTo($('#experiences'));
+				.clone()	
+				.attr('data-experience', number_of_experiences_local)
+				.appendTo($('#experiences'));
 
 				update_fields_experiences(number_of_experiences_local);
 				current.remove(); //Remove link from previous experience
 				validateExperiences();
 				removeLoading('div#loading');
 			});
-		
-		} else {
-			removeLoading('div#loading');
-			alert("Máximo de experiências é 5");
-		}
+
+  		} else {
+  			removeLoading('div#loading');
+  			alert("Máximo de experiências é 5");
+  		}
 		//enable buttom link
 		current.disable(false);
 	});
 
 	//Action click from button delete education
-	$(document).on('click','#delete-education',function(event) {
+	$(document).on('click','#delete-education', function(event) {
 		
 		event.preventDefault();
 
 		var current = $(this);
 		var div_education = $(this).getParent(3);
-		var id = div_education.attr("data-education");
-		
+		var id = new Number(div_education.attr("data-education"));
+  		//add loading image
+  		var before_send = function() {
+			//if it's the last div.experience, add loading in the previous div else in the next div  
+			if (number_of_educations == id) {
+				current.getParent(3).prev().append('<div id="loading"></div>');
+			} else {
+				current.getParent(3).next().prepend('<div id="loading"></div>');
+			}
+		};
+		//Get value number_of_experiences
+		var number_of_educations_local = (getAJAX('/session/get', 'number_of_educations', before_send)-1);
+		var jqxhr;
+
+		//Updates indexes the educations after the removed div
 		$("#educations > div.education").each( function(index) {
 			index++;
 			if(index > id) {
@@ -169,36 +184,23 @@ $(document).ready(function() {
 			}
 		});
 
-		$.post({                    
-		 	url: '/session/get',
-		 	data: { key: 'number_of_educations'},
-			dataType: 'json',
-			timeout: 50000,
-			beforeSend: function(){
-		    	//add loading image
-		    	current.getParent(3).next().prepend('<div id="loading"></div>');
-		    	//Remove div -> .experience, div of button clicked
-				div_education.remove();
-			},
-			success: function (response) {
-		  	
-		  		var number_of_educations = new Number(response.number_of_educations) - 1;
-				var jqxhr;
-	  		
-	  			//set new current session value of number_of_educations with ajax request
-				jqxhr = $.post({
-					url: '/session/set',
-					data: { key: 'number_of_educations', value: number_of_educations},
-					dataType: 'json'
-				});
+		//set new current session value of number_of_educations with ajax request
+		jqxhr = $.post({
+			url: '/session/set',
+			data: { key: 'number_of_educations', value: number_of_educations_local},
+			dataType: 'json'
+		});
 
-				jqxhr.always(function() {
-					if(number_of_educations == 1) {
-						$(".education[data-education='" + number_of_educations + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-education" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
-					}
-					removeLoading('div#loading');
-				});
-		  	}
+		jqxhr.always(function() {
+			//puts the button when there is only one education, or when the one to be deleted is the last one placed in the previous one
+			if(number_of_educations_local == 1 || id == number_of_educations) {
+				$(".education[data-education='" + number_of_educations_local + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-education" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
+			}
+			//update global variable number_of_experiences
+			number_of_educations = number_of_educations - 1;
+			//Remove div -> .education, div of button clicked
+			div_education.remove();
+			removeLoading('div#loading');
 		});
 	});
 
@@ -211,58 +213,43 @@ $(document).ready(function() {
 
 		//disable buttom link
 		current.bind('click', false);
-
-		//mobile url = /laravel/public
+		number_of_educations = number_of_educations + 1;
+		
+		//add loading image
+  		var before_send = function() {
+  			current.getParent(3).append('<div id="loading"></div>');
+  		};
 		//Get current session value of number_of_educations with ajax request
-		$.post({                    
-			url: '/session/get',
-		  	data: { key: 'number_of_educations'},
-		  	dataType: 'json',
-		  	timeout: 50000,
-		  	beforeSend: function(){
-		    	//add loading image
-				current.getParent(3).append('<div id="loading"></div>');
-		  	},
-		  	success: function (response) {
-		  	
-		  		var number_of_educations = new Number(response.number_of_educations) + 1;
-		  		var jqxhr;
+		var number_of_educations_local = (getAJAX('/session/get', 'number_of_educations', before_send) + 1);
+    	var jqxhr;
 
-		  		if (number_of_educations <= 5) {
-		  			//set new current session value of number_of_educations with ajax request
-					jqxhr = $.post({
-						url: '/session/set',
-						data: { key: 'number_of_educations', value: number_of_educations},
-						dataType: 'json'
-					});
+    	if (number_of_educations_local <= 5) {
+  			//set new current session value of number_of_educations with ajax request
+  			jqxhr = $.post({
+  				url: '/session/set',
+  				data: { key: 'number_of_educations', value: number_of_educations_local},
+  				dataType: 'json'
+  			});
 
-					jqxhr.always(function() {
-					
-						//Get 'last' experience by 'number_of_educations'
-						var last_education = $(".education[data-education='" + (number_of_educations - 1) + "']")
-					
-						last_education
-							.clone()	
-							.attr('data-education', number_of_educations)
-							.appendTo($('#educations'));
+  			jqxhr.always(function() {
 
-						update_fields_educations(number_of_educations);
-						current.remove(); //Remove link from previous experience
-						validateEducations();
-						removeLoading('div#loading');
-					});	
-				} else {
-					removeLoading('div#loading');
-					alert("Máximo de educações é 5");
-				}
-		  	},
-		  	error: function(xmlhttprequest, textstatus, message) {
-		    	if(textstatus==="timeout") {
-		    		removeLoading('div#loading');
-		        	alert("Erro: Tente novamente");
-		    	}
-		  	}
-		});
+				//Get 'last' experience by 'number_of_educations'
+				var last_education = $(".education[data-education='" + (number_of_educations_local - 1) + "']")
+
+				last_education
+				.clone()	
+				.attr('data-education', number_of_educations_local)
+				.appendTo($('#educations'));
+
+				update_fields_educations(number_of_educations_local);
+				current.remove(); //Remove link from previous experience
+				validateEducations();
+				removeLoading('div#loading');
+			});	
+  		} else {
+  			removeLoading('div#loading');
+  			alert("Máximo de educações é 5");
+  		}
 		//enable buttom link
 		current.disable(false);
 	});
@@ -320,19 +307,20 @@ $(document).ready(function() {
 		current_editor.find('div.note-editor').remove();
 		current_editor.find("textarea").remove();					
 		current_editor.append("<textarea name='ex_description_["+ new_number_of_experience +"]'></textarea>");
-		current_editor.find("textarea").summernote({
-					    		height: 150,	
-					    		lang: 'pt-BR',
-					    		toolbar: [
-								    // [groupName, [list of button]]
-								    ['style', ['bold', 'italic', 'underline', 'clear']],
-								    ['font', ['strikethrough', 'superscript', 'subscript']],
-								    ['fontsize', ['fontsize']],
-								    ['color', ['color']],
-								    ['para', ['ul', 'ol', 'paragraph']],
-								    ['height', ['height']]
-								  ]
-					    	});
+		current_editor.find("textarea")
+			.summernote({
+						height: 150,	
+						lang: 'pt-BR',
+						toolbar: [
+									// [groupName, [list of button]]
+							    	['style', ['bold', 'italic', 'underline', 'clear']],
+							    	['font', ['strikethrough', 'superscript', 'subscript']],
+									['fontsize', ['fontsize']],
+									['color', ['color']],
+									['para', ['ul', 'ol', 'paragraph']],
+									['height', ['height']]
+								 ]
+						});
 	}
 
 	//Function update inputs and textarea attributes name of educations
@@ -435,7 +423,7 @@ $(document).ready(function() {
 
 			$(".education[data-education='" + new_number_of_education + "']").find("div.semester").attr("id", "semester_" + new_number_of_education);
 			$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
-			
+
 			//If action remove not clean values
 			if(remove == false) {
 				//if obj equal 'SELECT' don't clean value 
@@ -446,7 +434,7 @@ $(document).ready(function() {
 			removeErrorMessage(element);
 		});
 	}
-	
+
 	//When there is change select state crea
 	$(document).on('change', '.crea select.selectpicker', function() {
 		$(this).valid();
@@ -521,152 +509,152 @@ $(document).ready(function() {
 				extension: "Insira uma imagem no formato jpeg, png ou jpg"
 			},
 		},
-    	errorPlacement: function(error, element) {
+		errorPlacement: function(error, element) {
 			showErrorMessage(element,error);
-    	},
-    	success: function(label, element) {
-    		removeErrorMessage(element);
-    	},
+		},
+		success: function(label, element) {
+			removeErrorMessage(element);
+		},
     	// The div has the following class `.note-editable .panel-body` that we can use to
   		// exclude it from validation
-    	ignore: ":hidden:not(#summernote),.note-editable.panel-body"
-	});
+  		ignore: ":hidden:not(#summernote),.note-editable.panel-body"
+  	});
 
 	//Used in the validation of experiences by Array
 	// must be called after validate()
 	var validateExperiences = function() {
-		$('input.ex_company_name').each(function () {
-	        $(this).rules('add', {
-	            required: true,
-	            minlength: 3,
-	            maxlength: 100,
-	            messages: {
-				    required: "O campo nome da empresa é obrigatório",
-				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo nome da empresa é {0}"),
-				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo nome da empresa é {0}")
+		$('input.ex_company_name').each(function() {
+			$(this).rules('add', {
+				required: true,
+				minlength: 3,
+				maxlength: 100,
+				messages: {
+					required: "O campo nome da empresa é obrigatório",
+					minlength: jQuery.validator.format("Mínimo de caracteres para o campo nome da empresa é {0}"),
+					maxlength: jQuery.validator.format("Máximo de caracteres para o campo nome da empresa é {0}")
 				}
-	        });
-	    });
+			});
+		});
 
-	    $('input.ex_responsibility_name').each(function () {
-	        $(this).rules('add', {
-	            required: true,
-	            minlength: 3,
-	            maxlength: 100,
-	            messages: {
-				    required: "O campo cargo é obrigatório",
-				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo cargo é {0}"),
-				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo cargo é {0}")
+		$('input.ex_responsibility_name').each(function() {
+			$(this).rules('add', {
+				required: true,
+				minlength: 3,
+				maxlength: 100,
+				messages: {
+					required: "O campo cargo é obrigatório",
+					minlength: jQuery.validator.format("Mínimo de caracteres para o campo cargo é {0}"),
+					maxlength: jQuery.validator.format("Máximo de caracteres para o campo cargo é {0}")
 				}
-	        });
-	    });
+			});
+		});
 
-	    $('input.ex_start_date').each(function () {
-	        $(this).rules('add', {
-	            required:true,
-	            number: true,
-	            exactly: 4,
-	            messages: {
-	            	required: "O campo data de início é obrigatório",
-				    number: "O campo data de início só aceita números",
-				    exactly: jQuery.validator.format("O campo data de início tem que possuir {0} números")
+		$('input.ex_start_date').each(function() {
+			$(this).rules('add', {
+				required:true,
+				number: true,
+				exactly: 4,
+				messages: {
+					required: "O campo data de início é obrigatório",
+					number: "O campo data de início só aceita números",
+					exactly: jQuery.validator.format("O campo data de início tem que possuir {0} números")
 				}
-	        });
-	    });
+			});
+		});
 
-	    $('input.ex_end_date').each(function () {
-	        $(this).rules('add', {
-	            number: true,
-	            exactly: 4,
-	            messages: {
-				    number: "O campo data de término só aceita números",
-				    exactly: jQuery.validator.format("O campo data de término tem que possuir {0} números")
+		$('input.ex_end_date').each(function() {
+			$(this).rules('add', {
+				number: true,
+				exactly: 4,
+				messages: {
+					number: "O campo data de término só aceita números",
+					exactly: jQuery.validator.format("O campo data de término tem que possuir {0} números")
 				}
-	        });
-	    });
+			});
+		});
 	}
 	validateExperiences();
 
 	//Used in the validation of educations by Array
 	// must be called after validate()
 	var validateEducations = function() {
-		$('select.ed_select_degree').each(function () {
-	        $(this).rules('add', {
-	            valueNotEquals: "",
-	            inArray: ["graduating", "graduate"],
-	            messages: {
-				    valueNotEquals: "O campo grau é obrigatório",
-				    inArray: "Selecione uma opção"
+		$('select.ed_select_degree').each(function() {
+			$(this).rules('add', {
+				valueNotEquals: "",
+				inArray: ["graduating", "graduate"],
+				messages: {
+					valueNotEquals: "O campo grau é obrigatório",
+					inArray: "Selecione uma opção"
 				}
-	        });
-	    });
-		$('input.ed_course').each(function () {
-	        $(this).rules('add', {
-	            required: true,
-	            minlength: 3,
-	            maxlength: 100,
-	            messages: {
-				    required: "O campo curso é obrigatório",
-				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo curso é {0}"),
-				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo curso é {0}")
+			});
+		});
+		$('input.ed_course').each(function() {
+			$(this).rules('add', {
+				required: true,
+				minlength: 3,
+				maxlength: 100,
+				messages: {
+					required: "O campo curso é obrigatório",
+					minlength: jQuery.validator.format("Mínimo de caracteres para o campo curso é {0}"),
+					maxlength: jQuery.validator.format("Máximo de caracteres para o campo curso é {0}")
 				}
-	        });
-	    });
-	    $('input.ed_college').each(function () {
-	        $(this).rules('add', {
-	            required: true,
-	            minlength: 3,
-	            maxlength: 100,
-	            messages: {
-				    required: "O campo instituição de ensino é obrigatório",
-				    minlength: jQuery.validator.format("Mínimo de caracteres para o campo instituição de ensino é {0}"),
-				    maxlength: jQuery.validator.format("Máximo de caracteres para o campo instituição de ensino é {0}")
+			});
+		});
+		$('input.ed_college').each(function() {
+			$(this).rules('add', {
+				required: true,
+				minlength: 3,
+				maxlength: 100,
+				messages: {
+					required: "O campo instituição de ensino é obrigatório",
+					minlength: jQuery.validator.format("Mínimo de caracteres para o campo instituição de ensino é {0}"),
+					maxlength: jQuery.validator.format("Máximo de caracteres para o campo instituição de ensino é {0}")
 				}
-	        });
-	    });
-	    $('input.ed_start_date').each(function () {
-	        $(this).rules('add', {
-	            required: true,
-	            number:true,
-	            exactly:4,
-	            messages: {
-				    required: "O campo ano de início é obrigatório",
-				    number: "O campo ano de início só aceita números",
-				    exactly: jQuery.validator.format("O campo ano de início tem que possuir {0} números")
+			});
+		});
+		$('input.ed_start_date').each(function() {
+			$(this).rules('add', {
+				required: true,
+				number:true,
+				exactly:4,
+				messages: {
+					required: "O campo ano de início é obrigatório",
+					number: "O campo ano de início só aceita números",
+					exactly: jQuery.validator.format("O campo ano de início tem que possuir {0} números")
 				}
-	        });
-	    });
-	    $('input.ed_end_date').each(function () {
-	        $(this).rules('add', {
-	            number: true,
-	            exactly: 4,
-	            messages: {
-				    number: "O campo ano de término só aceita números",
-				    exactly: jQuery.validator.format("O campo ano de término tem que possuir {0} números")
+			});
+		});
+		$('input.ed_end_date').each(function() {
+			$(this).rules('add', {
+				number: true,
+				exactly: 4,
+				messages: {
+					number: "O campo ano de término só aceita números",
+					exactly: jQuery.validator.format("O campo ano de término tem que possuir {0} números")
 				}
-	        });
-	    });
+			});
+		});
 	}
 	validateEducations();
 
 	function addRulesOfGraduate(state, number) {
-        state.rules('add', {
-            valueNotEquals: "",
-            inArray: ["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
-            "PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"],
-            messages: {
-			    valueNotEquals: "O campo estado é obrigatório",
-			    inArray: "Escolha um estado"
+		state.rules('add', {
+			valueNotEquals: "",
+			inArray: ["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
+			"PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"],
+			messages: {
+				valueNotEquals: "O campo estado é obrigatório",
+				inArray: "Escolha um estado"
 			}
-        });
-        number.rules('add', {
-            required: true,
-            number:true,
-            messages: {
-			    required: "O campo CREA é obrigatório",
-			    number: "O campo CREA só aceita números"
+		});
+		number.rules('add', {
+			required: true,
+			number:true,
+			messages: {
+				required: "O campo CREA é obrigatório",
+				number: "O campo CREA só aceita números"
 			}
-        });
+		});
 	}
 	function removeRulesOfGraduate(state, number) {
 		state.rules('remove');
@@ -674,16 +662,16 @@ $(document).ready(function() {
 	}
 
 	function addRulesOfGraduating(semester) {
-        semester.rules('add', {
-            required: true,
-            number: true,
-            range: [1,10],
-            messages: {
-			    required: "O campo semestre é obrigatório",
-			    number: "O campo semestre só aceita números",
-			    range: "O campo semestre precisa estar entre 1 e 10"
+		semester.rules('add', {
+			required: true,
+			number: true,
+			range: [1,10],
+			messages: {
+				required: "O campo semestre é obrigatório",
+				number: "O campo semestre só aceita números",
+				range: "O campo semestre precisa estar entre 1 e 10"
 			}
-        });
+		});
 	}
 
 	function removeRulesOfGraduating(semester) {
@@ -747,6 +735,7 @@ $(document).ready(function() {
 		$(element).getParent(1).find('p.alert-danger').remove();
 
 		var levelParent;
+		
 		switch($(element).attr('id')) {
 			case "image_perfil":
 				$('<p class="alert-danger">'+ error[0].innerHTML +'</p>').insertAfter($(element).next());
