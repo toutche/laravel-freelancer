@@ -29,7 +29,7 @@ $(document).ready(function() {
 	$('.crea').hide();
 
 	//mobile url = /laravel/public
-	function getAJAX(url, key, before_send = (function(){})()) {
+	function getAJAX(url, key, before_send = function(){}) {
 		var response;
 		var jqxhr = $.post({                    
 		 	url: url,
@@ -38,7 +38,7 @@ $(document).ready(function() {
 			async: false,
 			timeout: 50000,
 			beforeSend: function(){
-		    	before_send;
+		    	(before_send)();
 		  	}
 		});
 
@@ -49,7 +49,7 @@ $(document).ready(function() {
 	}
 
 	//variable to control total experiences
-	var number_of_experiences = new Number(getAJAX('/session/get', 'number_of_experiences'));
+	var number_of_experiences = getAJAX('/session/get', 'number_of_experiences');
 
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
@@ -64,18 +64,17 @@ $(document).ready(function() {
 		var id = new Number(div_experience.attr("data-experience"));
 		var jqxhr;
 		//add loading image
-		var before_send = (function() {
+		var before_send = function() {
 			//if it's the last div.experience, add loading in the previous div else in the next div  
 			if (number_of_experiences == id) {
 				current.getParent(3).prev().append('<div id="loading"></div>');
 			} else {
 				current.getParent(3).next().prepend('<div id="loading"></div>');
 			}
-		})();
+		};
 		//Get value number_of_experiences
 	  	var number_of_experiences_local = getAJAX('/session/get', 'number_of_experiences', before_send);
-	  	//update global variable number_of_experiences
-	  	number_of_experiences = number_of_experiences - 1;
+	  	
 	  	//Updates the experiences after the div removed
 	  	for(i = (id+1); i <= number_of_experiences_local; i++) {
 	  		update_fields_experiences(i,true);
@@ -90,11 +89,13 @@ $(document).ready(function() {
 
 		jqxhr.always(function() {
 			//puts the button when there is only one experiment, or when the one to be deleted is the last one placed in the previous one
-			if((number_of_experiences_local-1) == 1 || id == number_of_experiences_local) {
+			if((number_of_experiences_local-1) == 1 || id == number_of_experiences) {
 				$(".experience[data-experience='" + (number_of_experiences_local-1) + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
 			}
 			//Remove div -> .experience, div of button clicked
 			div_experience.remove();
+			//update global variable number_of_experiences
+	  		number_of_experiences = number_of_experiences - 1;
 			removeLoading('div#loading');
 		});
 
@@ -113,9 +114,9 @@ $(document).ready(function() {
   		number_of_experiences = number_of_experiences + 1;
   		
   		//add loading image
-		var before_send = (function() {
+		var before_send = function() {
 			current.getParent(3).append('<div id="loading"></div>');
-		})();
+		};
 		//Get value number_of_experiences
 	  	var number_of_experiences_local = (getAJAX('/session/get', 'number_of_experiences', before_send) + 1);
 		
