@@ -157,19 +157,79 @@ $(document).ready(function() {
 
 	//Action click from button delete education
 	$(document).on('click','#delete-education', function(event) {
-		
 		event.preventDefault();
 
-		var current = $(this);
 		var div_education = $(this).getParent(3);
 		var id = new Number(div_education.attr("data-education"));
+		//show confirmation modal for the exclusion
+		showModal($('[data-remodal-id=modal]'), "educação", id);
+	});
+
+	//Action click from button add new education
+	$(document).on('click','#add-education',function(event) {
+		event.preventDefault(); //Prevent default from click
+
+		//identifies the current button clicked
+		var current = $(this);
+
+		//disable buttom link
+		current.bind('click', false);
+		
+		//add loading image
+  		var before_send = function() {
+  			current.getParent(3).append('<div id="loading"></div>');
+  		};
+		//Get current session value of number_of_educations with ajax request
+		var number_of_educations_local = (getAJAX('/session/get', 'number_of_educations', before_send) + 1);
+    	var jqxhr;
+
+    	if (number_of_educations_local <= 5) {
+    		//update global variable number_of_educations
+    		number_of_educations = number_of_educations + 1;
+  			//set new current session value of number_of_educations with ajax request
+  			jqxhr = $.post({
+  				url: '/session/set',
+  				data: { key: 'number_of_educations', value: number_of_educations_local},
+  				dataType: 'json'
+  			});
+
+  			jqxhr.always(function() {
+
+				//Get 'last' experience by 'number_of_educations'
+				var last_education = $(".education[data-education='" + (number_of_educations_local - 1) + "']")
+
+				last_education
+				.clone()	
+				.attr('data-education', number_of_educations_local)
+				.appendTo($('#educations'));
+
+				update_fields_educations(number_of_educations_local);
+				current.remove(); //Remove link from previous experience
+				validateEducations();
+				removeLoading('div#loading');
+			});	
+  		} else {
+  			removeLoading('div#loading');
+  			alert("Máximo de educações é 5");
+  		}
+		//enable buttom link
+		current.disable(false);
+	});
+
+	//action the click exclusion education 
+	$(document).on('click', '.remodal [data-remodal-action=confirm]', function(e) {
+		e.preventDefault();
+
+		var id = new Number($(this).getParent(1).attr("data-id"));
+		var div_education = $(".education[data-education='" + id + "']");
+		
   		//add loading image
   		var before_send = function() {
 			//if it's the last div.experience, add loading in the previous div else in the next div  
 			if (number_of_educations == id) {
-				current.getParent(3).prev().append('<div id="loading"></div>');
+				div_education.prev().append('<div id="loading"></div>');
 			} else {
-				current.getParent(3).next().prepend('<div id="loading"></div>');
+				div_education.next().prepend('<div id="loading"></div>');
 			}
 		};
 		//Get value number_of_experiences
@@ -202,56 +262,6 @@ $(document).ready(function() {
 			div_education.remove();
 			removeLoading('div#loading');
 		});
-	});
-
-	//Action click from button add new education
-	$(document).on('click','#add-education',function(event) {
-		event.preventDefault(); //Prevent default from click
-
-		//identifies the current button clicked
-		var current = $(this);
-
-		//disable buttom link
-		current.bind('click', false);
-		number_of_educations = number_of_educations + 1;
-		
-		//add loading image
-  		var before_send = function() {
-  			current.getParent(3).append('<div id="loading"></div>');
-  		};
-		//Get current session value of number_of_educations with ajax request
-		var number_of_educations_local = (getAJAX('/session/get', 'number_of_educations', before_send) + 1);
-    	var jqxhr;
-
-    	if (number_of_educations_local <= 5) {
-  			//set new current session value of number_of_educations with ajax request
-  			jqxhr = $.post({
-  				url: '/session/set',
-  				data: { key: 'number_of_educations', value: number_of_educations_local},
-  				dataType: 'json'
-  			});
-
-  			jqxhr.always(function() {
-
-				//Get 'last' experience by 'number_of_educations'
-				var last_education = $(".education[data-education='" + (number_of_educations_local - 1) + "']")
-
-				last_education
-				.clone()	
-				.attr('data-education', number_of_educations_local)
-				.appendTo($('#educations'));
-
-				update_fields_educations(number_of_educations_local);
-				current.remove(); //Remove link from previous experience
-				validateEducations();
-				removeLoading('div#loading');
-			});	
-  		} else {
-  			removeLoading('div#loading');
-  			alert("Máximo de educações é 5");
-  		}
-		//enable buttom link
-		current.disable(false);
 	});
 
 	function removeLoading(identifier) {
@@ -768,5 +778,13 @@ $(document).ready(function() {
 		
 		$(element).getParent(levelParent).removeClass('has-error');
 		$(element).getParent(levelParent).find('p.alert-danger').remove();
+	}
+
+	function showModal(modal, reference, id) {
+		modal.attr("data-id", id);
+		modal.find("p > b:first-child").text(reference);
+		modal.find("p > b:last").text(id);
+		var inst = modal.remodal(); //instance
+		inst.open(); //open remodal
 	}
 });
