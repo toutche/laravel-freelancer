@@ -55,52 +55,15 @@ $(document).ready(function() {
 
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
-
 		event.preventDefault();
 
-		//identifies the current button clicked
-		var current = $(this);
 		//(div_experience = .experience) div of button clicked
 		var div_experience = $(this).getParent(3);
 		//Data-attribute of the div_experience
 		var id = new Number(div_experience.attr("data-experience"));
-		var jqxhr;
-		//add loading image
-		var before_send = function() {
-			//if it's the last div.experience, add loading in the previous div else in the next div  
-			if (number_of_experiences == id) {
-				current.getParent(3).prev().append('<div id="loading"></div>');
-			} else {
-				current.getParent(3).next().prepend('<div id="loading"></div>');
-			}
-		};
-		//Get value number_of_experiences
-		var number_of_experiences_local = getAJAX('/session/get', 'number_of_experiences', before_send);
 
-	  	//Updates indexes the experiences after the removed div
-	  	for(i = (id+1); i <= number_of_experiences_local; i++) {
-	  		update_fields_experiences(i,true);
-	  	}
-
-  		//set new current session value of number_of_experiences with ajax request
-  		jqxhr = $.post({
-  			url: '/session/set',
-  			data: { key: 'number_of_experiences', value: (number_of_experiences_local-1)},
-  			dataType: 'json'
-  		});
-
-  		jqxhr.always(function() {
-			//puts the button when there is only one experiment, or when the one to be deleted is the last one placed in the previous one
-			if((number_of_experiences_local-1) == 1 || id == number_of_experiences) {
-				$(".experience[data-experience='" + (number_of_experiences_local-1) + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-experience" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
-			}
-			//Remove div -> .experience, div of button clicked
-			div_experience.remove();
-			//update global variable number_of_experiences
-			number_of_experiences = number_of_experiences - 1;
-			removeLoading('div#loading');
-		});
-
+		//show confirmation modal for the exclusion
+		showModal($('[data-remodal-id=modal]'), 'experience', id);
   	});
 
 	//Action click from button add new experience
@@ -162,7 +125,7 @@ $(document).ready(function() {
 		var div_education = $(this).getParent(3);
 		var id = new Number(div_education.attr("data-education"));
 		//show confirmation modal for the exclusion
-		showModal($('[data-remodal-id=modal]'), "educação", id);
+		showModal($('[data-remodal-id=modal]'), 'education', id);
 	});
 
 	//Action click from button add new education
@@ -216,50 +179,61 @@ $(document).ready(function() {
 		current.disable(false);
 	});
 
-	//action the click exclusion education 
+	//action the click exclusion education|experience 
 	$(document).on('click', '.remodal [data-remodal-action=confirm]', function(e) {
 		e.preventDefault();
 
-		var id = new Number($(this).getParent(1).attr("data-id"));
-		var div_education = $(".education[data-education='" + id + "']");
-		
-  		//add loading image
+		var modal = $(this).getParent(1); //div modal
+		var reference = modal.attr("data-reference"); // reference: 'education', 'experience'
+		var id = new Number(modal.attr("data-id")); //id modal: id of experience or education
+		//var div = $(".education[data-education='" + id + "']");
+		var div = $("."+reference+"[data-"+reference+"='" + id + "']");
+		var number_of; // number variable global: 'number_of_educations', 'number_of_experiences'
+
+		//add loading image
   		var before_send = function() {
-			//if it's the last div.experience, add loading in the previous div else in the next div  
-			if (number_of_educations == id) {
-				div_education.prev().append('<div id="loading"></div>');
+			//if it's the last 'div.education', ''div.experience'', add loading in the previous div else in the next div  
+			number_of = (reference == 'education') ? number_of_educations : number_of_experiences;
+			if (number_of == id) {
+				div.prev().append('<div id="loading"></div>');
 			} else {
-				div_education.next().prepend('<div id="loading"></div>');
+				div.next().prepend('<div id="loading"></div>');
 			}
 		};
-		//Get value number_of_experiences
-		var number_of_educations_local = (getAJAX('/session/get', 'number_of_educations', before_send)-1);
+		
+		//Get value number_of_experiences|number_of_experiences
+		var number = getAJAX("/session/get", "number_of_"+reference+"s", before_send);
 		var jqxhr;
 
-		//Updates indexes the educations after the removed div
-		$("#educations > div.education").each( function(index) {
-			index++;
-			if(index > id) {
-				update_fields_educations(index,true);
+		//Updates indexes the experiences, or educations after the removed div
+	  	for(i = (id+1); i <= number; i++) {
+	  		if (reference == 'education') {
+				update_fields_educations(i,true);
+			} else if(reference == 'experience') {
+				update_fields_experiences(i,true);
 			}
-		});
+	  	}
 
-		//set new current session value of number_of_educations with ajax request
+	  	//set new current session value of 'number_of_educations', 'number_of_experiences' with ajax request
 		jqxhr = $.post({
 			url: '/session/set',
-			data: { key: 'number_of_educations', value: number_of_educations_local},
+			data: { key: "number_of_"+reference+"s", value: (number-1)},
 			dataType: 'json'
 		});
 
 		jqxhr.always(function() {
-			//puts the button when there is only one education, or when the one to be deleted is the last one placed in the previous one
-			if(number_of_educations_local == 1 || id == number_of_educations) {
-				$(".education[data-education='" + number_of_educations_local + "'] div.add-post-btn:last > div:first-child").append('<a href="#" id="add-education" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
+			//puts the button when there is only one experiment or education, or when the one to be deleted is the last one placed in the previous one
+			if(number == 1 || id == number_of) {
+				div.prev().find("div.add-post-btn:last > div:first-child").append('<a href="#" id="add-'+reference+'" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
 			}
-			//update global variable number_of_experiences
-			number_of_educations = number_of_educations - 1;
-			//Remove div -> .education, div of button clicked
-			div_education.remove();
+			//Remove div -> '.experience', '.education', div of button clicked
+			div.remove();
+			//update global variable 'number_of_educations', 'number_of_experiences'
+			if (reference == 'education') {
+				number_of_educations = number_of_educations - 1;
+			} else if(reference == 'experience') {
+				number_of_experiences = number_of_experiences - 1;
+			}
 			removeLoading('div#loading');
 		});
 	});
@@ -779,9 +753,16 @@ $(document).ready(function() {
 		$(element).getParent(levelParent).removeClass('has-error');
 		$(element).getParent(levelParent).find('p.alert-danger').remove();
 	}
-
+	/**
+	 * [showModal Opens exclusion remodal of education or experience ]
+	 * @param  {[object]} modal     [object div.remodal]
+	 * @param  {[String]} reference [call reference: 'education', 'experience']
+	 * @param  {[Number]} id        [id number of div to be deleted]
+	 */
 	function showModal(modal, reference, id) {
 		modal.attr("data-id", id);
+		modal.attr("data-reference", reference);
+		if (reference == 'experience') { reference = 'experiência'} else if(reference == 'education') { reference = 'educação'}
 		modal.find("p > b:first-child").text(reference);
 		modal.find("p > b:last").text(id);
 		var inst = modal.remodal(); //instance
