@@ -3,6 +3,8 @@
 @push('scripts_css')
 	<link rel="stylesheet" href="{{url('assets/site/css/summernote.css')}}" type="text/css">
 	<link rel="stylesheet" href="{{url('assets/site/css/bootstrap-select.min.css')}}" type="text/css">
+	<link rel="stylesheet" href="{{url('css/remodal.css')}}" type="text/css">
+	<link rel="stylesheet" href="{{url('css/remodal-default-theme.css')}}" type="text/css">
 @endpush
 
 @section('content')
@@ -38,6 +40,17 @@
 			</div>
 		</div>
 	</div>
+	<!-- Modal Exclução -->
+	<div class="remodal" data-remodal-id="modal">
+	  	<button data-remodal-action="close" class="remodal-close"></button>
+	  	<h1>Exclusão</h1>
+	 	<p>
+	    	Tem certeza que deseja excluir a <b></b> de n° <b></b> ?
+	 	</p>
+	 	<br>
+	 	<button data-remodal-action="cancel" class="btn my-btn-default">Cancelar</button>
+	 	<button data-remodal-action="confirm" class="btn my-btn-default my-btn-default-confirm">Excluir</button>
+	</div>
 </section>
 @endsection
 
@@ -58,8 +71,8 @@
 	<script type="text/javascript" src="{{url('assets/site/js/summernote.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/summernote-pt-BR.min.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/bootstrap-select.min.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/remodal.js')}}"></script>
 	<script type="text/javascript" src="{{url('assets/site/js/perfil-complement.js')}}"></script>
-
 	<script>
 		
     	$('.edit').summernote({

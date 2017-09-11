@@ -772,6 +772,9 @@ nav#menu span.fa.fa-bars:hover {
     padding: 10px;
     border-radius: 3px;
 }
+.my-btn-default-confirm {
+    background-color: #81C784;
+}
 /**
  * Perfil complemento
  */
