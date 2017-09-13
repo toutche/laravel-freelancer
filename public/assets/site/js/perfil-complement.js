@@ -27,6 +27,7 @@ $(document).ready(function() {
 
 	$('.semester').hide();
 	$('.crea').hide();
+	$('.other_course').hide();
 
 	//mobile url = /laravel/public
 	function getAJAX(url, key, before_send = function(){}) {
@@ -347,6 +348,10 @@ $(document).ready(function() {
 			$(".education[data-education='" + number_of_education + "']").attr("data-education", new_number_of_education);
 		}
 		
+		$(".education[data-education='" + new_number_of_education + "']").find("div.other_course").attr("id", "other_course_" + new_number_of_education);
+		$(".education[data-education='" + new_number_of_education + "']").find("div.semester").attr("id", "semester_" + new_number_of_education);
+		$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
+
 		//Fetches all clone inputs
 		$(".education[data-education='" + new_number_of_education + "'] :input").each( function() {
 			
@@ -381,9 +386,6 @@ $(document).ready(function() {
 					select.change();
 					element = select;
 					break;
-				/*case 'ed_course_[' + number_of_education + ']':
-					$(this).attr("name", "ed_course_[" + new_number_of_education + "]");
-					break;*/
 				case 'ed_select_course_[' + number_of_education + ']':
 					//$(this) == select
 					$(this).getParent(3).prev().attr("for", "ed_select_course_[" + new_number_of_education + "]"); //external label
@@ -410,6 +412,10 @@ $(document).ready(function() {
 					}
 					select.change();
 					element = select;
+					break;
+				case 'ed_other_course_[' + number_of_education + ']':
+					$(this).prev().attr("for", "ed_other_course_[" + new_number_of_education + "]");
+					$(this).attr("name", "ed_other_course_[" + new_number_of_education + "]");
 					break;
 				case 'ed_semester_[' + number_of_education + ']':
 					$(this).attr("name", "ed_semester_[" + new_number_of_education + "]");
@@ -453,9 +459,6 @@ $(document).ready(function() {
 					$(this).attr("name", "ed_end_date_[" + new_number_of_education + "]");
 					break;
 			}
-
-			$(".education[data-education='" + new_number_of_education + "']").find("div.semester").attr("id", "semester_" + new_number_of_education);
-			$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
 
 			//If action remove not clean values
 			if(remove == false) {
@@ -503,9 +506,9 @@ $(document).ready(function() {
 				required: false,
 				cellPhoneVerify: true
 			},
-			site: {
+			/*site: {
 				url: true
-			},
+			},*/
 			date_birth: {
 				required: true,
 				brazilianDate: true
@@ -709,6 +712,23 @@ $(document).ready(function() {
 		$(semester).rules('remove');
 	}
 
+	function addRulesOfOtherCourse(otherCourse) {
+		otherCourse.rules('add', {
+			required: true,
+			minlength: 3,
+			maxlength: 100,
+			messages: {
+				required: "O campo outro curso é obrigatório",
+				minlength: jQuery.validator.format("Mínimo de caracteres para o campo outro curso é {0}"),
+				maxlength: jQuery.validator.format("Máximo de caracteres para o campo outro curso é {0}")
+			}
+		});
+	}
+
+	function removeRulesOfOtherCourse(otherCourse) {
+		$(otherCourse).rules('remove');
+	}
+
 	//Identifies whether the degree is selected and shows the specific div according to the degree.
 	//When it returns with error in the educations already appears, the clones with the 
 	//div semester or crea open.
@@ -717,15 +737,16 @@ $(document).ready(function() {
 	$('.degree select.selectpicker').each(function(){
 		open_crea_or_semester($(this), false);
 	});
+	$('.course select.selectpicker').each(function(){
+		open_other_course($(this), false);
+	});
 	//When there is change
 	$(document).on('change', '.degree select.selectpicker', function() {
 		open_crea_or_semester($(this), true);
 	});
 	//When there is change on select ed_select_courses
 	$(document).on('change', '.course select.selectpicker', function() {
-		if($(this).valid()) {
-			removeErrorMessage($(this));
-		}
+		open_other_course($(this), true);
 	});
 
 	function open_crea_or_semester(element, validate) {
@@ -753,6 +774,31 @@ $(document).ready(function() {
 		}
 		if(validate) element.valid();
 	}
+
+	function open_other_course(element, validate) {
+		var option_selected = element.val();
+		var education_number = element.attr('data-id');
+		var other_course = $("div#other_course_" + education_number);
+		
+		other_course.hide();
+		removeRulesOfOtherCourse(other_course.find('input'));
+
+		if(option_selected == 1) {
+			$('.other_course').show();
+			addRulesOfOtherCourse(other_course.find('input'));
+		} else if(option_selected == '') {
+			other_course.hide();
+			removeRulesOfOtherCourse(other_course.find('input'));
+		} 
+
+		if(validate) {
+			if(element.valid()) {
+				removeErrorMessage(element);
+			}
+		}
+
+	}
+
 
 	//Masks
 	$('input[name="cpf"]').mask('000.000.000-00');

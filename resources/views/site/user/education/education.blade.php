@@ -55,6 +55,13 @@
 					</label>
 				</div>
 			</div>
+			<div class="form-group other_course @if ($errors->has('ed_other_course_.'.$i)) has-error @endif" id="other_course_{{$i}}">
+				<label class="control-label" for="ed_other_course_[{{$i}}]">Outro Curso</label>
+				<input type="text" class="form-control ed_other_course" name="ed_other_course_[{{$i}}]" placeholder="Digite aqui o novo curso" value="{{old('ed_other_course_.'.$i)}}">
+				@if ($errors->has('ed_other_course_.'.$i)) 
+					<p class="alert-danger">{{ $errors->first('ed_other_course_.'.$i) }}</p> 
+				@endif
+			</div>
 			<div class="form-group semester @if ($errors->has('ed_semester_.'.$i)) has-error @endif" id="semester_{{$i}}">
 				<label class="control-label" for="textarea">Semestre</label>
 				<input type="number" class="form-control ed_semester" name="ed_semester_[{{$i}}]" placeholder="Ex: 6" value="{{old('ed_semester_.'.$i)}}">
