@@ -41,7 +41,15 @@ class ComplementInformationsController extends Controller
         'SE'=>'Sergipe',
         'TO'=>'Tocantins'
         );
+        //Get all active courses on the table courses
         $courses = Course::where('status', 1)->get();
+        //Copies the first occurrence (others option) of the collection
+        $primaryocurrency = $courses[0];
+        //Removes the first occurrence of the collection
+        unset($courses[0]);
+        //Adds the copy of the first occurrence of at the end of the collection
+        $courses->push($primaryocurrency);
+        
     	return view("site.complement_register_perfil", compact('title', 'brazilianStates', 'courses'));
     }
 
