@@ -48,10 +48,32 @@ $(document).ready(function() {
 		return response;
 	}
 
+	function getAJAXCourses() {
+		var response = new Array();
+		var columns = JSON.parse('["id", "name_of_course"]');
+		var where = JSON.parse('[ ["status",1] ]');
+		var jqxhr = $.post({                    
+			url: '/cursos',
+			data: {columns: columns, where: where},
+			dataType: 'json',
+			async: false,
+			timeout: 50000,
+		});
+
+		jqxhr.done(function(responseRequest){
+			$.each(responseRequest, function(index, value) {
+				response.push(value.id + "");
+			});
+		});
+		return response;
+	}
+
 	//variable to control total experiences
 	var number_of_experiences = getAJAX('/session/get', 'number_of_experiences');
 	//variable to control total educations
 	var number_of_educations = getAJAX('/session/get', 'number_of_educations');
+	//variable to control courses
+	var courses = getAJAXCourses();
 
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
@@ -359,8 +381,35 @@ $(document).ready(function() {
 					select.change();
 					element = select;
 					break;
-				case 'ed_course_[' + number_of_education + ']':
+				/*case 'ed_course_[' + number_of_education + ']':
 					$(this).attr("name", "ed_course_[" + new_number_of_education + "]");
+					break;*/
+				case 'ed_select_course_[' + number_of_education + ']':
+					//$(this) == select
+					$(this).getParent(3).prev().attr("for", "ed_select_course_[" + new_number_of_education + "]"); //external label
+					$(this).getParent(3).attr("id", "ed_select_course_[" + new_number_of_education + "]"); //div#ed_select_degree_[i]
+					$(this).prev().prev().attr("data-id", "ed_select_course_[" + new_number_of_education + "]"); // button
+					$(this).attr("name", "ed_select_course_[" + new_number_of_education + "]");
+					$(this).attr("id", "ed_select_course_[" + new_number_of_education + "]");
+					$(this).attr("data-id", new_number_of_education);
+
+					var label = $(this).getParent(2); //#label
+					var select = label.find("select").clone(); //clone select
+					var index;
+					//If action remove not clean values
+					if(remove == true) {
+						//Get index of selected option
+						index = label.find("li.selected").attr("data-original-index");
+					}
+					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
+					select.appendTo(label).selectpicker("render"); //add new select
+					//If action remove not clean values
+					if(remove == true) {
+						//Remarks option selected by index
+						select.children().eq(index).attr("selected", "selected");
+					}
+					select.change();
+					element = select;
 					break;
 				case 'ed_semester_[' + number_of_education + ']':
 					$(this).attr("name", "ed_semester_[" + new_number_of_education + "]");
@@ -572,15 +621,13 @@ $(document).ready(function() {
 				}
 			});
 		});
-		$('input.ed_course').each(function() {
+		$('select.ed_select_course').each(function() {
 			$(this).rules('add', {
-				required: true,
-				minlength: 3,
-				maxlength: 100,
+				valueNotEquals: "",
+				inArray: courses,
 				messages: {
-					required: "O campo curso é obrigatório",
-					minlength: jQuery.validator.format("Mínimo de caracteres para o campo curso é {0}"),
-					maxlength: jQuery.validator.format("Máximo de caracteres para o campo curso é {0}")
+					valueNotEquals: "O campo curso é obrigatório",
+					inArray: "Selecione um curso válido"
 				}
 			});
 		});
@@ -674,6 +721,12 @@ $(document).ready(function() {
 	$(document).on('change', '.degree select.selectpicker', function() {
 		open_crea_or_semester($(this), true);
 	});
+	//When there is change on select ed_select_courses
+	$(document).on('change', '.course select.selectpicker', function() {
+		if($(this).valid()) {
+			removeErrorMessage($(this));
+		}
+	});
 
 	function open_crea_or_semester(element, validate) {
 		var option_selected = element.val();
@@ -743,6 +796,9 @@ $(document).ready(function() {
 		var levelParent;
 		switch($(element).attr('id')) {
 			case "ed_select_degree_[" + $(element).attr('data-id') + "]":
+				levelParent = 4;
+				break;
+			case "ed_select_course_[" + $(element).attr('data-id') + "]":
 				levelParent = 4;
 				break;
 			default:

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ComplementInformationsRequest extends FormRequest
 {
@@ -103,7 +104,9 @@ class ComplementInformationsRequest extends FormRequest
             'image_perfil'                  => 'image|mimes:jpeg,png,jpg|max:2000|nullable',
             //Educations
             'ed_select_degree_.*'           => 'required|in:graduating,graduate',
-            'ed_course_.*'                  => 'required|min:3|max:100',
+            'ed_select_course_.*'           => ['required', Rule::exists('courses', 'id') ->where(function($query){
+                $query->where('status', 1);
+            }),],
             'ed_college_.*'                 => 'required|min:3|max:100',
             'ed_start_date_.*'              => 'required|numeric|exactly:4',
             'ed_end_date_.*'                => 'nullable|numeric|exactly:4', 
@@ -149,9 +152,8 @@ class ComplementInformationsRequest extends FormRequest
             'image_perfil.max'                      => 'Tamanho máximo para imagem de perfil é 2MB',
             //Educations
             'ed_select_degree_.*.required'          => 'O campo grau é obrigatório',
-            'ed_course_.*.required'                 => 'O campo curso é obrigatório',
-            'ed_course_.*.min'                      => 'Mínimo de caracteres para o campo curso é 3',
-            'ed_course_.*.max'                      => 'Máximo de caracteres para o campo curso é 100',
+            'ed_select_course_.*.required'          => 'O campo curso é obrigatório',
+            'ed_select_course_.*.exists'            => 'Selecione um curso válido',
             'ed_college_.*.required'                => 'O campo instituição de ensino é obrigatório',
             'ed_college_.*.min'                     => 'Mínimo de caracteres para o campo instituição de ensino é 3',
             'ed_college_.*.max'                     => 'Máximo de caracteres para o campo instituição de ensino é 100',

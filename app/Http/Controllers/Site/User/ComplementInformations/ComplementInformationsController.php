@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site\User\ComplementInformations;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Site\User\ComplementInformationsRequest;
+use App\Models\Course;
 
 class ComplementInformationsController extends Controller
 {
@@ -40,7 +41,8 @@ class ComplementInformationsController extends Controller
         'SE'=>'Sergipe',
         'TO'=>'Tocantins'
         );
-    	return view("site.complement_register_perfil", compact('title', 'brazilianStates'));
+        $courses = Course::where('status', 1)->get();
+    	return view("site.complement_register_perfil", compact('title', 'brazilianStates', 'courses'));
     }
 
     public function postComplementRegisterPerfil(ComplementInformationsRequest $request)

@@ -32,4 +32,5 @@ Route::group(['namespace' => 'Site'], function(){
 Route::group(['namespace' => 'Ajax'], function(){
 	Route::post('/session/get', 'SessionController@getSessionValueByName');
 	Route::post('/session/set', 'SessionController@setSessionValueByName');
+	Route::post('/cursos', 'CourseController@index'); 
 });

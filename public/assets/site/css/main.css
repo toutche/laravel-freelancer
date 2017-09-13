@@ -835,6 +835,16 @@ nav#menu span.fa.fa-bars:hover {
     padding: 15px;
     z-index: 999;
 }
+.styled-select.course:before {
+    content: "\e6dc";
+    float: left;
+    position: absolute;
+    font-family: themify;
+    color: #666;
+    font-size: 18px;
+    padding: 15px;
+    z-index: 999;
+}
 .styled-select.state:before {
     content: "\e690";
     float: left;
@@ -844,6 +854,9 @@ nav#menu span.fa.fa-bars:hover {
     font-size: 18px;
     padding: 15px;
     z-index: 999;
+}
+.styled-select.course {
+    width: 100%;
 }
 .bootstrap-select.btn-group .dropdown-toggle .filter-option {
     margin-left: 30px;

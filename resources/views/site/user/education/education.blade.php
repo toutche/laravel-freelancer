@@ -39,12 +39,21 @@
 					</label>
 				</div>
 			</div>
-			<div class="form-group @if ($errors->has('ed_course_.'.$i)) has-error @endif">
+			<div class="form-group @if ($errors->has('ed_select_course_.'.$i)) has-error @endif">
 				<label class="control-label" for="textarea">Curso</label>
-				<input type="text" class="form-control ed_course" name="ed_course_[{{$i}}]" placeholder="Curso" value="{{old('ed_course_.'.$i)}}">
-				@if ($errors->has('ed_course_.'.$i)) 
-					<p class="alert-danger">{{ $errors->first('ed_course_.'.$i) }}</p> 
-				@endif
+				<div id="ed_select_course_[{{$i}}]">
+					<label class="styled-select course">
+						<select id="ed_select_course_[{{$i}}]" name="ed_select_course_[{{$i}}]" data-id="{{$i}}" class="dropdown-product selectpicker ed_select_course" data-width="100%">
+							<option value="">Selecione uma opção</option>
+							@foreach($courses as $course)
+								<option value="{{$course->id}}" {{ (old('ed_select_course_.'.$i) == $course->id ? "selected" : " ")}}>{{$course->name_of_course}}</option>
+							@endforeach
+						</select>
+						@if ($errors->has('ed_select_course_.'.$i)) 
+							<p class="alert-danger">{{ $errors->first('ed_select_course_.'.$i) }}</p>
+						@endif
+					</label>
+				</div>
 			</div>
 			<div class="form-group semester @if ($errors->has('ed_semester_.'.$i)) has-error @endif" id="semester_{{$i}}">
 				<label class="control-label" for="textarea">Semestre</label>
