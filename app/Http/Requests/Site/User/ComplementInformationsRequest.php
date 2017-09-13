@@ -152,6 +152,7 @@ class ComplementInformationsRequest extends FormRequest
             'image_perfil.max'                      => 'Tamanho máximo para imagem de perfil é 2MB',
             //Educations
             'ed_select_degree_.*.required'          => 'O campo grau é obrigatório',
+            'ed_select_degree_.*.in'                => 'Selecione uma opção válida',
             'ed_select_course_.*.required'          => 'O campo curso é obrigatório',
             'ed_select_course_.*.exists'            => 'Selecione um curso válido',
             'ed_college_.*.required'                => 'O campo instituição de ensino é obrigatório',
@@ -186,7 +187,7 @@ class ComplementInformationsRequest extends FormRequest
                     $messages['ed_semester_.' . $i . '.between'] = "O campo semestre precisa estar entre 1 e 10";
                 } else if($ed_select_degree == "graduate") {
                     $messages['ed_crea_state_.' . $i. '.required'] = "O campo estado é obrigatório"; 
-                    $messages['ed_crea_state_.' . $i. '.in'] = "Escolha um estado";
+                    $messages['ed_crea_state_.' . $i. '.in'] = "Selecione um estado válido";
                     $messages['ed_crea_number_.' . $i .'.required'] = "O campo CREA é obrigatório";
                     $messages['ed_crea_number_.' . $i .'.numeric'] = "O campo CREA só aceita números";
                 }

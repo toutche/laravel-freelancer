@@ -617,7 +617,7 @@ $(document).ready(function() {
 				inArray: ["graduating", "graduate"],
 				messages: {
 					valueNotEquals: "O campo grau é obrigatório",
-					inArray: "Selecione uma opção"
+					inArray: "Selecione uma opção válida"
 				}
 			});
 		});
@@ -675,7 +675,7 @@ $(document).ready(function() {
 			"PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"],
 			messages: {
 				valueNotEquals: "O campo estado é obrigatório",
-				inArray: "Escolha um estado"
+				inArray: "Selecione um estado válido"
 			}
 		});
 		number.rules('add', {
