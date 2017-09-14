@@ -435,6 +435,9 @@ $(document).ready(function() {
 							select.change();
 						}
 					}
+					if(remove == false) {
+						select.change();
+					}
 					element = select;
 					break;
 				case 'ed_other_course_[' + number_of_education + ']':
