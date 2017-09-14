@@ -828,6 +828,11 @@ $(document).ready(function() {
 				//Show 'p' whith error message
 				$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
 				break;
+			case "ed_select_course_[" + $(element).attr('data-id') + "]":
+				levelParent = 4;
+				//Show 'p' whith error message
+				$(element).after('<p class="alert-danger">'+ error[0].innerHTML +'</p>');
+				break;
 			default:
 				levelParent = 1;
 				//Show 'p' whith error message
