@@ -374,10 +374,12 @@ $(document).ready(function() {
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
 					var index;
+					var p_error;
 					//If action remove not clean values
 					if(remove == true) {
 						//Get index of selected option
 						index = label.find("li.selected").attr("data-original-index");
+						p_error = label.find("p");
 					}
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
 					select.appendTo(label).selectpicker("render"); //add new select
@@ -385,8 +387,14 @@ $(document).ready(function() {
 					if(remove == true) {
 						//Remarks option selected by index
 						select.children().eq(index).attr("selected", "selected");
+						//if found p tag, add again 
+						if(p_error.exists()) {
+							p_error.appendTo(label.find("div:first-child"));
+						}
+						if(select.children().eq(index).val() != ""){
+							select.change();
+						}
 					}
-					select.change();
 					element = select;
 					break;
 				case 'ed_select_course_[' + number_of_education + ']':
@@ -424,7 +432,6 @@ $(document).ready(function() {
 							select.change();
 						}
 					}
-					//select.change();
 					element = select;
 					break;
 				case 'ed_other_course_[' + number_of_education + ']':
