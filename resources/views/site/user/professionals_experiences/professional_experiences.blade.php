@@ -63,7 +63,7 @@
 			<section class="editor">
 				<textarea class="edit" name="ex_description_[{{$i}}]">
 					@php 
-						echo htmlspecialchars(old('ex_description_'.$i));
+						echo htmlspecialchars(old('ex_description_.'.$i));
 					@endphp
 				</textarea>
 			</section>
