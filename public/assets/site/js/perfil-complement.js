@@ -25,6 +25,9 @@ $(document).ready(function() {
 		}
 	});
 
+	//Test if exits element
+	jQuery.fn.exists = function(){return this.length>0;}
+
 	$('.semester').hide();
 	$('.crea').hide();
 	$('.other_course').hide();
@@ -182,7 +185,7 @@ $(document).ready(function() {
   			jqxhr.always(function() {
 
 				//Get 'last' experience by 'number_of_educations'
-				var last_education = $(".education[data-education='" + (number_of_educations_local - 1) + "']")
+				var last_education = $(".education[data-education='" + (number_of_educations_local - 1) + "']");
 
 				last_education
 				.clone()	
@@ -286,7 +289,7 @@ $(document).ready(function() {
 		}
 		
 		//Fetches all clone inputs
-		$(".experience[data-experience='" + new_number_of_experience + "'] :input").each( function() {
+		$(".experience[data-experience='" + new_number_of_experience + "']:last :input").each( function() {
 			
 			//Set news attributes name
 			switch($(this).attr("name")) {
@@ -309,7 +312,7 @@ $(document).ready(function() {
 		});
 
 		//Update references of the Summernote (recreate)
-		var current_editor = $(".experience[data-experience='" + new_number_of_experience + "']:last section.editor");
+		var current_editor = $(".experience[data-experience='" + new_number_of_experience + "'] section.editor");
 		
 		current_editor.find('div.note-editor').remove();
 		current_editor.find("textarea").remove();					
@@ -353,7 +356,7 @@ $(document).ready(function() {
 		$(".education[data-education='" + new_number_of_education + "']").find("div.crea").attr("id", "crea_" + new_number_of_education);
 
 		//Fetches all clone inputs
-		$(".education[data-education='" + new_number_of_education + "'] :input").each( function() {
+		$(".education[data-education='" + new_number_of_education + "']:last :input").each( function() {
 			
 			var element = $(this);
 			
@@ -388,8 +391,9 @@ $(document).ready(function() {
 					break;
 				case 'ed_select_course_[' + number_of_education + ']':
 					//$(this) == select
+					
 					$(this).getParent(3).prev().attr("for", "ed_select_course_[" + new_number_of_education + "]"); //external label
-					$(this).getParent(3).attr("id", "ed_select_course_[" + new_number_of_education + "]"); //div#ed_select_degree_[i]
+					$(this).getParent(3).attr("id", "ed_select_course_[" + new_number_of_education + "]"); //div#ed_select_course_[i]
 					$(this).prev().prev().attr("data-id", "ed_select_course_[" + new_number_of_education + "]"); // button
 					$(this).attr("name", "ed_select_course_[" + new_number_of_education + "]");
 					$(this).attr("id", "ed_select_course_[" + new_number_of_education + "]");
@@ -398,19 +402,29 @@ $(document).ready(function() {
 					var label = $(this).getParent(2); //#label
 					var select = label.find("select").clone(); //clone select
 					var index;
+					var p_error;
 					//If action remove not clean values
 					if(remove == true) {
 						//Get index of selected option
 						index = label.find("li.selected").attr("data-original-index");
+						p_error = label.find("p");
 					}
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
 					select.appendTo(label).selectpicker("render"); //add new select
+					
 					//If action remove not clean values
 					if(remove == true) {
 						//Remarks option selected by index
 						select.children().eq(index).attr("selected", "selected");
+						//if found p tag, add again 
+						if(p_error.exists()) {
+							p_error.appendTo(label.find("div:first-child"));
+						}
+						if(select.children().eq(index).val() != ""){
+							select.change();
+						}
 					}
-					select.change();
+					//select.change();
 					element = select;
 					break;
 				case 'ed_other_course_[' + number_of_education + ']':
@@ -466,8 +480,8 @@ $(document).ready(function() {
 				if(element[0].tagName != 'SELECT') {
 					$(this).val("");
 				}
+				removeErrorMessage(element);
 			}
-			removeErrorMessage(element);
 		});
 	}
 
