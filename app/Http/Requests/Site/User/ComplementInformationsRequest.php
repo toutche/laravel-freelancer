@@ -127,6 +127,15 @@ class ComplementInformationsRequest extends FormRequest
                 }
             }
         }
+
+        //As select course selection applies the respective rules
+        for($i = 1; $i <= count(Input::get('ed_select_course_.*')); $i++ ) {
+            if(!empty(Input::get('ed_select_course_.' . $i ))) {
+                if(Input::get('ed_select_course_.' . $i) == 1) {
+                    $rules['ed_other_course_.' . $i] = 'required|min:3|max:100';
+                } 
+            }
+        }
         return $rules;  
     }
 
@@ -191,6 +200,19 @@ class ComplementInformationsRequest extends FormRequest
                     $messages['ed_crea_number_.' . $i .'.required'] = "O campo CREA é obrigatório";
                     $messages['ed_crea_number_.' . $i .'.numeric'] = "O campo CREA só aceita números";
                 }
+            }
+        }
+
+        //As select course selection applies the respective messages
+        for($i = 1; $i <= count(Input::get('ed_select_course_.*')); $i++ ) {
+            $ed_select_course = Input::get('ed_select_course_.' . $i );
+
+            if(!empty($ed_select_course)) {
+                if($ed_select_course == 1) {
+                    $messages['ed_other_course_.' . $i . '.required'] = "O campo outro curso é obrigatório";
+                    $messages['ed_other_course_.' . $i . '.min'] = "Mínimo de caracteres para o campo outro curso é 3";
+                    $messages['ed_other_course_.' . $i . '.max'] = "Máximo de caracteres para o campo outro curso é 100";
+                } 
             }
         }
         return $messages;

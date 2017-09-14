@@ -506,9 +506,9 @@ $(document).ready(function() {
 				required: false,
 				cellPhoneVerify: true
 			},
-			/*site: {
+			site: {
 				url: true
-			},*/
+			},
 			date_birth: {
 				required: true,
 				brazilianDate: true
