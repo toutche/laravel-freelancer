@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400, 700, 900');
+@font-face {
+ font-family: "Comfortaa Light";
+ src: url("../../../fonts/Comfortaa-Light.ttf") format("truetype");
+}
+@font-face {
+ font-family: "Comfortaa Bold";
+ src: url("../../../fonts/Comfortaa-Bold.ttf") format("truetype");
+}
 body {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Comfortaa Light', sans-serif;
     font-weight: 400;
     font-size: 13px;
     line-height: 24px;
@@ -21,7 +29,7 @@ h3 {
 }
 p {
     font-size: 14px;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Comfortaa Light', sans-serif;
     margin: 0;
     line-height: 24px;
     font-weight: 400;
@@ -63,11 +71,11 @@ label {
 }
 .clear { clear: both; }
 ::selection {
-    background: #ff4f57;
+    background: #4682B4!important;
     color: #fff;
 }
 ::-moz-selection {
-    background: #ff4f57;
+    background: #4682B4!important;
     color: #fff;
 }
 /**
@@ -214,7 +222,7 @@ label {
     color: #666;
     margin-bottom: 2px;
     font-size: 13px;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Comfortaa Light', sans-serif;
     padding: 5px 10px;
     line-height: 26px;
     transition: all 0.3s ease-in-out;
@@ -322,17 +330,29 @@ label {
 .slicknav_menu {
     display: none;
 }
+.slicknav_btn {
+    border-color: #4682B4!important;
+}
+.slicknav_menu .slicknav_icon-bar {
+    background: #4682B4!important;
+}
+.slicknav_nav>li:hover, .slicknav_nav>li>ul>li:hover {
+    background-color: #4682B4!important;
+}
+.slicknav_nav>li:hover>a,.slicknav_nav>li:hover>.slicknav_item.slicknav_row>a, .slicknav_nav>li:hover>ul>li:hover>a {
+    color: #FFF!important;
+}
 @media screen and (max-width: 767px)  {
     .navbar-brand {
-    position: absolute;
-    top: 0;
-}
-.tbtn {
-    display: none;
-}
-.slicknav_menu {
-    display: block;
-}
+        position: absolute;
+        top: 0;
+    }
+    .tbtn {
+        display: none;
+    }
+    .slicknav_menu {
+        display: block;
+    }
 }
 @media screen and (max-width: 768px)  {
     .navbar-toggle {
@@ -410,6 +430,7 @@ nav#menu span.fa.fa-bars:hover {
     background-position: center; 
 }
 .page-header .product-title {
+    font-family: 'Comfortaa Bold';
     font-size: 30px;
     line-height: 38px;
     font-weight: 900;
@@ -465,6 +486,7 @@ nav#menu span.fa.fa-bars:hover {
     border-radius: 0 .4px 0 0;
 }
 .my-account-form .cd-switcher a {
+    font-family: 'Comfortaa Bold';
     display: block;
     width: 100%;
     font-size: 16px;
