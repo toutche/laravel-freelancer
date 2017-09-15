@@ -33,7 +33,8 @@ $(document).ready(function() {
 	$('.other_course').hide();
 
 	//mobile url = /laravel/public
-	function getAJAX(url, key, before_send = function(){}) {
+	function getAJAX(url, key, before_send) {
+		before_send = before_send || function(){};
 		var response;
 		var jqxhr = $.post({                    
 			url: url,
@@ -270,8 +271,8 @@ $(document).ready(function() {
 	}
 
 	//Function update inputs and textarea attributes name of experiences
-	function update_fields_experiences(number_of_experience, remove = false) {
-		
+	function update_fields_experiences(number_of_experience, remove) {
+		remove = remove || false;
 		var new_number_of_experience
 		
 		if (remove == false) {
@@ -334,8 +335,8 @@ $(document).ready(function() {
 	}
 
 	//Function update inputs and textarea attributes name of educations
-	function update_fields_educations(number_of_education, remove = false) {
-		
+	function update_fields_educations(number_of_education, remove) {
+		remove = remove || false;
 		var new_number_of_education;
 
 		if (remove == false) {
