@@ -1,0 +1,237 @@
+@font-face {
+ font-family: "Comfortaa Bold";
+ src: url("../../../fonts/Comfortaa-Bold.ttf") format("truetype");
+}
+/* colors mixins and all the good stuff */
+nav {
+  display: block;
+}
+/* ----------------------------- */
+/* == Menu */
+/* ----------------------------- */
+.menu-wrapper {
+  position: relative;
+  z-index: 10;
+  font-family: 'Economica', sans-serif;
+  font-size: 1.857em;
+  text-transform: uppercase;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background: #4682B4;
+  /* the hidden link for RWD nav */
+  /* the rest of the menu lvl 1 */
+  /* current links */
+  /* submenu ! */
+  /* unhide the 2nd level */
+}
+.menu-wrapper .menu {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+}
+.menu-wrapper .menu > li {
+  position: relative;
+  padding: 0.7em  0;
+  display: inline-block;
+}
+.menu-wrapper ul.menu,
+.menu-wrapper a.menu-link {
+  font-family: 'Comfortaa Bold';
+  font-size: 19px;
+  border-bottom: 1px dashed #FFFFFF;
+}
+.menu-wrapper a.menu-link {
+  display: none;
+  padding: 0.7em  0;
+  background: #699be6;
+}
+.menu-wrapper a {
+  display: block;
+  position: relative;
+  padding: 0 0.5em;
+  margin: 0 0.2em;
+  line-height: 1.3em;
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.menu-wrapper a:hover {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  transition: all 0.5s;
+}
+.menu-wrapper a > span.caret {
+  margin-left: 5px;
+}
+.menu-wrapper .menu > .current-menu-item > a,
+.menu-wrapper .menu > .current-menu-ancestor > a {
+  position: relative;
+  z-index: 12;
+  background: #699be6;
+  color: #2055bb;
+  border-bottom: 1px solid transparent;
+}
+.menu-wrapper .menu > .current-menu-item > a:hover,
+.menu-wrapper .menu > .current-menu-ancestor > a:hover {
+  background: #fffdfd;
+}
+.menu-wrapper .menu > .current-menu-item > a:hover:after,
+.menu-wrapper .menu > .current-menu-ancestor > a:hover:after {
+  border-top-color: #fffdfd;
+}
+.menu-wrapper .menu > .current-menu-item > a:after,
+.menu-wrapper .menu > .current-menu-ancestor > a:after {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(255, 255, 255, 0);
+  border-top-color: #699be6;
+  border-width: 5px;
+  left: 50%;
+  margin-left: -5px;
+}
+.menu-wrapper .sub-menu {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: 14px 0 0 -0.7em;
+  padding: 3px 0 0 0;
+  position: absolute;
+  max-height: 0em;
+  overflow: hidden;
+  list-style: none outside none;
+  text-align: left;
+  text-transform: none;
+}
+.menu-wrapper .sub-menu li {
+  display: block;
+  background: #4682B4;
+  margin-right: 0.7em;
+}
+.menu-wrapper .sub-menu a {
+  margin: 0;
+  white-space: nowrap;
+  line-height: 1.8em;
+  border: none;
+}
+.menu-wrapper .sub-menu a:hover {
+  background: #699be6;
+}
+.menu-wrapper .sub-menu li:last-child {
+  padding-bottom: 0.26em;
+}
+.menu-wrapper .sub-menu li:last-child a {
+  border-bottom: 1px dashed #FFFFFF;
+}
+.menu-wrapper li:hover .sub-menu {
+  max-height: 30em;
+  width: 230px;
+  text-align: center;
+  transition: max-height 0.5s;
+}
+/* Responsive Menu */
+@media screen and (max-width: 768px) {
+  .js .menu-wrapper nav[role=navigation] {
+    overflow: hidden;
+    max-height: 0em;
+  }
+  .js .menu-wrapper nav[role=navigation].active {
+    max-height: 30em;
+    transition: max-height 0.5s ease-out;
+  }
+  .menu-wrapper {
+    /* unhide the 2nd level */
+    /* styling the toggle menu */
+    /* arrow to indicate that we have subnav*/
+  }
+  .menu-wrapper a.menu-link {
+    display: block;
+    width: auto;
+    padding-right: 15px;
+    padding-left: 10px;
+    border: none;
+    margin: 0;
+  }
+  .menu-wrapper a.menu-link > span {
+    float: right;
+  }
+  .menu-wrapper a.menu-link:hover {
+    background-color: #4682B4;
+  }
+  .menu-wrapper .menu .menu {
+    padding-bottom: 5px;
+  }
+  .menu-wrapper .menu li {
+    display: block;
+    border: 1px solid pink;
+    border: none;
+  }
+  .menu-wrapper .menu > li {
+    padding: 0px;
+    border: none;
+  }
+  .menu-wrapper .menu > li + li {
+    border-top: 1px dashed #FFFFFF;
+  }
+  .menu-wrapper .menu a {
+    padding: 0.5em 0;
+    margin: 0px;
+    border: none;
+  }
+  .menu-wrapper .menu a:hover {
+    background: #699be6;
+  }
+  .menu-wrapper .menu .rightalign {
+    float: none;
+  }
+  .menu-wrapper li + li a:before {
+    content: "";
+  }
+  .menu-wrapper li:hover .sub-menu {
+    max-height: 0em;
+    width: 100%;
+    text-align: initial;
+    transition: none;
+  }
+  .menu-wrapper .sub-menu {
+    background: none;
+    margin-left: 0px;
+    margin-top: 1px;
+    display: block;
+    width: 100%;
+  }
+  .menu-wrapper .sub-menu li,
+  .menu-wrapper .sub-menu li a {
+    margin: 0;
+    display: block;
+    width: 100%;
+  }
+  .menu-wrapper .sub-menu a {
+    padding-left: 0.8em;
+  }
+  .menu-wrapper .sub-menu a:hover {
+    background: #699be6;
+  }
+  .menu-wrapper .sub-menu li {
+    border-bottom: 1px dashed #FFFFFF;
+  }
+  .menu-wrapper .sub-menu li:last-child {
+    padding: 0;
+  }
+  .menu-wrapper .sub-menu li:last-child a {
+    border: none;
+  }
+  .menu-wrapper .menu .has-subnav {
+    position: relative;
+  }
+  .menu-wrapper li .sub-menu.active {
+    max-height: 30em;
+    overflow: visible;
+    position: relative;
+    z-index: 9;
+    transition: max-height 0.5s ease-out;
+  }
+}

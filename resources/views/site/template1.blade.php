@@ -14,106 +14,60 @@
 		<link rel="stylesheet" href="{{url('css/themify-icons.css')}}" type="text/css">
 		<link rel="stylesheet" href="{{url('assets/site/css/main.css')}}" type="text/css">
 		<!-- Responsive Menu -->
-		<link rel="stylesheet" href="{{url('assets/site/css/slicknav.css')}}" type="text/css">
+		<link rel="stylesheet" href="{{url('css/menu-navigation.css')}}" type="text/css">
 		@stack('scripts_css')
 		
 	</head>
 	<body>
-		<div class="header">
-			<div class="logo-menu">
-				<nav class="navbar navbar-default main-navigation" role="navigation" data-spy="affix" data-offset-top="50">
-					<div class="container">
-					 
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-							<a class="navbar-brand logo" href="index-2.html">Logo</a>
-						</div>
-						<div class="collapse navbar-collapse" id="navbar">
-							<ul class="nav navbar-nav">
-								<li>
-									<a class="active" href="#">Home</a>
-								</li>
-								<li>
-									<a class="" href="#">Menu 1 <i class="fa fa-angle-down"></i></a>
-									<ul class="dropdown">
-										<li><a class="active" href="#">Submenu 1</a></li>
-										<li><a href="#">Submenu 2</a></li>
-										<li><a href="#">Submenu 3</a></li>
-										<li><a href="#">Submenu 4</a></li>
-									</ul>
-								</li>
-								<li>
-									<a href="#">Menu 2 <i class="fa fa-angle-down"></i></a>
-									<ul class="dropdown">
-										<li><a href="#">Submenu 1</a></li>
-										<li><a href="#">Submenu 2</a></li>
-										<li><a href="#">Submenu 3</a></li>
-									</ul>
-								</li>
-								<li><a href="#">Menu 3 <i class="fa fa-angle-down"></i></a>
-									<ul class="dropdown">
-										<li><a href="#">Submenu 1</a></li>
-										<li><a href="#">Submenu 2</a></li>
-									</ul>
-								</li>
-								<li>
-									<a href="#">Menu 4</i></a>
-								</li>
-							</ul>
-							<ul class="nav navbar-nav navbar-right float-right">
-								<li class="left"><a href="#"><i class="ti-pencil-alt"></i> Postar Vaga</a></li>
-								<li class="right"><a href="#"><i class="ti-lock"></i> Login</a></li>
-							</ul>
-						</div>
-					</div>
-					 
-					<ul class="wpb-mobile-menu">
+		<div class="menu-wrapper">
+
+			<a href="#menu" class="menu-link">Menu<span class="ti-menu" aria-hidden="true"></span>
+			</a>
+			<nav id="menu" role="navigation">
+				<div class="menu">
+					<ul  class="menu">
 						<li>
-							<a href="index-2.html">Home</a>
+							<a href="#">Home</a>
 						</li>
-						<li>
-							<a href="about.html">Menu 1</a>
-							<ul >
-								<li><a class="active" href="#">Submenu 1</a></li>
-								<li><a href="#">Submenu 2</a></li>
-								<li><a href="#">Submenu 3</a></li>
-								<li><a href="#">Submenu 4</a></li>
+						<li  class=" current-menu-item">
+							<a href="#">Menu 1</a>
+						</li>
+						<li  class="has-subnav">
+							<a href="#">Áreas<span class="caret"></span></a>
+
+							<ul class="sub-menu">
+								<li>
+									<a href="#">Área 1</a>
+								</li>
+								<li>
+									<a href="#">Área 2</a>
+								</li>
+								<li>
+									<a href="#">Área 3</a>
+								</li>
+								<li>
+									<a href="#">Área 4</a>
+								</li>
+								<li>
+									<a href="#">Área 5</a>
+								</li>
 							</ul>
 						</li>
 						<li>
 							<a href="#">Menu 2</a>
-							<ul>
-								<li><a href="#">Submenu 1</a></li>
-								<li><a href="#">Submenu 2</a></li>
-								<li><a href="#">Submenu 3</a></li>
-							</ul>
 						</li>
 						<li>
-							<a href="#">Menu 3</a>
-							<ul>
-								<li><a href="#">Submenu 1</a></li>
-								<li><a href="#">Submenu 2</a></li>
-							</ul>
+							<a href="#">Contato</a>
 						</li>
-						<li>
-							<a href="#">Menu 4</a>
-						</li>
-						<li class="btn-m"><a href="#"><i class="ti-pencil-alt"></i> Postar Vaga</a></li>
-						<li class="btn-m"><a class="active" href="#"><i class="ti-lock"></i> Login</a></li>
 					</ul>
-				</nav>
-			</div>
+				</div>
+			</nav>
 		</div>
 		
 		@yield('content')
 
 		<script type="text/javascript" src="{{url('js/jquery-3.2.1.min.js')}}"></script>
-		<script type="text/javascript" src="{{url('assets/site/js/slicknav.js')}}"></script>
+		<script type="text/javascript" src="{{url('js/menu-navgation.js')}}"></script>
 		<script type="text/javascript" src="{{url('assets/site/js/main.js')}}"></script>
 		@stack('scripts_js')
 	</body>

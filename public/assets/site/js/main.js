@@ -1,25 +1,4 @@
-jQuery(document).ready(function($) {
-	//Counter numbers of site
-    /*$('.counter').counterUp({
-        delay: 1,
-        time: 800
-    });*/
-});
-/*$(window).load(function() {
-    "use strict";
-    $('#loading').fadeOut();
-});*/
-$(document).ready(function() {
-    $('.wpb-mobile-menu').slicknav({
-        prependTo: '.navbar-header',
-        parentTag: 'jobs',
-        allowParentLinks: true,
-        duplicate: true,
-        label: '',
-        closedSymbol: '<i class="fa fa-angle-right"></i>',
-        openedSymbol: '<i class="fa fa-angle-down"></i>',
-    });
-});
+
 $(".nav > li:has(ul)").addClass("drop");
 $(".nav > li.drop > ul").addClass("dropdown");
 $(".nav > li.drop > ul.dropdown ul").addClass("sup-dropdown");
