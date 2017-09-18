@@ -9,6 +9,7 @@ use App\Http\Requests\Site\User\RegisterFormRequest;
 use App\Http\Requests\Site\User\LoginFormRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Site\User\PasswordReset;
+use Mail;
 
 class UserController extends Controller
 {
@@ -70,12 +71,24 @@ class UserController extends Controller
     {
     	$dataForm = $request->except(['_token']);
     	$dataForm['password'] = bcrypt($dataForm['password']);
-
-    	if($this->user->create($dataForm)) {
+        $user = $this->user->create($dataForm);
+    	if($user) {
+            $this->sendMail($user->name, $user);
     		return redirect('perfil/complemento-perfil');
     	} else {
             $request->session()->flash('error-register','Erro ao registrar,tente novamente!');
     		return back();
     	}
+    }
+
+    //Send e-mail with token for the user
+    private function sendMail($name, $user)
+    {
+        Mail::send('site.emails.welcome', [
+            'name' => $name
+        ], function($message) use ($user) {
+                $message->to($user->email);
+                $message->subject("Seja bem vindo ao nosso portal!");
+        });
     }
 }
