@@ -1,7 +1,7 @@
 <div class="divider"><h3>Informações Básicas</h3></div>
 	<div class="form-group @if ($errors->has('name')) has-error @endif">
 		<label class="control-label" for="name">Nome</label>
-		<input type="text" class="form-control" name="name" placeholder="Nome" value="{{old('name')}}">
+		<input type="text" class="form-control" name="name" placeholder="Nome" value="{{Auth::User()->name}}" disabled="disabled">
 		@if ($errors->has('name')) 
 			<p class="alert-danger">{{ $errors->first('name') }}</p> 
 		@endif	
@@ -15,7 +15,7 @@
 	</div>
 	<div class="form-group @if ($errors->has('email')) has-error @endif">
 		<label class="control-label" for="email">E-mail</label>
-		<input type="text" class="form-control" name="email" placeholder="seu@dominio.com.br" value="{{old('email')}}">
+		<input type="text" class="form-control" name="email" placeholder="seu@dominio.com.br" value="{{Auth::User()->email}}" disabled="disabled">
 		@if ($errors->has('email')) 
 			<p class="alert-danger">{{ $errors->first('email') }}</p> 
 		@endif
