@@ -16,8 +16,8 @@ Route::get('/', 'Site\User\UserController@login');
 
 
 Route::group(['namespace' => 'Site'], function(){
-	Route::get('/login', 'User\UserController@login');
-	Route::post('/login', 'User\UserController@postLogin');
+	Route::get('/login/{token?}', 'User\UserController@login');
+	Route::post('/login/{token?}', 'User\UserController@postLogin');
 	Route::get('/perfil/logout', 'User\UserController@logout');
 
 	Route::post('/perfil/resetar/senha', 'User\PasswordResetController@resetPassword');

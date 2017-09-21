@@ -1,11 +1,13 @@
 <div id="cd-login" class="{{ (!session('tabNameSelected') || (session('tabNameSelected') == 'login')) ? 'is-selected' : '' }}">
 	<div class="page-login-form">
 		@if(session('error'))
-			<p class="alert alert-danger">{{ session('error') }}</p>
+			<p class="alert alert-danger">@php echo htmlspecialchars_decode(session('error')); @endphp</p>
 		@elseif( session('success') )
-			<p class="alert alert-success">{{ session('success') }}</p>
+			<p class="alert alert-success">@php echo htmlspecialchars_decode(session('success')); @endphp</p>
+		@elseif( session('warning') )
+			<p class="alert alert-warning">@php echo htmlspecialchars_decode(session('warning')); @endphp</p>
 		@endif
-		<form role="form" class="login-form" id="login-form" method="POST" action="{{url('/login')}}">
+		<form role="form" class="login-form" id="login-form" method="POST" action="@php echo url('login',$parameters = ((!empty($token)) ? array('token' => $token) : array())); @endphp">
 			{!!csrf_field()!!}
 			<div class="form-group @if ($errors->has('email_username')) has-error @endif">
 				<div class="input-icon">
