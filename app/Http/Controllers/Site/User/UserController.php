@@ -109,6 +109,9 @@ class UserController extends Controller
     {
     	$dataForm = $request->except(['_token']);
     	$dataForm['password'] = bcrypt($dataForm['password']);
+        //add new field in dataform
+        $dataForm['status'] = 1;
+
         $user = $this->insertUser($dataForm);
     	if($user) {
             $token = $this->generateTokenByEmail($user->email);
@@ -116,7 +119,7 @@ class UserController extends Controller
                 $result = $this->insertUserComplemented($user->id, $token);
                 if ($result) {
                     $this->sendMail($token, $user);
-                    return redirect('perfil/complemento-perfil');
+                    return redirect('perfil/registrado');
                 }
             }    		
     	} else {
