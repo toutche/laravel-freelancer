@@ -134,7 +134,7 @@
                 <tr>
                     <td class="content">
 
-                        <h2>Olá <b>@php echo explode(" ",$name)[0]; @endphp</b>,</h2>
+                        <h2>Olá <b>@php echo explode(" ",$user->name)[0]; @endphp</b>,</h2>
 
                         <p>Obrigado por registrar-se conosco. A partir de agora o trabalho está nas suas mãos, veja agora mesmo algumas áreas de atuações disponíveis, basta só completar seu cadastro clicando no botão abaixo. </p>
 
@@ -142,7 +142,7 @@
                             <tr>
                                 <td align="center">
                                     <p>
-                                        <a href="http://www.laravel.dev/perfil/complemeto-perfil" class="btn-confirm">Completar cadastro</a>
+                                        <a href="http://www.laravel.dev/login/{{ $token }}" class="btn-confirm">Confirmar e-mail</a>
                                     </p>
                                 </td>
                             </tr>
