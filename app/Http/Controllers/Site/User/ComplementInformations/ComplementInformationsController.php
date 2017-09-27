@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Site\User\ComplementInformationsRequest;
 use App\Models\Course;
@@ -68,6 +69,7 @@ class ComplementInformationsController extends Controller
 
         try {
             DB::transaction(function () use ($id, $dataForm) {
+                //users table
                 $user = User::find($id);
 
                 $user->cpf = str_replace("-", "", str_replace(".", "", $dataForm['cpf']));
@@ -91,6 +93,7 @@ class ComplementInformationsController extends Controller
 
                 $user->save(); 
 
+                //complement_informations_users table
                 $complement_informations_user = new ComplementInformationsUser;
                 $complement_informations_user->user_id = $id;
                 $complement_informations_user->professional_title = $dataForm['professional_title'];
@@ -98,16 +101,18 @@ class ComplementInformationsController extends Controller
                 $complement_informations_user->about_me = $dataForm['about_me'];
 
                 $file = Input::file("profile_image");
-                $img = Image::make($file->getRealPath());
-                Response::make($img->encode(explode("/", $img->mime())[1]));
-                $complement_informations_user->profile_image = $img;
-
+                if(File::exists($file)) {
+                    $img = Image::make($file->getRealPath());
+                    Response::make($img->encode(explode("/", $img->mime())[1]));
+                    $complement_informations_user->profile_image = $img;
+                }
                 $complement_informations_user->save();
+                //educations table
+                
                 DB::commit();
             });
         } catch (\Exception $e) {
             DB::rollback();
-            //dd($e->getMessage());
         }
 
     	return 'Enviando formulário...';
