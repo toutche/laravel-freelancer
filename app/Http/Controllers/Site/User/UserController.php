@@ -110,7 +110,7 @@ class UserController extends Controller
     	$dataForm = $request->except(['_token']);
     	$dataForm['password'] = bcrypt($dataForm['password']);
         //add new field in dataform
-        $dataForm['status'] = 1;
+        $dataForm['status'] = 0;
 
         $user = $this->insertUser($dataForm);
     	if($user) {
