@@ -81,7 +81,9 @@ label {
 /**
  * Reset Bootstrap
  */
-
+.margin-top-40 {
+    margin-top: 40px;
+}
 /* Main Menu*/
 .navbar-default.affix {
     width: 100%;
@@ -935,5 +937,47 @@ nav#menu span.fa.fa-bars:hover {
     -ms-transition: all 150ms linear;
     transition: all 150ms linear;
 }
+/*
+    REGISTER CONFIRM PAGE
+ */
+.job-list {
+    border: 1px solid #f1f1f1;
+    padding: 15px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+.my-job-list {
+    border: 1px solid #3c763d;
+}
+.job-list .thumb {
+    float: left;
+}
+.job-list .thumb img {
+    border-radius: 4px;
+}
+.job-list .my-job-list-content {
+    margin-left: 0px!important;
+}
+.job-list .job-list-content {
+    display: block;
+    margin-left: 125px;
+    position: relative;
+}
+.job-list .job-list-content h4 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.job-list .job-list-content p {
+    margin-bottom: 20px;
+}
+.job-list .job-tag {
+    border-top: 1px solid #ddd;
+    padding: 15px 0;
+    line-height: 35px;
+}
+.job-list .my-job-tag {
+    border-top: 1px solid #3c763d!important;
+}
+
 
 

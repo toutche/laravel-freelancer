@@ -119,6 +119,7 @@ class UserController extends Controller
                 $result = $this->insertUserComplemented($user->id, $token);
                 if ($result) {
                     $this->sendMail($token, $user);
+                    session()->flash('email', $user->email);
                     return redirect('perfil/registrado');
                 }
             }    		
@@ -126,6 +127,18 @@ class UserController extends Controller
             $request->session()->flash('error-register','Erro ao registrar,tente novamente!');
     		return back();
     	}
+    }
+
+    public function registerConfirm() {
+        $title = "Registro Confirmado";
+        
+        if (session()->exists('email')) {
+            $email = session()->get('email');
+            return view('site.login.register_confirm', compact('title', 'email'));
+        } else {
+            abort(403);
+        }
+        
     }
 
     //insert new user
