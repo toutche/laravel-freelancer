@@ -708,19 +708,16 @@ $(document).ready(function() {
 
 	function addRulesOfGraduate(state, number) {
 		state.rules('add', {
-			valueNotEquals: "",
-			inArray: ["AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
+			inArray: ["", "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB",
 			"PR", "PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"],
 			messages: {
-				valueNotEquals: "O campo estado é obrigatório",
 				inArray: "Selecione um estado válido"
 			}
 		});
 		number.rules('add', {
-			required: true,
+			required: false,
 			number:true,
 			messages: {
-				required: "O campo CREA é obrigatório",
 				number: "O campo CREA só aceita números"
 			}
 		});
@@ -833,7 +830,6 @@ $(document).ready(function() {
 		}
 
 	}
-
 
 	//Masks
 	$('input[name="cpf"]').mask('000.000.000-00');

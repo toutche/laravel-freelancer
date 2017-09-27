@@ -92,9 +92,7 @@ class ComplementInformationsRequest extends FormRequest
     {
         $rules = array();
         $rules = [
-            /*'name'                          => 'required|min:3|max:100',*/
             'cpf'                           => 'required|cpf',
-            /*'email'                         => 'required|email|max:40|unique:users',*/
             'professional_title'            => 'min:3|max:100|nullable',
             'phone'                         => 'phone|nullable',
             'cell_phone'                    => 'cell_phone|nullable',
@@ -122,8 +120,8 @@ class ComplementInformationsRequest extends FormRequest
                 if(Input::get('ed_select_degree_.' . $i) == "graduating") {
                     $rules['ed_semester_.' . $i] = 'required|numeric|between:1,10';
                 } else if(Input::get('ed_select_degree_.' . $i) == "graduate") {
-                    $rules['ed_crea_state_.' . $i] = 'required|in:AC,AL,AM,AP,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR, PE,PI,RJ,RN,RO,RS,RR,SC,SE,SP,TO'; 
-                    $rules['ed_crea_number_.' . $i] = 'required|numeric';
+                    $rules['ed_crea_state_.' . $i] = 'in:"",AC,AL,AM,AP,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR, PE,PI,RJ,RN,RO,RS,RR,SC,SE,SP,TO';
+                    $rules['ed_crea_number_.' . $i] = 'numeric|nullable';
                 }
             }
         }
@@ -143,14 +141,7 @@ class ComplementInformationsRequest extends FormRequest
     {
         $messages = array();
         $messages = [
-            /*'name.required'                         => 'O campo nome é obrigatório',
-            'name.min'                              => 'Mínimo de caracteres para o nome é 3',
-            'name.max'                              => 'Máximo de caracteres para o nome é 100',*/
             'cpf.required'                          => 'O campo CPF é obrigatório',
-            /*'email.required'                        => 'O campo e-mail é obrigatório',
-            'email.email'                           => 'Digite um e-mail válido',
-            'email.max'                             => 'Máximo de caracteres para o email é 40',
-            'email.unique'                          => 'Este e-mail já está registrado',*/
             'professional_title.min'                => 'Mínimo de caracteres para o título profissional é 3',
             'professional_title.max'                => 'Máximo de caracteres para o título profissional é 100',
             'site.url'                              => 'Digite uma url no formato http://www ou https://www',
@@ -195,9 +186,7 @@ class ComplementInformationsRequest extends FormRequest
                     $messages['ed_semester_.' . $i . '.numeric'] = "O campo semestre só aceita números";
                     $messages['ed_semester_.' . $i . '.between'] = "O campo semestre precisa estar entre 1 e 10";
                 } else if($ed_select_degree == "graduate") {
-                    $messages['ed_crea_state_.' . $i. '.required'] = "O campo estado é obrigatório"; 
                     $messages['ed_crea_state_.' . $i. '.in'] = "Selecione um estado válido";
-                    $messages['ed_crea_number_.' . $i .'.required'] = "O campo CREA é obrigatório";
                     $messages['ed_crea_number_.' . $i .'.numeric'] = "O campo CREA só aceita números";
                 }
             }
