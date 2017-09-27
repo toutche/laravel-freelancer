@@ -17,6 +17,7 @@ class CreateCoursesTable extends Migration
             $table->increments('id');
             $table->string('name_of_course');
             $table->boolean('status');
+            $table->timestamps();
         });
     }
 

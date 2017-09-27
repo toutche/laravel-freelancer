@@ -20,7 +20,7 @@ class CreateComplementInformationsUsersTable extends Migration
             $table->string('site')->nullable();
             $table->longText('about_me')->nullable();
             $table->binary('profile_image')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });
 
