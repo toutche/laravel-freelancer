@@ -92,16 +92,16 @@ class ComplementInformationsRequest extends FormRequest
     {
         $rules = array();
         $rules = [
-            'name'                          => 'required|min:3|max:100',
+            /*'name'                          => 'required|min:3|max:100',*/
             'cpf'                           => 'required|cpf',
-            'email'                         => 'required|email|max:40|unique:users',
+            /*'email'                         => 'required|email|max:40|unique:users',*/
             'professional_title'            => 'min:3|max:100|nullable',
             'phone'                         => 'phone|nullable',
             'cell_phone'                    => 'cell_phone|nullable',
             'site'                          => 'url|nullable',
             'date_birth'                    => 'required|date_format:d/m/Y',
             'about_me'                      => 'string|max:1500|nullable',
-            'image_perfil'                  => 'image|mimes:jpeg,png,jpg|max:2000|nullable',
+            'profile_image'                  => 'image|mimes:jpeg,png,jpg|max:2000|nullable',
             //Educations
             'ed_select_degree_.*'           => 'required|in:graduating,graduate',
             'ed_select_course_.*'           => ['required', Rule::exists('courses', 'id') ->where(function($query){
@@ -143,22 +143,22 @@ class ComplementInformationsRequest extends FormRequest
     {
         $messages = array();
         $messages = [
-            'name.required'                         => 'O campo nome é obrigatório',
+            /*'name.required'                         => 'O campo nome é obrigatório',
             'name.min'                              => 'Mínimo de caracteres para o nome é 3',
-            'name.max'                              => 'Máximo de caracteres para o nome é 100',
+            'name.max'                              => 'Máximo de caracteres para o nome é 100',*/
             'cpf.required'                          => 'O campo CPF é obrigatório',
-            'email.required'                        => 'O campo e-mail é obrigatório',
+            /*'email.required'                        => 'O campo e-mail é obrigatório',
             'email.email'                           => 'Digite um e-mail válido',
             'email.max'                             => 'Máximo de caracteres para o email é 40',
-            'email.unique'                          => 'Este e-mail já está registrado',
+            'email.unique'                          => 'Este e-mail já está registrado',*/
             'professional_title.min'                => 'Mínimo de caracteres para o título profissional é 3',
             'professional_title.max'                => 'Máximo de caracteres para o título profissional é 100',
             'site.url'                              => 'Digite uma url no formato http://www ou https://www',
             'date_birth.required'                   => 'O campo data de nascimento é obrigatório',
             'date_birth.date_format'                => 'Digite uma data válida no formato DD/MM/AAAA',
             'about_me.max'                          => 'Máximo de caracteres para o sobre mim é 1500',
-            'image_perfil.mimes'                    => 'Insira uma imagem no formato jpeg, png ou jpg',
-            'image_perfil.max'                      => 'Tamanho máximo para imagem de perfil é 2MB',
+            'profile_image.mimes'                    => 'Insira uma imagem no formato jpeg, png ou jpg',
+            'profile_image.max'                      => 'Tamanho máximo para imagem de perfil é 2MB',
             //Educations
             'ed_select_degree_.*.required'          => 'O campo grau é obrigatório',
             'ed_select_degree_.*.in'                => 'Selecione uma opção válida',

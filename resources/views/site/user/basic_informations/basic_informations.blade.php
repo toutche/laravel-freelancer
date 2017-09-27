@@ -1,7 +1,7 @@
 <div class="divider"><h3>Informações Básicas</h3></div>
 	<div class="form-group @if ($errors->has('name')) has-error @endif">
 		<label class="control-label" for="name">Nome</label>
-		<input type="text" class="form-control" name="name" placeholder="Nome" value="{{Auth::User()->name}}" disabled="disabled">
+		<input type="text" class="form-control" name="name" placeholder="Nome" value="{{Auth::User()->name}}" readonly>
 		@if ($errors->has('name')) 
 			<p class="alert-danger">{{ $errors->first('name') }}</p> 
 		@endif	
@@ -15,7 +15,7 @@
 	</div>
 	<div class="form-group @if ($errors->has('email')) has-error @endif">
 		<label class="control-label" for="email">E-mail</label>
-		<input type="text" class="form-control" name="email" placeholder="seu@dominio.com.br" value="{{Auth::User()->email}}" disabled="disabled">
+		<input type="text" class="form-control" name="email" placeholder="seu@dominio.com.br" value="{{Auth::User()->email}}" readonly>
 		@if ($errors->has('email')) 
 			<p class="alert-danger">{{ $errors->first('email') }}</p> 
 		@endif
@@ -76,10 +76,10 @@
 		<div class="button-group">
 			<div class="action-buttons">
 				<div class="upload-button">
-					<input type="file" name="image_perfil" id="image_perfil" class="inputfile" />
-					<label for="image_perfil">Escolha imagem de perfil</label>
-					@if ($errors->has('image_perfil')) 
-						<p class="alert-danger">{{ $errors->first('image_perfil') }}</p> 
+					<input type="file" name="profile_image" id="profile_image" class="inputfile" />
+					<label for="profile_image">Escolha imagem de perfil</label>
+					@if ($errors->has('profile_image')) 
+						<p class="alert-danger">{{ $errors->first('profile_image') }}</p> 
 					@endif
 				</div>
 			</div>

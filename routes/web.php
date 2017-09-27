@@ -28,6 +28,7 @@ Route::group(['namespace' => 'Site'], function(){
 	Route::get('/perfil/registrado', 'User\UserController@registerConfirm');
 	Route::get('/perfil/complemento-perfil', 'User\ComplementInformations\ComplementInformationsController@complementRegisterPerfil');
 	Route::post('/perfil/complemento-perfil/envio', 'User\ComplementInformations\ComplementInformationsController@postComplementRegisterPerfil');
+	Route::get('/perfil/image/{id}', 'User\ComplementInformations\ComplementInformationsController@showProfileImage');
 });
 
 Route::group(['namespace' => 'Ajax'], function(){
