@@ -13,6 +13,7 @@ use App\Http\Requests\Site\User\ComplementInformationsRequest;
 use App\Models\Course;
 use App\Models\Site\User\User;
 use App\Models\Site\User\ComplementInformationsUser;
+use App\Models\Site\User\EducationsUser;
 use Image;
 
 class ComplementInformationsController extends Controller
@@ -107,12 +108,40 @@ class ComplementInformationsController extends Controller
                     $complement_informations_user->profile_image = $img;
                 }
                 $complement_informations_user->save();
-                //educations table
                 
+                //educations_users table
+            
+                $number_of_educations = session()->get('number_of_educations');
+
+                for($i=1; $i<=$number_of_educations; $i++) {
+                    $educations_user = new EducationsUser;
+                    $select_degree = $dataForm['ed_select_degree_'][$i];
+                    $educations_user->user_id = $id;
+                    $educations_user->degree = $select_degree;
+                    if($select_degree == "graduating") {
+                        $educations_user->semester = $dataForm['ed_semester_'][$i];
+                    } else if($select_degree == "graduate") {
+                        $educations_user->crea_state = $dataForm['ed_crea_state_'][$i];
+                        $educations_user->crea_number = $dataForm['ed_crea_number_'][$i];
+                    }
+                    $select_course = $dataForm['ed_select_course_'][$i];
+                    $educations_user->course_id = $select_course;
+                    if($select_course == "1") {
+                        $educations_user->other_course = $dataForm['ed_other_course_'][$i];
+                    }
+                    $educations_user->college = $dataForm['ed_college_'][$i];
+                    $educations_user->start_date = $dataForm['ed_start_date_'][$id];
+                    $educations_user->end_date = $dataForm['ed_end_date_'][$id];
+                    $educations_user->save();
+                }
+
+
+
                 DB::commit();
             });
         } catch (\Exception $e) {
             DB::rollback();
+            dd($e->getMessage());
         }
 
     	return 'Enviando formulário...';
