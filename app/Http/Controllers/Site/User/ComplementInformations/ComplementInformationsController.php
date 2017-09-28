@@ -14,6 +14,7 @@ use App\Models\Course;
 use App\Models\Site\User\User;
 use App\Models\Site\User\ComplementInformationsUser;
 use App\Models\Site\User\EducationsUser;
+use App\Models\Site\User\ExperiencesUser;
 use Image;
 
 class ComplementInformationsController extends Controller
@@ -135,7 +136,19 @@ class ComplementInformationsController extends Controller
                     $educations_user->save();
                 }
 
+                //experiences_users table
+                $number_of_experiences = session()->get('number_of_experiences');
 
+                for($i=1; $i<=$number_of_experiences; $i++) {
+                    $experience_user = new ExperiencesUser;
+                    $experience_user->user_id = $id;
+                    $experience_user->company_name = $dataForm['ex_company_name_'][$i];
+                    $experience_user->responsibility_name = $dataForm['ex_responsibility_name_'][$i];
+                    $experience_user->start_date = $dataForm['ex_start_date_'][$i];
+                    $experience_user->end_date = $dataForm['ex_end_date_'][$i];
+                    $experience_user->description = $dataForm['ex_description_'][$i];
+                    $experience_user->save();
+                }
 
                 DB::commit();
             });
