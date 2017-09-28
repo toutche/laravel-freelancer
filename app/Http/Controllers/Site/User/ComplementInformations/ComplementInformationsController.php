@@ -15,6 +15,7 @@ use App\Models\Site\User\User;
 use App\Models\Site\User\ComplementInformationsUser;
 use App\Models\Site\User\EducationsUser;
 use App\Models\Site\User\ExperiencesUser;
+use App\Models\Site\User\UserComplemented;
 use Image;
 
 class ComplementInformationsController extends Controller
@@ -60,7 +61,14 @@ class ComplementInformationsController extends Controller
         //Adds the copy of the first occurrence of at the end of the collection
         $courses->push($primaryocurrency);
         
-    	return view("site.complement_register_perfil", compact('title', 'brazilianStates', 'courses'));
+        $userComplemented = UserComplemented::where('user_id', Auth::id())->first();
+        $status = $userComplemented->status;
+        if($status == 0) {
+            return view("site.complement_register_perfil", compact('title', 'brazilianStates', 'courses'));
+        }
+        else {
+            return "Dashboard";
+        } 
     }
 
     public function postComplementRegisterPerfil(ComplementInformationsRequest $request)
@@ -150,14 +158,23 @@ class ComplementInformationsController extends Controller
                     $experience_user->save();
                 }
 
+                $userComplemented = UserComplemented::where('user_id', $id)->first();
+                $userComplemented->status = 1;
+                $userComplemented->save();
+
+                session()->forget('number_of_educations');
+                session()->forget('number_of_experiences');
+
                 DB::commit();
+
             });
+            return 'Envia Dashboard...';
         } catch (\Exception $e) {
             DB::rollback();
             dd($e->getMessage());
         }
 
-    	return 'Enviando formulário...';
+    	
     }
 
     public function showProfileImage($id) {
