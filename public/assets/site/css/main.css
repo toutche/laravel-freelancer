@@ -364,6 +364,19 @@ label {
         display: none;
     }
 }
+@media screen and (max-width: 568px)  {
+    .message-box .thumb {
+	    float: none!important;
+	    text-align:center;
+	}
+	.message-box .box-content {
+ 		margin-left: 12px!important;
+ 		margin-top: 8px!important;
+	}
+	.full-message-box {
+		min-width: 271px;
+	}
+}
 .tbtn {
     color: #FFF!important;
     font-size: 30px;
@@ -938,44 +951,45 @@ nav#menu span.fa.fa-bars:hover {
     transition: all 150ms linear;
 }
 /*
-    REGISTER CONFIRM PAGE
+    General Messages
  */
-.job-list {
+.message-box {
     border: 1px solid #f1f1f1;
     padding: 15px;
     display: inline-block;
     margin-bottom: 15px;
 }
-.my-job-list {
+.full-message-box {
+	width: 70%;
+    margin-left: 15%;
+}
+.box-success {
     border: 1px solid #3c763d;
 }
-.job-list .thumb {
+.message-box .thumb {
     float: left;
 }
-.job-list .thumb img {
+.message-box .thumb img {
     border-radius: 4px;
 }
-.job-list .my-job-list-content {
-    margin-left: 0px!important;
-}
-.job-list .job-list-content {
+.message-box .box-content {
     display: block;
     margin-left: 125px;
     position: relative;
 }
-.job-list .job-list-content h4 {
+.message-box .box-content h4 {
     font-size: 24px;
     margin-bottom: 10px;
 }
-.job-list .job-list-content p {
+.message-box .box-content p {
     margin-bottom: 20px;
 }
-.job-list .job-tag {
+.message-box .divider {
     border-top: 1px solid #ddd;
     padding: 15px 0;
     line-height: 35px;
 }
-.job-list .my-job-tag {
+.message-box .divider-success {
     border-top: 1px solid #3c763d!important;
 }
 
