@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Site\User\ComplementInformationsRequest;
 use App\Models\Course;
@@ -86,19 +87,24 @@ class ComplementInformationsController extends Controller
                 $data = str_replace("/", "-", $dataForm['date_birth']);
                 $user->date_birth = date("Y-m-d", strtotime($data));
 
-                $phone = str_replace("(", "", $dataForm['phone']);
-                $phone = str_replace(")", "", $phone);
-                $phone = str_replace("-", "", $phone);
-                $phone = str_replace(" ", "", $phone);
-                $dataForm['phone'] = str_replace("-", "", $phone);
-                $user->phone = $dataForm['phone'];
-
-                $cell_phone = str_replace("(", "", $dataForm['cell_phone']);
-                $cell_phone = str_replace(")", "", $cell_phone);
-                $cell_phone = str_replace("-", "", $cell_phone);
-                $cell_phone = str_replace(" ", "", $cell_phone);
-                $dataForm['cell_phone'] = str_replace("-", "", $cell_phone);
-                $user->cell_phone = $dataForm['cell_phone'];
+                if($dataForm['phone'] != "") {
+                    $phone = str_replace("(", "", $dataForm['phone']);
+                    $phone = str_replace(")", "", $phone);
+                    $phone = str_replace("-", "", $phone);
+                    $phone = str_replace(" ", "", $phone);
+                    $dataForm['phone'] = str_replace("-", "", $phone);
+                    $user->phone = $dataForm['phone'];
+                }
+                
+                if($dataForm['cell_phone'] != "") {
+                    $cell_phone = str_replace("(", "", $dataForm['cell_phone']);
+                    $cell_phone = str_replace(")", "", $cell_phone);
+                    $cell_phone = str_replace("-", "", $cell_phone);
+                    $cell_phone = str_replace(" ", "", $cell_phone);
+                    $dataForm['cell_phone'] = str_replace("-", "", $cell_phone);
+                    $user->cell_phone = $dataForm['cell_phone'];
+                }
+                
                 $user->status = 1;
 
                 $user->save(); 
@@ -171,7 +177,10 @@ class ComplementInformationsController extends Controller
             return 'Envia Dashboard...';
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e->getMessage());
+            session()->flash('error_title', "Erro BD");
+            session()->flash('error_message', "Erro ao cadastrar o complemento do perfil.");
+            Log::error('Error insert complement information user', ['user_id' => $id, 'error_message' => $e->getMessage()]);
+            return redirect()->route('error');
         }
 
     	
