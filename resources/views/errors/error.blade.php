@@ -12,7 +12,7 @@
     	<div class="row">
     		<div class="message-box box-success full-message-box margin-top-40">
     			<div class="thumb">
-    				<img alt="" src="{{URL::asset('assets/site/images/sad.png')}}">
+    				<img alt="Carinha Triste" src="{{URL::asset('assets/site/images/sad.png')}}">
     			</div>
     			<div class="box-content">
     				<h4>
