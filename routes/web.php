@@ -13,7 +13,7 @@
 
 
 Route::get('/', 'Site\User\UserController@login');
-
+Route::get('/erro', 'Site\MessageController@showError')->name('error');
 
 Route::group(['namespace' => 'Site'], function(){
 	Route::get('/login/{token?}', 'User\UserController@login');
