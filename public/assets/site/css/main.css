@@ -441,8 +441,12 @@ nav#menu span.fa.fa-bars:hover {
     margin: 0;
     border-top: 1px solid #999;
     position: relative;
-    background-image: url(/assets/site/images/bg-header.jpg);
-    background-position: center; 
+}
+.page-header img {
+	background-position: center;
+    position: absolute;
+    top: 0;
+    height: 100%;
 }
 .page-header .product-title {
     font-family: 'Comfortaa Bold';

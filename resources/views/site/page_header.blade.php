@@ -1,5 +1,6 @@
 <!-- Page Header -->
 	<div class="page-header">
+		<img alt="Imagem Principal" src="{{URL::asset('assets/site/images/bg-header.jpg')}}">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
