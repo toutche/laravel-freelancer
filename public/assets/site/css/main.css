@@ -457,7 +457,7 @@ nav#menu span.fa.fa-bars:hover {
 }
 .breadcrumb {
     font-size: 14px;
-    color: #9ac6ea;
+    color: #FFF;
     border-radius: 0px;
     background: transparent;
     padding: 5px 0px;
@@ -468,6 +468,9 @@ nav#menu span.fa.fa-bars:hover {
 }
 .breadcrumb a:hover {
     color: #ff4f57;
+}
+.breadcrumb .current {
+	color: #9ac6ea;
 }
 #loading {
     background-image: url(../images/loading.gif);

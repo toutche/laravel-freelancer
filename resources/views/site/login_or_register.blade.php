@@ -1,22 +1,12 @@
 @extends('site.template1')
 
 @section('content')
-	<!-- Page Header -->
-	<div class="page-header">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="breadcrumb-wrapper">
-						<h2 class="product-title">Login</h2>
-						<ol class="breadcrumb">
-							<li><a href="#"><i class="ti-home"></i> Home</a></li>
-							<li class="current">Login</li>
-						</ol>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	@component('site.page_header')
+		@slot('breadcrumb_title')
+			Login
+		@endslot
+		<li class="current">Login</li>
+	@endcomponent
 	
 	<!-- Forms Login and Register -->
 	<section id="content" class="my-account">
