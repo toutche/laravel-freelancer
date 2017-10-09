@@ -107,13 +107,23 @@ class ComplementInformationsRequest extends FormRequest
             }),],
             'ed_college_.*'                 => 'required|min:3|max:100',
             'ed_start_date_.*'              => 'required|numeric|exactly:4',
-            'ed_end_date_.*'                => 'nullable|numeric|exactly:4', 
-            //Experiences
-            'ex_company_name_.*'            => 'required|min:3|max:100',
-            'ex_responsibility_name_.*'     => 'required|min:3|max:100',
-            'ex_start_date_.*'              => 'required|numeric|exactly:4',
-            'ex_end_date_.*'                => 'nullable|numeric|exactly:4'
+            'ed_end_date_.*'                => 'nullable|numeric|exactly:4',
         ];
+        //Experiences
+        //add rules for experiences if inputs are present
+        if (count(Input::get('ex_company_name_.*')) == 1) {
+            if (Input::has('ex_company_name_.' . 1) || Input::has('ex_responsibility_name_.' . 1) || Input::has('ex_start_date_.' . 1) || Input::has('ex_end_date_.' . 1)) {
+                $rules['ex_company_name_.' . 1] = 'required|nullable|min:3|max:100';
+                $rules['ex_responsibility_name_.' . 1] = 'required|min:3|max:100';
+                $rules['ex_start_date_.' . 1] = 'required|numeric|exactly:4';
+                $rules['ex_end_date_.' . 1] = 'nullable|numeric|exactly:4';
+            }
+        } else {
+             $rules['ex_company_name_.*'] = 'required|nullable|min:3|max:100';
+                $rules['ex_responsibility_name_.*'] = 'required|min:3|max:100';
+                $rules['ex_start_date_.*'] = 'required|numeric|exactly:4';
+                $rules['ex_end_date_.*'] = 'nullable|numeric|exactly:4';
+        }
         //As graduation selection applies the respective rules
         for($i = 1; $i <= count(Input::get('ed_select_degree_.*')); $i++ ) {
             if(!empty(Input::get('ed_select_degree_.' . $i ))) {
@@ -164,13 +174,12 @@ class ComplementInformationsRequest extends FormRequest
             'ed_end_date_.*.numeric'                => 'O campo ano de término só aceita números',
             'ed_end_date_.*.exactly'                => 'O campo ano de término tem que possuir 4 números',
             //Experiences
-            'ex_company_name_.*.required'           => 'O campo nome da empresa é obrigatório',
+            
+            'ex_company_name_.*.required'                => 'O campo nome da empresa é obrigatório',
             'ex_company_name_.*.min'                => 'Mínimo de caracteres para o campo nome da empresa é 3',
             'ex_company_name_.*.max'                => 'Máximo de caracteres para o campo nome da empresa é 100',
-            'ex_responsibility_name_.*.required'    => 'O campo cargo é obrigatório',
             'ex_responsibility_name_.*.min'         => 'Mínimo de caracteres para o campo cargo é 3',
             'ex_responsibility_name_.*.max'         => 'Máximo de caracteres para o campo cargo é 100',
-            'ex_start_date_.*.required'             => 'O campo data de início é obrigatório',
             'ex_start_date_.*.numeric'              => 'O campo data de início só aceita números',
             'ex_start_date_.*.exactly'              => 'O campo data de início tem que possuir 4 números',
             'ex_end_date_.*.numeric'                => 'O campo data de término só aceita números',
@@ -212,5 +221,5 @@ class ComplementInformationsRequest extends FormRequest
             session()->flash('errors_experiences','yes');
             session()->flash('errors_educations','yes');
         });
-    } 
+    }
 }

@@ -74,11 +74,15 @@
 					@endif
 				</div>
 				<div class="pull-right">
-					@if($i != 1)
-						<a href="#" id="delete-experience" class="btn-delete"><i class="ti-trash"></i> Deletar este</a>
-					@endif
+					<a href="#" id="delete-experience" class="btn-delete"><i class="ti-trash"></i> Deletar este</a>
 				</div>
 			</div>
 		</div>
 	@endfor
+
+	<div class="box-add-experience">
+		<ul>
+			<li><a href="#" class="btn my-btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Adicionar Experiência</a></li>
+		</ul>
+	</div>
 </div>

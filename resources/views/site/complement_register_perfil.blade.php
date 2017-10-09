@@ -35,6 +35,7 @@
 								<button id="save" class="btn my-btn-default" type="submit">Salvar</button>
 							</div>
 						</div>
+						<dir class="clearfix"></dir>
 					</form>
 				</div>
 			</div>

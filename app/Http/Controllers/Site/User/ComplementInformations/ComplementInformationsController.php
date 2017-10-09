@@ -152,18 +152,36 @@ class ComplementInformationsController extends Controller
 
                 //experiences_users table
                 $number_of_experiences = session()->get('number_of_experiences');
-
-                for($i=1; $i<=$number_of_experiences; $i++) {
-                    $experience_user = new ExperiencesUser;
-                    $experience_user->user_id = $id;
-                    $experience_user->company_name = $dataForm['ex_company_name_'][$i];
-                    $experience_user->responsibility_name = $dataForm['ex_responsibility_name_'][$i];
-                    $experience_user->start_date = $dataForm['ex_start_date_'][$i];
-                    $experience_user->end_date = $dataForm['ex_end_date_'][$i];
-                    $experience_user->description = $dataForm['ex_description_'][$i];
-                    $experience_user->save();
+                if ($number_of_experiences == 1) {
+                    $ex_company_name = $dataForm['ex_company_name_'][$number_of_experiences];
+                    $ex_responsibility_name = $dataForm['ex_responsibility_name_'][$number_of_experiences];
+                    $ex_start_date = $dataForm['ex_start_date_'][$number_of_experiences];
+                    $ex_end_date = $dataForm['ex_end_date_'][$number_of_experiences];
+                    $ex_description = $dataForm['ex_description_'][$number_of_experiences];
+                    if (!is_null($ex_company_name) || !is_null($ex_responsibility_name)
+                        || !is_null($ex_start_date) || !is_null($ex_end_date) || !is_null($ex_description)) {
+                        $experience_user = new ExperiencesUser;
+                        $experience_user->user_id = $id;
+                        $experience_user->company_name = $dataForm['ex_company_name_'][$number_of_experiences];
+                        $experience_user->responsibility_name = $dataForm['ex_responsibility_name_'][$number_of_experiences];
+                        $experience_user->start_date = $dataForm['ex_start_date_'][$number_of_experiences];
+                        $experience_user->end_date = $dataForm['ex_end_date_'][$number_of_experiences];
+                        $experience_user->description = $dataForm['ex_description_'][$number_of_experiences];
+                        $experience_user->save();
+                    }
+                } else {
+                    for($i=1; $i<=$number_of_experiences; $i++) {
+                        $experience_user = new ExperiencesUser;
+                        $experience_user->user_id = $id;
+                        $experience_user->company_name = $dataForm['ex_company_name_'][$i];
+                        $experience_user->responsibility_name = $dataForm['ex_responsibility_name_'][$i];
+                        $experience_user->start_date = $dataForm['ex_start_date_'][$i];
+                        $experience_user->end_date = $dataForm['ex_end_date_'][$i];
+                        $experience_user->description = $dataForm['ex_description_'][$i];
+                        $experience_user->save();
+                    }    
                 }
-
+                
                 $userComplemented = UserComplemented::where('user_id', $id)->first();
                 $userComplemented->status = 1;
                 $userComplemented->save();
@@ -182,8 +200,6 @@ class ComplementInformationsController extends Controller
             Log::error('Error insert complement information user', ['user_id' => $id, 'error_message' => $e->getMessage()]);
             return redirect()->route('error');
         }
-
-    	
     }
 
     public function showProfileImage($id) {

@@ -857,6 +857,12 @@ nav#menu span.fa.fa-bars:hover {
 .editor {
     margin-bottom: 20px;
 }
+div.box-add-experience > ul {
+    margin: 25px;
+}
+div.box-add-experience > ul > li {
+    text-align: center;
+}
 /**
  * Geral
  */

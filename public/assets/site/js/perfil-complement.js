@@ -80,6 +80,20 @@ $(document).ready(function() {
 	//variable to control courses
 	var courses = getAJAXCourses();
 
+	var element_div_experience = $(".experience[data-experience='" + number_of_experiences + "']");
+	if (number_of_experiences == 1 && !element_div_experience.find("p.alert-danger").exists()) {
+		console.log("Entrou if");
+		$(".experience[data-experience='" + number_of_experiences + "']").hide();
+	} else {
+		$('.box-add-experience').hide();
+	}
+
+	$('.box-add-experience > ul > li > a').on('click', function(event){
+		event.preventDefault();
+		$(".experience[data-experience='" + number_of_experiences + "']").show();
+		$(this).getParent(3).hide();
+	});
+
 	//Action click from button delete experience
 	$(document).on('click','#delete-experience',function(event) {
 		event.preventDefault();
@@ -228,7 +242,7 @@ $(document).ready(function() {
 			}
 		};
 		
-		//Get value number_of_experiences|number_of_experiences
+		//Get value number_of_educations|number_of_experiences
 		var number = getAJAX("/session/get", "number_of_"+reference+"s", before_send);
 		var jqxhr;
 
@@ -240,26 +254,48 @@ $(document).ready(function() {
 				update_fields_experiences(i,true);
 			}
 	  	}
-
+	  	if (reference == 'experience' && number == 1) {
+			number = number;
+		} else {
+			number = number - 1;
+		}
 	  	//set new current session value of 'number_of_educations', 'number_of_experiences' with ajax request
 		jqxhr = $.post({
 			url: '/session/set',
-			data: { key: "number_of_"+reference+"s", value: (number-1)},
+			data: { key: "number_of_"+reference+"s", value: number},
 			dataType: 'json'
 		});
 
 		jqxhr.always(function() {
 			//puts the button when there is only one experiment or education, or when the one to be deleted is the last one placed in the previous one
 			if(number == 1 || id == number_of) {
-				div.prev().find("div.add-post-btn:last > div:first-child").append('<a href="#" id="add-'+reference+'" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
+				var current_div = div.prev();
+				if (reference == 'experience') {
+					current_div = div.prev().prev();
+				}
+				current_div.find("div.add-post-btn:last > div:first-child").append('<a href="#" id="add-'+reference+'" class="btn-added"><i class="ti-plus"></i> Adicionar</a>');
 			}
-			//Remove div -> '.experience', '.education', div of button clicked
-			div.remove();
 			//update global variable 'number_of_educations', 'number_of_experiences'
 			if (reference == 'education') {
 				number_of_educations = number_of_educations - 1;
+				//Remove div -> '.experience', '.education', div of button clicked
+				div.remove();
 			} else if(reference == 'experience') {
-				number_of_experiences = number_of_experiences - 1;
+				//if the experience was the last to be deleted show general button to add a new 
+				if ((number_of-1) == 0) {
+					
+					$(".experience[data-experience='" + number_of + "']").hide();
+					$('.box-add-experience').show();
+					$(".experience[data-experience='" + number_of + "']:first input").each(function() {
+						$(this).val("");
+					});
+					$(".experience[data-experience='" + number_of + "'] div.note-editable").empty("");
+				} else {
+					//Remove div -> '.experience', '.education', div of button clicked
+					div.remove();
+					number_of_experiences = number_of_experiences - 1;
+				}
+				
 			}
 			removeLoading('div#loading');
 		});
