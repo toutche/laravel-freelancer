@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Site\User;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Facades\Input;
@@ -214,12 +215,5 @@ class ComplementInformationsRequest extends FormRequest
             }
         }
         return $messages;
-    }
-
-    public function withValidator($validator) {
-        $validator->after(function ($validator) {
-            session()->flash('errors_experiences','yes');
-            session()->flash('errors_educations','yes');
-        });
     }
 }

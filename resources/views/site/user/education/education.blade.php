@@ -4,7 +4,7 @@
 		$number_of_educations = 0;
 	@endphp
 
-	@if(!session()->has('errors_educations'))
+	@if(!$errors->any())
 		@php
 			session()->forget('number_of_educations');
 		@endphp

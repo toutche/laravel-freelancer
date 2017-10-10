@@ -5,7 +5,7 @@
 		$number_of_experiences = 0;
 	@endphp
 	
-	@if(!session()->has('errors_experiences'))
+	@if(!$errors->any())
 		@php
 			session()->forget('number_of_experiences');
 		@endphp
