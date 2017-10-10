@@ -158,15 +158,16 @@ class ComplementInformationsController extends Controller
                     $ex_start_date = $dataForm['ex_start_date_'][$number_of_experiences];
                     $ex_end_date = $dataForm['ex_end_date_'][$number_of_experiences];
                     $ex_description = $dataForm['ex_description_'][$number_of_experiences];
-                    if (!is_null($ex_company_name) || !is_null($ex_responsibility_name)
-                        || !is_null($ex_start_date) || !is_null($ex_end_date) || !is_null($ex_description)) {
+                    //required fields
+                    if (!is_null($ex_company_name) && !is_null($ex_responsibility_name)
+                        && !is_null($ex_start_date)) {
                         $experience_user = new ExperiencesUser;
                         $experience_user->user_id = $id;
-                        $experience_user->company_name = $dataForm['ex_company_name_'][$number_of_experiences];
-                        $experience_user->responsibility_name = $dataForm['ex_responsibility_name_'][$number_of_experiences];
-                        $experience_user->start_date = $dataForm['ex_start_date_'][$number_of_experiences];
-                        $experience_user->end_date = $dataForm['ex_end_date_'][$number_of_experiences];
-                        $experience_user->description = $dataForm['ex_description_'][$number_of_experiences];
+                        $experience_user->company_name = $ex_company_name;
+                        $experience_user->responsibility_name = $ex_responsibility_name;
+                        $experience_user->start_date = $ex_start_date;
+                        $experience_user->end_date = $ex_end_date;
+                        $experience_user->description = $ex_description;
                         $experience_user->save();
                     }
                 } else {
