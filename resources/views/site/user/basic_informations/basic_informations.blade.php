@@ -7,7 +7,7 @@
 		@endif	
 	</div>
 	<div class="form-group @if ($errors->has('cpf')) has-error @endif">
-		<label class="control-label" for="cpf">CPF</label>
+		<label class="control-label" for="cpf"><span class="fa fa-asterisk required" aria-hidden="true"></span> CPF</label>
 		<input type="text" class="form-control" name="cpf" placeholder="000.000.000-00" value="{{old('cpf')}}">
 		@if ($errors->has('cpf')) 
 			<p class="alert-danger">{{ $errors->first('cpf') }}</p> 
@@ -53,7 +53,7 @@
 		@endif
 	</div>
 	<div class="form-group @if ($errors->has('date_birth')) has-error @endif">
-		<label class="control-label" for="date_birth">Data de Nascimento</label>
+		<label class="control-label" for="date_birth"><span class="fa fa-asterisk required" aria-hidden="true"></span> Data de Nascimento</label>
 		<input type="text" class="form-control" name="date_birth" placeholder="DD/MM/AAAA" value="{{old('date_birth')}}">
 		@if ($errors->has('date_birth')) 
 			<p class="alert-danger">{{ $errors->first('date_birth') }}</p> 

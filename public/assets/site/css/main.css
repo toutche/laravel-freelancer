@@ -863,6 +863,9 @@ div.box-add-experience > ul {
 div.box-add-experience > ul > li {
     text-align: center;
 }
+span.fa.fa-asterisk.required {
+	color:red;
+}
 /**
  * Geral
  */

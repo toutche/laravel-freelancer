@@ -26,14 +26,14 @@
 
 		<div class="experience" data-experience="{{$i}}">
 			<div class="form-group @if ($errors->has('ex_company_name_.'.$i)) has-error @endif">
-				<label class="control-label" for="textarea">Nome da empresa</label>
+				<label class="control-label" for="textarea"><span class="fa fa-asterisk required" aria-hidden="true"></span> Nome da empresa</label>
 				<input type="text" class="form-control ex_company_name" name="ex_company_name_[{{$i}}]" placeholder="Nome da empresa" value="{{old('ex_company_name_.'.$i)}}">
 				@if ($errors->has('ex_company_name_.'.$i)) 
 					<p class="alert-danger">{{ $errors->first('ex_company_name_.'.$i) }}</p> 
 				@endif										
 			</div>
 			<div class="form-group @if ($errors->has('ex_responsibility_name_.'.$i)) has-error @endif">
-				<label class="control-label" for="textarea">Cargo</label>
+				<label class="control-label" for="textarea"><span class="fa fa-asterisk required" aria-hidden="true"></span> Cargo</label>
 				<input type="text" class="form-control ex_responsibility_name" name="ex_responsibility_name_[{{$i}}]" placeholder="Cargo" value="{{old('ex_responsibility_name_.'.$i)}}">
 				@if ($errors->has('ex_responsibility_name_.'.$i)) 
 					<p class="alert-danger">{{ $errors->first('ex_responsibility_name_.'.$i) }}</p> 
@@ -42,7 +42,7 @@
 			<div class="form-group">
 				<div class="row">
 					<div class="col-md-6 @if ($errors->has('ex_start_date_.'.$i)) has-error @endif">
-						<label class="control-label" for="textarea">Data de início</label>
+						<label class="control-label" for="textarea"><span class="fa fa-asterisk required" aria-hidden="true"></span> Data de início</label>
 						<input type="text" class="form-control ex_start_date" name="ex_start_date_[{{$i}}]" placeholder="Ex: 2014" value="{{old('ex_start_date_.'.$i)}}">
 						@if ($errors->has('ex_start_date_.'.$i))
 							<p class="alert-danger">{{ $errors->first('ex_start_date_.'.$i) }}</p> 
