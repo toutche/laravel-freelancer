@@ -438,7 +438,6 @@ $(document).ready(function() {
 					break;
 				case 'ed_select_course_[' + number_of_education + ']':
 					//$(this) == select
-					
 					$(this).getParent(3).prev().attr("for", "ed_select_course_[" + new_number_of_education + "]"); //external label
 					$(this).getParent(3).attr("id", "ed_select_course_[" + new_number_of_education + "]"); //div#ed_select_course_[i]
 					$(this).prev().prev().attr("data-id", "ed_select_course_[" + new_number_of_education + "]"); // button
@@ -457,6 +456,7 @@ $(document).ready(function() {
 						p_error = label.find("p");
 					}
 					label.find(".bootstrap-select").remove(); //remove div.bootstrap-select
+					select.removeAttr("disabled");
 					select.appendTo(label).selectpicker("render"); //add new select
 					
 					//If action remove not clean values
@@ -825,13 +825,14 @@ $(document).ready(function() {
 		
 		semester.hide();
 		crea.hide();
-		
+	
 		// set first option on select_course
 		if(option_selected != 'other_degree') {
 			select_course.val('');
 			select_course.removeAttr("disabled");
 			select_course.selectpicker('refresh');
-			open_other_course(select_course, false);
+			if(select_course.exists())
+				open_other_course(select_course, false);
 		}
 		
 		if(option_selected == 'graduating') {
@@ -854,7 +855,7 @@ $(document).ready(function() {
 			select_course.selectpicker('refresh');
 			open_other_course(select_course, true);
 		} else if(option_selected == '') {
-			select_course.attr("disabled", false);
+			
 		}
 		if(validate) element.valid();
 	}
