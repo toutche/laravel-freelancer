@@ -32,6 +32,7 @@
 							<option value="">Selecione uma opção</option>
 							<option value="graduating" {{ (old('ed_select_degree_.'.$i) == "graduating" ? "selected" : " ")}}>Graduando</option>
 							<option value="graduate" {{ (old('ed_select_degree_.'.$i) == "graduate" ? "selected" : " ")}}>Graduado</option>
+							<option value="other_degree" {{ (old('ed_select_degree_.'.$i) == "other_degree" ? "selected" : " ")}}>Outro</option>
 						</select>
 						@if ($errors->has('ed_select_degree_.'.$i)) 
 							<p class="alert-danger">{{ $errors->first('ed_select_degree_.'.$i) }}</p>

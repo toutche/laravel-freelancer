@@ -102,7 +102,7 @@ class ComplementInformationsRequest extends FormRequest
             'about_me'                      => 'string|max:1500|nullable',
             'profile_image'                  => 'image|mimes:jpeg,png,jpg|max:2000|nullable',
             //Educations
-            'ed_select_degree_.*'           => 'required|in:graduating,graduate',
+            'ed_select_degree_.*'           => 'required|in:graduating,graduate,other_degree',
             'ed_select_course_.*'           => ['required', Rule::exists('courses', 'id') ->where(function($query){
                 $query->where('status', 1);
             }),],

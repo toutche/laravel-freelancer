@@ -82,7 +82,6 @@ $(document).ready(function() {
 
 	var element_div_experience = $(".experience[data-experience='" + number_of_experiences + "']");
 	if (number_of_experiences == 1 && !element_div_experience.find("p.alert-danger").exists()) {
-		console.log("Entrou if");
 		$(".experience[data-experience='" + number_of_experiences + "']").hide();
 	} else {
 		$('.box-add-experience').hide();
@@ -688,7 +687,7 @@ $(document).ready(function() {
 		$('select.ed_select_degree').each(function() {
 			$(this).rules('add', {
 				valueNotEquals: "",
-				inArray: ["graduating", "graduate"],
+				inArray: ["graduating", "graduate", "other_degree"],
 				messages: {
 					valueNotEquals: "O campo grau é obrigatório",
 					inArray: "Selecione uma opção válida"
@@ -822,7 +821,19 @@ $(document).ready(function() {
 		var education_number = element.attr('data-id');
 		var semester = $("div#semester_" + education_number);
 		var crea = $("div#crea_" + education_number);
-
+		var select_course = $('select[id="ed_select_course_['+ education_number +']"]');
+		
+		semester.hide();
+		crea.hide();
+		
+		// set first option on select_course
+		if(option_selected != 'other_degree') {
+			select_course.val('');
+			select_course.removeAttr("disabled");
+			select_course.selectpicker('refresh');
+			open_other_course(select_course, false);
+		}
+		
 		if(option_selected == 'graduating') {
 			crea.hide();
 			semester.show();
@@ -836,9 +847,14 @@ $(document).ready(function() {
 			removeErrorMessage(semester.find('input'));
 			removeRulesOfGraduating(semester.find('input'));
 			addRulesOfGraduate(crea.find('select'), crea.find('input'));
+		} else if(option_selected == 'other_degree') {
+			// set option other on select_course
+			select_course.val(courses[0]);
+			select_course.attr("disabled", "disabled");
+			select_course.selectpicker('refresh');
+			open_other_course(select_course, true);
 		} else if(option_selected == '') {
-			semester.hide();
-			crea.hide();
+			select_course.attr("disabled", false);
 		}
 		if(validate) element.valid();
 	}
@@ -850,21 +866,19 @@ $(document).ready(function() {
 		
 		other_course.hide();
 		removeRulesOfOtherCourse(other_course.find('input'));
-
+		removeErrorMessage(other_course.find('input'));
+		other_course.find('input').val("");
+		
 		if(option_selected == 1) {
-			$('.other_course').show();
+			other_course.show();
 			addRulesOfOtherCourse(other_course.find('input'));
-		} else if(option_selected == '') {
-			other_course.hide();
-			removeRulesOfOtherCourse(other_course.find('input'));
-		} 
+		}
 
 		if(validate) {
 			if(element.valid()) {
 				removeErrorMessage(element);
 			}
 		}
-
 	}
 
 	//Masks
