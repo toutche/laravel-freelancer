@@ -61,15 +61,8 @@ class ComplementInformationsController extends Controller
         unset($courses[0]);
         //Adds the copy of the first occurrence of at the end of the collection
         $courses->push($primaryocurrency);
-        
-        $userComplemented = UserComplemented::where('user_id', Auth::id())->first();
-        $status = $userComplemented->status;
-        if($status == 0) {
-            return view("site.complement_register_perfil", compact('title', 'brazilianStates', 'courses'));
-        }
-        else {
-            return "Dashboard";
-        } 
+
+        return view("site.complement_register_perfil", compact('title', 'brazilianStates', 'courses'));
     }
 
     public function postComplementRegisterPerfil(ComplementInformationsRequest $request)
@@ -186,14 +179,13 @@ class ComplementInformationsController extends Controller
                 $userComplemented = UserComplemented::where('user_id', $id)->first();
                 $userComplemented->status = 1;
                 $userComplemented->save();
-
+                
+                DB::commit();
                 session()->forget('number_of_educations');
                 session()->forget('number_of_experiences');
 
-                DB::commit();
-
             });
-            return 'Envia Dashboard...';
+            return redirect()->route('dashboard');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error_title', "Erro BD");

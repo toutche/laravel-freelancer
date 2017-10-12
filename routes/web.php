@@ -1,4 +1,5 @@
 <?php
+use App\Http\Middleware\CheckUserComplementedPerfil;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,9 @@
 
 Route::get('/', 'Site\User\UserController@login');
 Route::get('/erro', 'Site\MessageController@showError')->name('error');
+Route::get('/perfil/dashboard', function(){
+	return view('site.user.dashboard');
+})->name('dashboard');
 
 Route::group(['namespace' => 'Site'], function(){
 	Route::get('/login/{token?}', 'User\UserController@login');
@@ -26,8 +30,11 @@ Route::group(['namespace' => 'Site'], function(){
 
 	Route::post('/perfil/registrar', 'User\UserController@postRegister');
 	Route::get('/perfil/registrado', 'User\UserController@registerConfirm');
-	Route::get('/perfil/complemento-perfil', 'User\ComplementInformations\ComplementInformationsController@complementRegisterPerfil');
+
+	Route::get('/perfil/complemento-perfil', 'User\ComplementInformations\ComplementInformationsController@complementRegisterPerfil')->middleware('status.complemented.perfil', 'prevent.back.history');
+
 	Route::post('/perfil/complemento-perfil/envio', 'User\ComplementInformations\ComplementInformationsController@postComplementRegisterPerfil');
+
 	Route::get('/perfil/image/{id}', 'User\ComplementInformations\ComplementInformationsController@showProfileImage');
 });
 

@@ -66,7 +66,7 @@ class UserController extends Controller
                 if ($this->existsOcurrency($ocurrency)) {
                     if($this->complemented($ocurrency->status)) {
                         //Envia para o Dashboard 
-                        return "Envia dashboardd"; 
+                        return redirect()->route('dashboard'); 
                     } else {
                         return redirect('perfil/complemento-perfil');
                     }
@@ -81,7 +81,7 @@ class UserController extends Controller
                 if ($this->existsOcurrency($ocurrency)) {
                     if ($this->complemented($ocurrency->status)) {
                         //Envia para o Dashboard 
-                        return "Envia dashboarddd";
+                        return redirect()->route('dashboard');
                     } else {
                         $request->session()->flash('warning', 'Acesse seu e-mail <b><a href="http://www.' . explode("@", Auth::User()->email)[1] . '" target="_blank">(' . Auth::User()->email .')</a></b> para completar seu cadastro!');
                         //remove user session
