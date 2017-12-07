@@ -36,6 +36,11 @@ Route::group(['namespace' => 'Site'], function(){
 	Route::post('/perfil/complemento-perfil/envio', 'User\ComplementInformations\ComplementInformationsController@postComplementRegisterPerfil');
 
 	Route::get('/perfil/image/{id}', 'User\ComplementInformations\ComplementInformationsController@showProfileImage');
+	
+	/* Company */
+	Route::get('/perfil/complemento-empresa', 'User\ComplementInformations\ComplementInformationsCompanyController@complementRegisterPerfilCompany')->middleware('prevent.back.history');
+	
+	Route::post('/perfil/complemento-empresa/envio', 'User\ComplementInformations\ComplementInformationsCompanyController@postComplementRegisterPerfilCompany');
 });
 
 Route::group(['namespace' => 'Ajax'], function(){
