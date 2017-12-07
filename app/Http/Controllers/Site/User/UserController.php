@@ -68,7 +68,11 @@ class UserController extends Controller
                         //Envia para o Dashboard 
                         return redirect()->route('dashboard'); 
                     } else {
-                        return redirect('perfil/complemento-perfil');
+                        if($request->user()->is_company == 0){
+                            return redirect('perfil/complemento-perfil');
+                        } else {
+                            return redirect('/perfil/complemento-empresa');
+                        }
                     }
                 } else {
                     //remove user session
@@ -111,7 +115,7 @@ class UserController extends Controller
     	$dataForm['password'] = bcrypt($dataForm['password']);
         //add new field in dataform
         $dataForm['status'] = 0;
-
+        
         $user = $this->insertUser($dataForm);
     	if($user) {
             $token = $this->generateTokenByEmail($user->email);
