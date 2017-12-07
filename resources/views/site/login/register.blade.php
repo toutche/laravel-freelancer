@@ -52,6 +52,24 @@
 					@endif
 				</div>
 			</div>
+			<div class="form-group">
+				<label>Sou empresa?</label>
+				<div class="form-group" id="div-radio-is-company">
+					<ul>
+						<li>
+							<input type="radio" name="is_company" id="isCompanyYes" value="1">
+							<label for="isCompanyYes"> Sim</label>
+							<div class="check"></div>
+						</li>
+						<li>
+							<input type="radio" name="is_company" id="isCompanyNo" value="0" checked>
+							<label for="isCompanyNo"> Não</label>
+							<div class="check"><div class="inside"></div></div>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
 			<div class="button-align-center">
 				<button class="btn my-btn" >
 		        	<span class="left title">Registrar</span>
